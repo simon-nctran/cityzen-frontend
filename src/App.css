@@ -36,3 +36,48 @@
     transform: rotate(360deg);
   }
 }
+
+nav {
+  background-color: dodgerblue;
+}
+
+nav a {
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  display: inline-block;
+}
+
+nav a:hover {
+  color: white;
+}
+
+nav a.active {
+  padding-bottom: 8px;
+  border-bottom: 2px solid white;
+}
+
+header {
+  background-color: blue;
+}
+
+label {
+  display: inline;
+  margin-right: 1px;
+  margin-left: 1px;
+  padding: 15px;
+  position: left;
+}
+
+input {
+  padding: 8px;
+  margin: 2px;
+  border-radius: 2px;
+  border: #f2f2f2 solid 1px;
+}
+
+select {
+  padding: 8px;
+  margin: 2px;
+  border-radius: 2px;
+}
