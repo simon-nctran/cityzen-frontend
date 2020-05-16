@@ -11,13 +11,6 @@ export function getLogin(username, password) {
       username: username,
       password: password,
     })
-    .then((res) => {
-      console.log(res);
-      document.getElementById("loginOutput").innerHTML = JSON.stringify(res);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
 }
 
 export function getDirections(journey) {
