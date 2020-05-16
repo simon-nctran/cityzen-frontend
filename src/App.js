@@ -5,6 +5,8 @@ import Nav from "./components/Nav";
 import Header from "./components/Header";
 import Map from "./components/Map";
 
+import Home from "./pages/Home";
+
 import "./App.css";
 
 import LoginForm from "./components/LoginForm";
@@ -18,6 +20,7 @@ export default function App() {
           <Route exact path="/">
             <Header />
             <Map />
+            <Home />
           </Route>
 
           <Route path="/login">

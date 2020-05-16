@@ -1,5 +1,5 @@
-import React from "react";
-
 export default function Home() {
-  return <div>HOME</div>;
+  // const directions=getLongLat();
+  // console.log(directions);
+  return null;
 }
