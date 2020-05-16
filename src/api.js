@@ -13,8 +13,7 @@ export function getLogin(username, password) {
     })
     .then((res) => {
       console.log(res);
-      const response = JSON.stringify(res);
-      document.getElementById("loginOutput").innerHTML = response;
+      document.getElementById("loginOutput").innerHTML = JSON.stringify(res);
     })
     .catch((e) => {
       console.log(e);

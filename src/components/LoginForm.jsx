@@ -8,7 +8,6 @@ export default class LoginForm extends Component {
     this.state = {
       username: "",
       password: "",
-      //loginErrors: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
