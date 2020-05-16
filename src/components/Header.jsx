@@ -23,7 +23,7 @@ export default function Header() {
         <h2>Let's plan your journey!</h2>
       </div>
       <div className="getDirections">
-        <form>
+        <form id="getDirections">
           <label for="origin">
             Where are you right now?{" "}
             <input id="origin" type="text" placeholder="Origin" name="origin" />
@@ -46,6 +46,9 @@ export default function Header() {
           </label>
         </form>
       </div>
+      <button className="button-submit" type="submit" formiId="getDirections">
+        Submit
+      </button>
     </div>
   );
 }
