@@ -10,6 +10,8 @@ import Places from "./pages/Places";
 
 import "./App.css";
 
+import LoginForm from "./components/LoginForm";
+
 export default function App() {
   return (
     <Router>
@@ -27,6 +29,10 @@ export default function App() {
 
           <Route path="/places">
             <Places />
+          </Route>
+
+          <Route path="/login">
+            <LoginForm />
           </Route>
         </Switch>
       </div>

@@ -1,6 +1,24 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-const BASE_URL = "https://cityzen-app.herokuapp.com";
+const BASE_URL = "http://localhost:3001";
+
+export function getLogin(username, password) {
+  const endpoint = BASE_URL + "/users/login"
+
+  return axios.post(endpoint, {
+    username: username,
+    password: password
+  })
+    .then((res) => {
+      console.log(res)
+      const response = JSON.stringify(res)
+      document.getElementById("loginOutput").innerHTML = response;
+    })
+    .catch((e) => {
+      console.log(e)
+    })
+}
 
 function getAbout() {
   const endpoint = BASE_URL + "/about";
