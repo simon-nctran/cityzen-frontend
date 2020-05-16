@@ -15,9 +15,9 @@ export default function App() {
     <Router>
       <div className="App">
         <Nav />
-        <Header />
         <Switch>
           <Route exact path="/">
+            <Header />
             <Home />
           </Route>
 
