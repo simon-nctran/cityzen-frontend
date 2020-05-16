@@ -5,11 +5,9 @@ import Nav from "./components/Nav";
 import Header from "./components/Header";
 import Map from "./components/Map";
 
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Places from "./pages/Places";
-
 import "./App.css";
+
+import LoginForm from "./components/LoginForm";
 
 export default function App() {
   return (
@@ -22,12 +20,8 @@ export default function App() {
             <Map />
           </Route>
 
-          <Route path="/about">
-            <About />
-          </Route>
-
-          <Route path="/places">
-            <Places />
+          <Route path="/login">
+            <LoginForm />
           </Route>
         </Switch>
       </div>

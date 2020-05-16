@@ -1,88 +1,38 @@
-import { useState, useEffect } from "react";
+import axios from "axios";
 
+// const BASE_URL = "http://localhost:3001";
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
-export function getAbout() {
-  const endpoint = BASE_URL + "/about";
+export function getLogin(username, password) {
+  const endpoint = BASE_URL + "/users/login";
 
-  // return fetch call that gets about page
-  return fetch(endpoint).then((res) => {
-    console.log(res);
-    return res.data;
-  });
-}
-
-export function useAbout() {
-  const [loading, setLoading] = useState(true);
-  const [about, setAbout] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    getAbout()
-      .then((about) => {
-        setAbout(about);
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setError(e);
-        setLoading(false);
-      });
-  }, []);
-
-  return {
-    loading,
-    about,
-    error,
-  };
+  return axios
+    .post(endpoint, {
+      username: username,
+      password: password,
+    })
+    .then((res) => {
+      console.log(res);
+      const response = JSON.stringify(res);
+      document.getElementById("loginOutput").innerHTML = response;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 }
 
 export function getDirections(journey) {
   const { origin, destination, option } = journey;
-  if (!origin || !destination || !option) {
-    alert("must include all fields");
+  if (!origin || !destination) {
+    alert("Origin and Destination not specified!");
     return;
   }
 
   const endpoint = BASE_URL + `/`;
 
   return fetch(endpoint).then((res) => {
-    console.log(res);
+    console.log("Origin:", origin);
+    console.log("Destination:", destination);
     return null;
   });
-}
-
-function getPlaces() {
-  const endpoint = BASE_URL + "/places";
-
-  // return fetch call that gets about page
-  return fetch(endpoint).then((res) => {
-    console.log("getPlaces");
-    return res.json();
-  });
-}
-
-export function usePlaces() {
-  const [loading, setLoading] = useState(true);
-  const [places, setPlaces] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    getPlaces()
-      .then((places) => {
-        setPlaces(places);
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setError(e);
-        setLoading(false);
-      });
-  }, []);
-
-  return {
-    loading,
-    places,
-    error,
-  };
 }

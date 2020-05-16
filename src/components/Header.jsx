@@ -26,7 +26,16 @@ export default function Header() {
         <form id="getDirections">
           <label for="origin">
             Where are you right now?
-            <input id="origin" type="text" placeholder="Origin" name="origin" />
+            <input
+              id="origin"
+              type="text"
+              placeholder="Origin"
+              name="origin"
+              value={origin}
+              onChange={(event) => {
+                setOrigin(event.target.value);
+              }}
+            />
           </label>
           <label for="destination">
             Where do you want to go?
@@ -35,20 +44,24 @@ export default function Header() {
               type="text"
               placeholder="Destination"
               name="destination"
+              value={destination}
+              onChange={(event) => {
+                setDestination(event.target.value);
+              }}
             />
           </label>
-          <label for="options">
+          {/* <label for="options">
             What do you want on the way?{" "}
             <select id="options">
               <option value="Food">Food</option>
               <option value="Coffee">Coffee</option>
             </select>
-          </label>
+          </label> */}
         </form>
       </div>
-      <button className="button-submit" type="submit" formiId="getDirections">
+      <Button className={"btn-success"} onClick={onSubmit}>
         Submit
-      </button>
+      </Button>
     </div>
   );
 }
