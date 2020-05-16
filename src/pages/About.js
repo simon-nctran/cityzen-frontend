@@ -1,8 +1,11 @@
 import React from "react";
 
-import { useAbout } from "../api";
+import { getAbout, useAbout } from "../api";
 
 export default function About() {
+  console.log(getAbout());
+  return null;
+
   const { loading, about, error } = useAbout();
 
   if (loading) {

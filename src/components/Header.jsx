@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-import { newJourney } from "../api";
+import { getDirections } from "../api";
 import Button from "../components/Button";
 
 export default function Header() {
-  //   const [origin, setOrigin] = useState("");
-  //   const [destination, setDestination] = useState("");
-  //   const [options, setOptions] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [options, setOptions] = useState("");
 
   function onSubmit() {
-    // getDirections({
-    //     origin,
-    //     destination,
-    //     options
-    // });
+    getDirections({
+      origin,
+      destination,
+      options,
+    });
   }
 
   return (
@@ -25,7 +25,7 @@ export default function Header() {
       <div className="getDirections">
         <form id="getDirections">
           <label for="origin">
-            Where are you right now?{" "}
+            Where are you right now?
             <input id="origin" type="text" placeholder="Origin" name="origin" />
           </label>
           <label for="destination">
