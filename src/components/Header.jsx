@@ -20,9 +20,9 @@ export default function Header() {
     <div>
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
+        <h2>Let's plan your journey!</h2>
       </div>
       <div className="getDirections">
-        Let's plan your journey!
         <form>
           <label for="origin">
             Where are you right now?{" "}
