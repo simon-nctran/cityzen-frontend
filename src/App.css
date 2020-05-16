@@ -62,22 +62,23 @@ header {
 }
 
 label {
-  display: inline;
-  margin-right: 1px;
-  margin-left: 1px;
+  display: inline-block;
+  width: 250px;
   padding: 15px;
-  position: left;
+  bottom: -10px;
+  position: relative;
 }
 
 input {
+  display: inline-block;
+  margin-top: 10px;
   padding: 8px;
-  margin: 2px;
   border-radius: 2px;
   border: #f2f2f2 solid 1px;
 }
 
 select {
-  padding: 8px;
-  margin: 2px;
+  display: inline-block;
+  margin-top: 18px;
   border-radius: 2px;
 }
