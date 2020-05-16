@@ -81,3 +81,25 @@ select {
   margin: 2px;
   border-radius: 2px;
 }
+
+.mapContainer {
+  position: absolute;
+  top: 250px;
+  width: 1600px;
+  height: 1000px;
+  left: 20px;
+  border: 3px solid dodgerblue;
+}
+
+.sidebarStyle {
+display: inline-block;
+position: absolute;
+top: 0;
+left: 0;
+margin: 12px;
+background-color: #404040;
+color: #ffffff;
+z-index: 1 !important;
+padding: 6px;
+font-weight: bold;
+}
