@@ -8,7 +8,6 @@ export default class LoginForm extends Component {
     this.state = {
       username: "",
       password: "",
-      //loginErrors: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -54,7 +53,7 @@ export default class LoginForm extends Component {
             required
           />
 
-          <button type="submit">Login</button>
+          <button className="btn btn-success" type="submit">Login</button>
         </form>
         <p id="loginOutput">
 
