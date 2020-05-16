@@ -39,7 +39,7 @@ export function useAbout() {
 
 export function getDirections(journey) {
   const { origin, destination, option } = journey;
-  if (!origin || !destination || !option) {
+  if (!origin || !destination) {
     alert("must include all fields");
     return;
   }
@@ -47,7 +47,8 @@ export function getDirections(journey) {
   const endpoint = BASE_URL + `/`;
 
   return fetch(endpoint).then((res) => {
-    console.log(res);
+    console.log("Origin:", origin);
+    console.log("Destination:", destination);
     return null;
   });
 }
