@@ -5,8 +5,6 @@ import Nav from "./components/Nav";
 import Header from "./components/Header";
 import Map from "./components/Map";
 
-import Home from "./pages/Home";
-
 import "./App.css";
 
 export default function App() {

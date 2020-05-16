@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
 export function getDirections(journey) {
