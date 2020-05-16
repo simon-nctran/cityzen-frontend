@@ -50,13 +50,13 @@ export default function Header() {
               }}
             />
           </label>
-          <label for="options">
+          {/* <label for="options">
             What do you want on the way?{" "}
             <select id="options">
               <option value="Food">Food</option>
               <option value="Coffee">Coffee</option>
             </select>
-          </label>
+          </label> */}
         </form>
       </div>
       <Button className={"btn-success"} onClick={onSubmit}>

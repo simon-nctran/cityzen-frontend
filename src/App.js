@@ -6,8 +6,6 @@ import Header from "./components/Header";
 import Map from "./components/Map";
 
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Places from "./pages/Places";
 
 import "./App.css";
 
@@ -20,14 +18,6 @@ export default function App() {
           <Route exact path="/">
             <Header />
             <Map />
-          </Route>
-
-          <Route path="/about">
-            <About />
-          </Route>
-
-          <Route path="/places">
-            <Places />
           </Route>
         </Switch>
       </div>
