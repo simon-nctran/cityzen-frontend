@@ -54,7 +54,7 @@ export default class LoginForm extends Component {
             required
           />
 
-          <button type="submit">Login</button>
+          <button className="btn btn-success" type="submit">Login</button>
         </form>
         <p id="loginOutput">
 
