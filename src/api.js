@@ -26,7 +26,7 @@ export function addUser(username, password, emailAddress) {
 }
 
 export function getWaypoints(journey) {
-  const { origin, destination, option } = journey;
+  const { origin, destination } = journey;
   if (!origin || !destination) {
     alert("Origin and Destination not specified!");
     return;
