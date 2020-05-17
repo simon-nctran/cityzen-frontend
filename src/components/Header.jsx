@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { getDirections } from "../api";
+import { getWayoints } from "../api";
 import Button from "../components/Button";
 
 export default function Header() {
@@ -9,7 +9,7 @@ export default function Header() {
   const [options, setOptions] = useState("");
 
   function onSubmit() {
-    getDirections({
+    getWayoints({
       origin,
       destination,
       options,
