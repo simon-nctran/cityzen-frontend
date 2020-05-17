@@ -50,5 +50,5 @@ export function getLongLat(name) {
 
   return fetch(endpoint)
     .then((response) => response.json())
-    .then((data) => console.log(data.features));
+    .then((data) => console.log(data.features[0].geometry.coordinates));
 }
