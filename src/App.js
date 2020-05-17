@@ -8,6 +8,9 @@ import Map from "./components/Map";
 import "./App.css";
 
 import LoginForm from "./components/LoginForm";
+import RegistrationForm from "./components/RegistrationForm";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -16,12 +19,10 @@ export default function App() {
         <Nav />
         <Switch>
           <Route exact path="/">
-            <Header />
-            <Map />
+            <Home />
           </Route>
-
-          <Route path="/login">
-            <LoginForm />
+          <Route path="/profile">
+            <Profile />
           </Route>
         </Switch>
       </div>

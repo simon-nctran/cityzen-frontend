@@ -3,13 +3,24 @@ import axios from "axios";
 // const BASE_URL = "http://localhost:3001";
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
-export function getLogin(username, password) {
+export function getUser(username, password) {
   const endpoint = BASE_URL + "/users/login";
 
   return axios
     .post(endpoint, {
       username: username,
       password: password,
+    })
+}
+
+export function addUser(username, password, emailAddress) {
+  const endpoint = BASE_URL + "/users/new";
+
+  return axios
+    .post(endpoint, {
+      username: username,
+      password: password,
+      emailAddress: emailAddress,
     })
 }
 
