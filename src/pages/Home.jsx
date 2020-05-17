@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Map from "../components/Map";
 
 export default function Home() {
-  const [journey, setJourney] = useState("");
+  const [journey, setJourney] = useState({});
 
   function displayJourney(journey) {
     setJourney(journey);
