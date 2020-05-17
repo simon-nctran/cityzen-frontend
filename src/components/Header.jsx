@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 
-import { getWayoints } from "../api";
+import { getWaypoints } from "../api";
 import Button from "../components/Button";
 
+// App Header Component to get
 export default function Header() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
-  const [options, setOptions] = useState("");
 
   function onSubmit() {
-    getWayoints({
+    getWaypoints({
       origin,
       destination,
-      options,
     });
   }
 
@@ -56,13 +55,6 @@ export default function Header() {
               }}
             />
           </label>
-          {/* <label for="options">
-            What do you want on the way?{" "}
-            <select id="options">
-              <option value="Food">Food</option>
-              <option value="Coffee">Coffee</option>
-            </select>
-          </label> */}
         </form>
       </div>
       <Button className={"btn-success"} onClick={onSubmit}>

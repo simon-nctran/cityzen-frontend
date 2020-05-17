@@ -1,6 +1,5 @@
 import React from "react";
 import mapboxgl from "mapbox-gl";
-import {getLatLong} from "../api";
 
 // mapbox
 
@@ -24,8 +23,8 @@ export default class Map extends React.Component {
       center: [this.state.lng, this.state.lat],
       zoom: this.state.zoom,
     });
-    
-    // var start = 
+
+    // var start =
 
     map.on("move", () => {
       this.setState({

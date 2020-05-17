@@ -43,14 +43,14 @@ export default function LoginForm({ loginSuccess }) {
           type="username"
           placeholder="Username"
           value={username}
-          onChange={event => setUsername(event.target.value)}
+          onChange={(event) => setUsername(event.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={event => setPassword(event.target.value)}
+          onChange={(event) => setPassword(event.target.value)}
           required
         />
         <button className="btn btn-success" type="submit">
