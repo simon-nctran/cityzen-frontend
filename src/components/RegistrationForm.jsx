@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-//import { useForm } from "react-hook-form";
-import { addUser } from "../api";
+import { addUser, getUser } from "../api";
 
-export default function RegistrationForm() {
+export default function RegistrationForm({ registrationSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [registrationOutput, setRegistrationOutput] = useState("");
+  const [output, setOutput] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -14,16 +13,32 @@ export default function RegistrationForm() {
     addUser(username, password, email)
       .then((res) => {
         console.log(res);
-        setRegistrationOutput(JSON.stringify(res));
+        if (res.data === "Registration successful") {
+          successfulRegister(username)
+        } else if (res.data === "Username already exists") {
+          setOutput("Username already exists");
+        }
       })
       .catch((err) => {
         console.log(err);
-        setRegistrationOutput(JSON.stringify(err));
+        setOutput(JSON.stringify(err));
       });
   }
 
+  function successfulRegister(username) {
+    getUser(username)
+      .then((res) => {
+        registrationSuccess(
+          <React.Fragment>
+            {JSON.stringify(res)}
+          </React.Fragment>
+        )
+      })
+  }
+
   return (
-    <div>
+    <React.Fragment>
+      <h1>Registration Form:</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="username"
@@ -50,7 +65,9 @@ export default function RegistrationForm() {
           Register
         </button>
       </form>
-      <p>{registrationOutput}</p>
-    </div>
+      <p>{output}</p>
+      <br />
+      <br />
+    </React.Fragment>
   );
 }

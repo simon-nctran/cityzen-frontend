@@ -1,28 +1,43 @@
 import React, { useState } from "react";
-//import { useForm } from "react-hook-form";
-import { getUser } from "../api";
+import { getLogin, getUser } from "../api";
 
-export default function LoginForm() {
+export default function LoginForm({ loginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginOutput, setLoginOutput] = useState("");
+  const [output, setOutput] = useState(<React.Fragment />);
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    getUser(username, password)
+    getLogin(username, password)
       .then((res) => {
         console.log(res);
-        setLoginOutput(JSON.stringify(res));
+        if (res.data === "Login successful") {
+          successfulLogin(username)
+        } else if (res.data === "did not find username") {
+          setOutput(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
-        setLoginOutput(JSON.stringify(err));
+        setOutput(JSON.stringify(err));
       });
   }
 
+  function successfulLogin(username) {
+    getUser(username)
+      .then((res) => {
+        loginSuccess(
+          <React.Fragment>
+            {JSON.stringify(res)}
+          </React.Fragment>
+        )
+      })
+  }
+
   return (
-    <div>
+    <React.Fragment>
+      <h1>Login Form:</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="username"
@@ -42,7 +57,9 @@ export default function LoginForm() {
           Login
         </button>
       </form>
-      <p>{loginOutput}</p>
-    </div>
+      {output}
+      <br />
+      <br />
+    </React.Fragment>
   );
 }

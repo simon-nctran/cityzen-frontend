@@ -1,11 +1,11 @@
 import axios from "axios";
 
-// const BASE_URL = "http://localhost:3001";
+//const BASE_URL = "http://localhost:3001";
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 const MAPBOX_BASE_URL = "https://api.mapbox.com"
 const API_TOKEN = "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
 
-export function getUser(username, password) {
+export function getLogin(username, password) {
   const endpoint = BASE_URL + "/users/login";
 
   return axios
@@ -13,6 +13,16 @@ export function getUser(username, password) {
       username: username,
       password: password,
     })
+}
+
+export function getUser(username) {
+  const endpoint = BASE_URL + "/users/profile"
+
+  return axios.get(endpoint, {
+    params: {
+      username: username,
+    }
+  })
 }
 
 export function addUser(username, password, emailAddress) {
