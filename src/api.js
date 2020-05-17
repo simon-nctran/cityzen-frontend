@@ -6,21 +6,23 @@ const MAPBOX_BASE_URL = "https://api.mapbox.com";
 const API_TOKEN =
   "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
 
-export function getLogin(username, password) {
+export function getUser(username, password) {
   const endpoint = BASE_URL + "/users/login";
 
-  return axios
-    .post(endpoint, {
-      username: username,
-      password: password,
-    })
-    .then((res) => {
-      console.log(res);
-      document.getElementById("loginOutput").innerHTML = JSON.stringify(res);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+  return axios.post(endpoint, {
+    username: username,
+    password: password,
+  });
+}
+
+export function addUser(username, password, emailAddress) {
+  const endpoint = BASE_URL + "/users/new";
+
+  return axios.post(endpoint, {
+    username: username,
+    password: password,
+    emailAddress: emailAddress,
+  });
 }
 
 export function getWaypoints(journey) {
@@ -31,7 +33,6 @@ export function getWaypoints(journey) {
   }
   console.log(origin);
   console.log(destination);
-  getLongLat(origin);
 }
 
 export function getLongLat(name) {

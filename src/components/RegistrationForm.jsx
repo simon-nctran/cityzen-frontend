@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 //import { useForm } from "react-hook-form";
-import { getUser } from "../api";
+import { addUser } from "../api";
 
-export default function LoginForm() {
+export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loginOutput, setLoginOutput] = useState("");
+  const [email, setEmail] = useState("");
+  const [registrationOutput, setRegistrationOutput] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    getUser(username, password)
+    addUser(username, password, email)
       .then((res) => {
         console.log(res);
-        setLoginOutput(JSON.stringify(res));
+        setRegistrationOutput(JSON.stringify(res));
       })
       .catch((err) => {
         console.log(err);
-        setLoginOutput(JSON.stringify(err));
+        setRegistrationOutput(JSON.stringify(err));
       });
   }
 
@@ -28,21 +29,28 @@ export default function LoginForm() {
           type="username"
           placeholder="Username"
           value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          onChange={event => setUsername(event.target.value)}
           required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          onChange={event => setPassword(event.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email Address"
+          value={email}
+          onChange={event => setEmail(event.target.value)}
           required
         />
         <button className="btn btn-success" type="submit">
-          Login
+          Register
         </button>
       </form>
-      <p>{loginOutput}</p>
+      <p>{registrationOutput}</p>
     </div>
   );
 }
