@@ -13,7 +13,7 @@ export default function LoginForm({ loginSuccess }) {
       .then((res) => {
         console.log(res);
         if (res.data === "Login successful") {
-          successfulLogin(username)
+          successfulLogin(username);
         } else if (res.data === "Username not found") {
           setOutput(
             <React.Fragment>
@@ -35,23 +35,25 @@ export default function LoginForm({ loginSuccess }) {
   }
 
   function successfulLogin(username) {
-    getUser(username)
-      .then((res) => {
-        loginSuccess(
-          <React.Fragment>
-            <h1>Hi there, {username}</h1>
-            <br />
-            <h3>Your Profile:</h3>
-            <ul>
-              <li>Username: {res.data.username}</li>
-              <li>Password: {res.data.password}</li>
-              <li>Email Address: {res.data.emailAddress}</li>
-            </ul>
-            <br />
-            <h2>Thank you for trying out Cityzen!</h2>
-          </React.Fragment>
-        )
-      })
+    getUser(username).then((res) => {
+      console.log(res.data);
+      loginSuccess(
+        <React.Fragment>
+          <h1>Hi there, {username}</h1>
+          <br />
+          <h3>Your Profile:</h3>
+
+          <div className="profileDetails">
+            <p>Username: {res.data.username}</p>
+            <p>Password: {res.data.password}</p>
+            <p>Email Address: {res.data.emailAddress}</p>
+          </div>
+
+          <br />
+          <h2>Thank you for trying out Cityzen!</h2>
+        </React.Fragment>
+      );
+    });
   }
 
   return (

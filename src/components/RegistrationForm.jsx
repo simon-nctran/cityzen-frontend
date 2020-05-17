@@ -37,11 +37,13 @@ export default function RegistrationForm({ registrationSuccess }) {
             <h1>Hi there, {username}</h1>
             <br />
             <h3>Your Profile:</h3>
-            <ul>
-              <li>Username: {res.data.username}</li>
-              <li>Password: {res.data.password}</li>
-              <li>Email Address: {res.data.emailAddress}</li>
-            </ul>
+
+            <div className="profileDetails">
+              <p>Username: {res.data.username}</p>
+              <p>Password: {res.data.password}</p>
+              <p>Email Address: {res.data.emailAddress}</p>
+            </div>
+
             <br />
             <h2>Thank you for trying out Cityzen!</h2>
           </React.Fragment>
