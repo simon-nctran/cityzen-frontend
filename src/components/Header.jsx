@@ -15,11 +15,14 @@ export default function Header() {
     });
   }
 
+<<<<<<< HEAD
   React.useEffect(() => {
     console.log("mounted");
     return () => console.log("unmounted");
   }, []);
 
+=======
+>>>>>>> fb0d0dfdeb2bfea1efee2fbc431e380768a71ef9
   return (
     <div>
       <div className="appName">
@@ -28,7 +31,7 @@ export default function Header() {
       </div>
       <div className="getDirections">
         <form id="getDirections">
-          <label for="origin">
+          <label>
             Where are you right now?
             <input
               id="origin"
@@ -41,7 +44,7 @@ export default function Header() {
               }}
             />
           </label>
-          <label for="destination">
+          <label>
             Where do you want to go?
             <input
               id="destination"

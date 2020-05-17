@@ -5,7 +5,7 @@ export default function RegistrationForm({ registrationSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState(<React.Fragment />);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -16,7 +16,11 @@ export default function RegistrationForm({ registrationSuccess }) {
         if (res.data === "Registration successful") {
           successfulRegister(username)
         } else if (res.data === "Username already exists") {
-          setOutput("Username already exists");
+          setOutput(
+            <React.Fragment>
+              <p>Username already exists</p>
+            </React.Fragment>
+          );
         }
       })
       .catch((err) => {
@@ -30,7 +34,16 @@ export default function RegistrationForm({ registrationSuccess }) {
       .then((res) => {
         registrationSuccess(
           <React.Fragment>
-            {JSON.stringify(res)}
+            <h1>Hi there, {username}</h1>
+            <br />
+            <h3>Your Profile:</h3>
+            <ul>
+              <li>Username: {res.data.username}</li>
+              <li>Password: {res.data.password}</li>
+              <li>Email Address: {res.data.emailAddress}</li>
+            </ul>
+            <br />
+            <h2>Thank you for trying out Cityzen!</h2>
           </React.Fragment>
         )
       })
@@ -65,7 +78,7 @@ export default function RegistrationForm({ registrationSuccess }) {
           Register
         </button>
       </form>
-      <p>{output}</p>
+      {output}
       <br />
       <br />
     </React.Fragment>
