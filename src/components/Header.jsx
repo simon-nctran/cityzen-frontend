@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 
-import { getWaypoints } from "../api";
 import Button from "../components/Button";
 
 // App Header Component to get
-export default function Header() {
+export default function Header({ getWaypoints }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
 
