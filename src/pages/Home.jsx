@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <React.Fragment>
       <Header getWaypoints={displayJourney} />
-      <Map />
+      <Map journey={journey}/>
     </React.Fragment>
   );
 }

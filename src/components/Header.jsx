@@ -8,10 +8,14 @@ export default function Header({ getWaypoints }) {
   const [destination, setDestination] = useState("");
 
   function onSubmit() {
-    getWaypoints({
-      origin,
-      destination,
-    });
+    if (origin === "" || destination === "") {
+      alert("Origin and Destination cannot be empty!")
+    } else {
+      getWaypoints({
+        origin,
+        destination,
+      });
+    }
   }
 
   return (

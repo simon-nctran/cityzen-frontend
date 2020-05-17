@@ -2,90 +2,77 @@ import React, { useState, useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 
 // mapbox
-
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
 
-/*
-export default function Map() {
-  const [latLngZoom, setLatLngZoom] = useState({ lng: 5, lat: 34, zoom: 1.5 });
-  const mapContainer = useRef(null);
 
-  // Initialization.
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v9",
-      center: [5, 34],
-      zoom: 1.5
-    });
+// MapBox API: https://docs.mapbox.com/mapbox-gl-js/api/
+// Official examples for MapBox with React: https://github.com/mapbox/mapbox-react-examples
 
-    map.on("move", () => {
-      const { lng, lat } = map.getCenter();
-      setLatLngZoom({
-        lng: lng.toFixed(4),
-        lat: lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
-      });
-    });
-
-    return map.remove();
-  }, []);
-
-  const { lng, lat, zoom } = latLngZoom;
-  return (
-    <div>
-      <div>
-        <div className="sidebarStyle">
-          Longitude: {lng} | Latitude: {lat} | Zoom:{" "}
-          {zoom}
-        </div>
-      </div>
-      <div ref={mapContainer} className="mapContainer" />
-    </div>
-  );
-}
-*/
-
-/*
+// Main reference used to convert to functional component:
+// https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
-  const [lng, setLng] = useState(144.9)
-  const [lat, setLat] = useState(-37.8)
-  const [zoom, setZoom] = useState(10)
+  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9, lat: -37.8, zoom: 10 });
   const mapContainer = useRef(null);
+  // For useRef:
+  // https://reactjs.org/docs/hooks-reference.html#useref
+  // https://reactjs.org/docs/refs-and-the-dom.html
 
+
+  // Run during initialisation; only runs once as [] was passed ot the second argument
+  // second argument of useEffect is an array which defines the variables it tracks for changes
+  // it runs whenever one of these variables changes
   useEffect(() => {
+    console.log("Map Component has been mounted")
+    const { lng, lat, zoom } = lngLatZoom
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
-      zoom: zoom,
+      zoom: zoom
     });
 
     map.on("move", () => {
-      setLng(map.getCenter().lng)
-      setLat(map.getCenter().lat)
-      setZoom(map.getZoom())
+      setLngLatZoom({
+        lng: map.getCenter().lng,
+        lat: map.getCenter().lat,
+        zoom: map.getZoom()
+        // removed .toFixed as that converts to String,
+        // but latLngZoom uses Number as defined in the argument of useState above
+      });
     });
 
-    return map.remove();
+    return (() => {
+      console.log("Map Component has been unmounted")
+      map.remove()
+    });
   }, []);
 
+  // Allows the render to reload whenever props.journey changes
+  useEffect(() => {
+    console.log("Current Journey received by Map Component: (refer log directly below)")
+    console.log(props.journey)
+  },[props.journey])
+
+
+  const { lng, lat, zoom } = lngLatZoom;
   return (
-    <div>
-      <div>
+    // Using Fragments:
+    // https://reactjs.org/docs/fragments.html#short-syntax
+    // https://stackoverflow.com/questions/47761894/why-are-fragments-in-react-16-better-than-container-divs
+    <>
+      <>
         <div className="sidebarStyle">
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+          Longitude: {lng} | Latitude: {lat} | Zoom:{" "}
+          {zoom}
         </div>
-      </div>
+      </>
       <div ref={mapContainer} className="mapContainer" />
-    </div>
+    </>
   );
 }
-*/
 
-
-/*
+/* Class Version
 export default class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -130,5 +117,3 @@ export default class Map extends React.Component {
   }
 }
 */
-
-// ReactDOM.render(<Application />, document.getElementById("app"));
