@@ -5,15 +5,14 @@ import Map from "../components/Map";
 export default function Home() {
   const [journey, setJourney] = useState({});
 
-  function displayJourney(journey) {
-    setJourney(journey);
-    console.log("The Journey is:", journey);
-    return journey;
+  function getWayPoints(points) {
+    setJourney(points);
+    console.log("The Journey is:", points);
   }
 
   return (
     <React.Fragment>
-      <Header getWaypoints={displayJourney} />
+      <Header getWayPoints={getWayPoints} />
       <Map journey={journey}/>
     </React.Fragment>
   );

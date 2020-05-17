@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 
 // App Header Component to get
-export default function Header({ getWaypoints }) {
+export default function Header({ getWayPoints }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
 
@@ -11,7 +11,7 @@ export default function Header({ getWaypoints }) {
     if (origin === "" || destination === "") {
       alert("Origin and Destination cannot be empty!")
     } else {
-      getWaypoints({
+      getWayPoints({
         origin,
         destination,
       });
