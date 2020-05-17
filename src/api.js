@@ -16,13 +16,13 @@ export function getLogin(username, password) {
 }
 
 export function getUser(username) {
-  const endpoint = BASE_URL + "/users/profile"
+  const endpoint = BASE_URL + "/users/profile";
 
   return axios.get(endpoint, {
     params: {
       username: username,
-    }
-  })
+    },
+  });
 }
 
 export function addUser(username, password, emailAddress) {
@@ -41,6 +41,7 @@ export function getWaypoints(journey) {
     alert("Origin and Destination not specified!");
     return;
   }
+
   console.log(origin);
   console.log(destination);
 }
