@@ -14,8 +14,18 @@ export default function LoginForm({ loginSuccess }) {
         console.log(res);
         if (res.data === "Login successful") {
           successfulLogin(username)
-        } else if (res.data === "did not find username") {
-          setOutput(res.data);
+        } else if (res.data === "Username not found") {
+          setOutput(
+            <React.Fragment>
+              <p>Username not found</p>
+            </React.Fragment>
+          );
+        } else if (res.data === "Invalid password") {
+          setOutput(
+            <React.Fragment>
+              <p>Invalid password </p>
+            </React.Fragment>
+          );
         }
       })
       .catch((err) => {
@@ -29,7 +39,16 @@ export default function LoginForm({ loginSuccess }) {
       .then((res) => {
         loginSuccess(
           <React.Fragment>
-            {JSON.stringify(res)}
+            <h1>Hi there, {username}</h1>
+            <br />
+            <h3>Your Profile:</h3>
+            <ul>
+              <li>Username: {res.data.username}</li>
+              <li>Password: {res.data.password}</li>
+              <li>Email Address: {res.data.emailAddress}</li>
+            </ul>
+            <br />
+            <h2>Thank you for trying out Cityzen!</h2>
           </React.Fragment>
         )
       })
