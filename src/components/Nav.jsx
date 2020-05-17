@@ -1,7 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-function Nav() {
+// App Navigation Component
+export default function Nav() {
   return (
     <nav>
       <NavLink exact to="/">
@@ -11,5 +12,3 @@ function Nav() {
     </nav>
   );
 }
-
-export default Nav;

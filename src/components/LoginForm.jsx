@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import { getLogin } from "../api";
 
 export default class LoginForm extends Component {
@@ -16,7 +16,7 @@ export default class LoginForm extends Component {
 
   handleChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   }
 
@@ -24,9 +24,9 @@ export default class LoginForm extends Component {
     const { username, password } = this.state;
 
     const res = getLogin(username, password);
-    console.log("log")
+    console.log("log");
     console.log(`response ${res}`);
-    console.log("post res")
+    console.log("post res");
 
     event.preventDefault();
   }
@@ -53,11 +53,11 @@ export default class LoginForm extends Component {
             required
           />
 
-          <button className="btn btn-success" type="submit">Login</button>
+          <button className="btn btn-success" type="submit">
+            Login
+          </button>
         </form>
-        <p id="loginOutput">
-
-        </p>
+        <p id="loginOutput"></p>
       </div>
     );
   }
