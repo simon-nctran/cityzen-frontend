@@ -16,7 +16,6 @@ export function getLogin(username, password) {
 }
 
 export function getUser(username) {
-<<<<<<< HEAD
   const endpoint = BASE_URL + "/users/profile";
 
   return axios.get(endpoint, {
@@ -24,10 +23,6 @@ export function getUser(username) {
       username: username,
     },
   });
-=======
-  const endpoint = BASE_URL + `/users/${username}`
-  return axios.get(endpoint)
->>>>>>> fb0d0dfdeb2bfea1efee2fbc431e380768a71ef9
 }
 
 export function addUser(username, password, emailAddress) {

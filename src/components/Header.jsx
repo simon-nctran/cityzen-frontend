@@ -15,14 +15,11 @@ export default function Header() {
     });
   }
 
-<<<<<<< HEAD
   React.useEffect(() => {
     console.log("mounted");
     return () => console.log("unmounted");
   }, []);
 
-=======
->>>>>>> fb0d0dfdeb2bfea1efee2fbc431e380768a71ef9
   return (
     <div>
       <div className="appName">
