@@ -2,12 +2,9 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Nav from "./components/Nav";
-import Header from "./components/Header";
-import Map from "./components/Map";
-
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import "./App.css";
-
-import LoginForm from "./components/LoginForm";
 
 export default function App() {
   return (
@@ -16,12 +13,10 @@ export default function App() {
         <Nav />
         <Switch>
           <Route exact path="/">
-            <Header />
-            <Map />
+            <Home />
           </Route>
-
-          <Route path="/login">
-            <LoginForm />
+          <Route path="/profile">
+            <Profile />
           </Route>
         </Switch>
       </div>

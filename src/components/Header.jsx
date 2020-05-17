@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 
-import { getDirections } from "../api";
+import { getWaypoints } from "../api";
 import Button from "../components/Button";
 
+// App Header Component to get
 export default function Header() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
-  const [options, setOptions] = useState("");
 
   function onSubmit() {
-    getDirections({
+    getWaypoints({
       origin,
       destination,
-      options,
     });
   }
 
@@ -24,7 +23,7 @@ export default function Header() {
       </div>
       <div className="getDirections">
         <form id="getDirections">
-          <label for="origin">
+          <label>
             Where are you right now?
             <input
               id="origin"
@@ -37,7 +36,7 @@ export default function Header() {
               }}
             />
           </label>
-          <label for="destination">
+          <label>
             Where do you want to go?
             <input
               id="destination"
@@ -50,13 +49,6 @@ export default function Header() {
               }}
             />
           </label>
-          {/* <label for="options">
-            What do you want on the way?{" "}
-            <select id="options">
-              <option value="Food">Food</option>
-              <option value="Coffee">Coffee</option>
-            </select>
-          </label> */}
         </form>
       </div>
       <Button className={"btn-success"} onClick={onSubmit}>

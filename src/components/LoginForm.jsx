@@ -1,65 +1,86 @@
-import React, {Component} from 'react';
-import { getLogin } from "../api";
+import React, { useState } from "react";
+import { getLogin, getUser } from "../api";
 
-export default class LoginForm extends Component {
-  constructor(props) {
-    super(props);
+export default function LoginForm({ loginSuccess }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [output, setOutput] = useState(<React.Fragment />);
 
-    this.state = {
-      username: "",
-      password: "",
-      //loginErrors: ""
-    };
+  function handleSubmit(event) {
+    event.preventDefault();
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    getLogin(username, password)
+      .then((res) => {
+        console.log(res);
+        if (res.data === "Login successful") {
+          successfulLogin(username);
+        } else if (res.data === "Username not found") {
+          setOutput(
+            <React.Fragment>
+              <p>Username not found</p>
+            </React.Fragment>
+          );
+        } else if (res.data === "Invalid password") {
+          setOutput(
+            <React.Fragment>
+              <p>Invalid password </p>
+            </React.Fragment>
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setOutput(JSON.stringify(err));
+      });
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
+  function successfulLogin(username) {
+    getUser(username).then((res) => {
+      console.log(res.data);
+      loginSuccess(
+        <React.Fragment>
+          <h1>Hi there, {username}</h1>
+          <br />
+          <h3>Your Profile:</h3>
+
+          <div className="profileDetails">
+            <p>Username: {res.data.username}</p>
+            <p>Password: {res.data.password}</p>
+            <p>Email Address: {res.data.emailAddress}</p>
+          </div>
+
+          <br />
+          <h2>Thank you for trying out Cityzen!</h2>
+        </React.Fragment>
+      );
     });
   }
 
-  handleSubmit(event) {
-    const { username, password } = this.state;
-
-    const res = getLogin(username, password);
-    console.log("log")
-    console.log(`response ${res}`);
-    console.log("post res")
-
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="username"
-            name="username"
-            placeholder="Username"
-            value={this.state.email}
-            onChange={this.handleChange}
-            required
-          />
-
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={this.handleChange}
-            required
-          />
-
-          <button className="btn btn-success" type="submit">Login</button>
-        </form>
-        <p id="loginOutput">
-
-        </p>
-      </div>
-    );
-  }
+  return (
+    <React.Fragment>
+      <h1>Login Form:</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="username"
+          placeholder="Username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+        />
+        <button className="btn btn-success" type="submit">
+          Login
+        </button>
+      </form>
+      {output}
+      <br />
+      <br />
+    </React.Fragment>
+  );
 }
