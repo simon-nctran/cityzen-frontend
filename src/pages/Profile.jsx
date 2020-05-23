@@ -10,7 +10,7 @@ export default function Profile() {
   const { user, setUser } = useContext(UserContext);
 
   const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
-  const [profile, setProfile] = useState(<React.Fragment />);
+  const [profile, setProfile] = useState(< />);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
   const [toggledProfile, setToggledProfile] = useState(false);
@@ -18,7 +18,7 @@ export default function Profile() {
   function displayLogin() {
     setToggledLogin(true);
     setToggledRegister(false);
-    setForm(<LoginForm/>);
+    setForm(<LoginForm />);
   }
 
   function displayRegister() {
@@ -28,9 +28,9 @@ export default function Profile() {
   }
 
   function displayProfile(profile) {
-    setToggledProfile(true)
-    setToggledLogin(false)
-    setToggledRegister(false)
+    setToggledProfile(true);
+    setToggledLogin(false);
+    setToggledRegister(false);
 
     setProfile(profile);
   }
@@ -39,7 +39,7 @@ export default function Profile() {
     getUser(username).then((res) => {
       console.log(res.data);
       setProfile(
-        <React.Fragment>
+        <>
           <h1>Hi there, {username}</h1>
           <br />
           <h3>Your Profile:</h3>
@@ -53,7 +53,7 @@ export default function Profile() {
           <br />
           <h2>Thank you for trying out Cityzen!</h2>
           <Button onClick={logout}>Logout</Button>
-        </React.Fragment>
+        </>
       );
       // NOTE: Placed logout button in here so that it displays at the same time as profile text
       // If it were outside it would display earlier
@@ -62,47 +62,47 @@ export default function Profile() {
 
   function logout() {
     setForm(<h1>You have logged out</h1>);
-    setProfile(<React.Fragment />)
+    setProfile(< />);
     setToggledLogin(false);
     setToggledRegister(false);
-    setToggledProfile(false)
+    setToggledProfile(false);
     setUser(null);
   }
 
   useEffect(() => {
     if (user !== null) {
-      console.log(user)
-      setToggledLogin(false)
-      setToggledRegister(false)
-      setToggledProfile(true)
-      displayUser(user)
-    } else {
-      // code below kind of duplicates with logout() function
-      console.log(user)
+      console.log(user);
       setToggledLogin(false);
       setToggledRegister(false);
-      setToggledProfile(false)
-      setProfile(<React.Fragment />)
+      setToggledProfile(true);
+      displayUser(user);
+    } else {
+      // code below kind of duplicates with logout() function
+      console.log(user);
+      setToggledLogin(false);
+      setToggledRegister(false);
+      setToggledProfile(false);
+      setProfile(< />);
     }
-  }, [user])
-
-
-
-
+  }, [user]);
 
   return (
-    <React.Fragment>
-      {toggledProfile && <React.Fragment>{profile}</React.Fragment>}
+    <>
+      {toggledProfile && <>{profile}</>}
 
       {!toggledProfile && (
-        <React.Fragment>
+        <>
           {form}
-          {!toggledLogin && <Button onClick={displayLogin}>I want to Log In</Button>}
+
+          {!toggledLogin && (
+            <Button onClick={displayLogin}>I want to Log In</Button>
+          )}
+
           {!toggledRegister && (
             <Button onClick={displayRegister}>I want to Register</Button>
           )}
-        </React.Fragment>
+        </>
       )}
-    </React.Fragment>
+    </>
   );
 }

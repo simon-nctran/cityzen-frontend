@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { getLogin } from "../api";
 import UserContext from "../UserContext";
 
@@ -7,7 +7,7 @@ export default function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState(< />);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -16,18 +16,18 @@ export default function LoginForm() {
       .then((res) => {
         console.log(res);
         if (res.data === "Login successful") {
-          setUser(username)
+          setUser(username);
         } else if (res.data === "Username not found") {
           setOutput(
-            <React.Fragment>
+            <>
               <p>Username not found</p>
-            </React.Fragment>
+            </>
           );
         } else if (res.data === "Invalid password") {
           setOutput(
-            <React.Fragment>
+            <>
               <p>Invalid password </p>
-            </React.Fragment>
+            </>
           );
         }
       })
@@ -37,32 +37,8 @@ export default function LoginForm() {
       });
   }
 
-  /*
-  function successfulLogin(username) {
-    getUser(username).then((res) => {
-      console.log(res.data);
-      loginSuccess(
-        <React.Fragment>
-          <h1>Hi there, {username}</h1>
-          <br />
-          <h3>Your Profile:</h3>
-
-          <div className="profileDetails">
-            <p>Username: {res.data.username}</p>
-            <p>Password: {res.data.password}</p>
-            <p>Email Address: {res.data.emailAddress}</p>
-          </div>
-
-          <br />
-          <h2>Thank you for trying out Cityzen!</h2>
-        </React.Fragment>
-      );
-    });
-  }
-   */
-
   return (
-    <React.Fragment>
+    <>
       <h1>Login Form:</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -86,6 +62,6 @@ export default function LoginForm() {
       {output}
       <br />
       <br />
-    </React.Fragment>
+    </>
   );
 }
