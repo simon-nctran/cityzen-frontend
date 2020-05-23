@@ -8,8 +8,8 @@ import "./App.css";
 
 import UserContext from "./UserContext";
 
-export default function App(props) {
-  const [user, setUser] = useState(props.username)
+export default function App() {
+  const [user, setUser] = useState(localStorage.getItem("username"))
   // useContext Hook Tutorial: https://www.youtube.com/watch?v=lhMKvyLRWo0
 
   return (
