@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { getLogin, getUser } from "../api";
+import React, {useContext, useState} from "react";
+import { getLogin } from "../api";
+import UserContext from "../UserContext";
 
-export default function LoginForm({ loginSuccess }) {
+export default function LoginForm() {
+  const { setUser } = useContext(UserContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [output, setOutput] = useState(<React.Fragment />);
@@ -13,7 +16,7 @@ export default function LoginForm({ loginSuccess }) {
       .then((res) => {
         console.log(res);
         if (res.data === "Login successful") {
-          successfulLogin(username);
+          setUser(username)
         } else if (res.data === "Username not found") {
           setOutput(
             <React.Fragment>
@@ -34,6 +37,7 @@ export default function LoginForm({ loginSuccess }) {
       });
   }
 
+  /*
   function successfulLogin(username) {
     getUser(username).then((res) => {
       console.log(res.data);
@@ -55,6 +59,7 @@ export default function LoginForm({ loginSuccess }) {
       );
     });
   }
+   */
 
   return (
     <React.Fragment>

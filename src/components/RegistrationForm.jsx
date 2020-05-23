@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { addUser, getUser } from "../api";
+import React, {useContext, useState} from "react";
+import { addUser } from "../api";
+import UserContext from "../UserContext";
 
 export default function RegistrationForm({ registrationSuccess }) {
+  const { setUser } = useContext(UserContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +17,7 @@ export default function RegistrationForm({ registrationSuccess }) {
       .then((res) => {
         console.log(res);
         if (res.data === "Registration successful") {
-          successfulRegister(username)
+          setUser(username)
         } else if (res.data === "Username already exists") {
           setOutput(
             <React.Fragment>
@@ -29,6 +32,7 @@ export default function RegistrationForm({ registrationSuccess }) {
       });
   }
 
+  /*
   function successfulRegister(username) {
     getUser(username)
       .then((res) => {
@@ -50,6 +54,7 @@ export default function RegistrationForm({ registrationSuccess }) {
         )
       })
   }
+   */
 
   return (
     <React.Fragment>

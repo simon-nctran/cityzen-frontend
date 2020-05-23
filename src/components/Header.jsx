@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 
 import Button from "../components/Button";
+import UserContext from "../UserContext";
 
-// App Header Component to get
+// Header Component (child to App Component)
 export default function Header({ getWayPoints }) {
+  const { user } = useContext(UserContext);
+
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
 
@@ -22,7 +25,10 @@ export default function Header({ getWayPoints }) {
     <div>
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
-        <h2>Let's plan your journey!</h2>
+        {user !== null
+          ? <h2>Let's plan your journey {user}!</h2>
+          : <h2>Let's plan your journey!</h2>
+        }
       </div>
       <div className="getDirections">
         <form id="getDirections">
