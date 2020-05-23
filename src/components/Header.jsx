@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
-import { getWaypoints } from "../api";
 import Button from "../components/Button";
 
 // App Header Component to get
-export default function Header() {
+export default function Header({ getWayPoints }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
 
   function onSubmit() {
-    getWaypoints({
-      origin,
-      destination,
-    });
+    if (origin === "" || destination === "") {
+      alert("Origin and Destination cannot be empty!")
+    } else {
+      getWayPoints({
+        origin,
+        destination,
+      });
+    }
   }
 
   return (
