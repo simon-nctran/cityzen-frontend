@@ -66,6 +66,7 @@ export default function Profile() {
     setToggledLogin(false);
     setToggledRegister(false);
     setToggledProfile(false)
+    setUser(null);
   }
 
   useEffect(() => {
