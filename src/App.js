@@ -8,8 +8,8 @@ import "./App.css";
 
 import UserContext from "./UserContext";
 
-export default function App() {
-  const [user, setUser] = useState(null)
+export default function App(props) {
+  const [user, setUser] = useState(props.username)
   // useContext Hook Tutorial: https://www.youtube.com/watch?v=lhMKvyLRWo0
 
   return (

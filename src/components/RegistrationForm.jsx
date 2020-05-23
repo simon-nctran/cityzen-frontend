@@ -10,6 +10,8 @@ export default function RegistrationForm() {
   const [email, setEmail] = useState("");
   const [output, setOutput] = useState(<React.Fragment />);
 
+  const [remember, setRemember] = useState(false);
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -18,6 +20,10 @@ export default function RegistrationForm() {
         console.log(res);
         if (res.data === "Registration successful") {
           setUser(username);
+          if (remember) {
+            localStorage.setItem("username",username);
+          }
+
         } else if (res.data === "Username already exists") {
           setOutput(
             <>
@@ -61,6 +67,14 @@ export default function RegistrationForm() {
           Register
         </button>
       </form>
+      <label>
+        Remember me
+        <input
+          type="checkbox"
+          checked={remember}
+          onChange={(event) => setRemember(event.target.checked)}
+        />
+      </label>
       {output}
       <br />
       <br />

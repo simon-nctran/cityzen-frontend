@@ -9,6 +9,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [output, setOutput] = useState(<React.Fragment />);
 
+  const [remember, setRemember] = useState(false);
+
   function handleSubmit(event) {
     event.preventDefault();
 
@@ -17,12 +19,17 @@ export default function LoginForm() {
         console.log(res);
         if (res.data === "Login successful") {
           setUser(username);
+          if (remember) {
+            localStorage.setItem("username",username);
+          }
+
         } else if (res.data === "Username not found") {
           setOutput(
             <>
               <p>Username not found</p>
             </>
           );
+
         } else if (res.data === "Invalid password") {
           setOutput(
             <>
@@ -59,6 +66,14 @@ export default function LoginForm() {
           Login
         </button>
       </form>
+      <label>
+        Remember me
+        <input
+          type="checkbox"
+          checked={remember}
+          onChange={(event) => setRemember(event.target.checked)}
+        />
+      </label>
       {output}
       <br />
       <br />

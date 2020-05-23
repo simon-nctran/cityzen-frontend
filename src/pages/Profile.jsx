@@ -67,6 +67,7 @@ export default function Profile() {
     setToggledRegister(false);
     setToggledProfile(false);
     setUser(null);
+    localStorage.removeItem("username");
   }
 
   useEffect(() => {
