@@ -10,7 +10,7 @@ export default function Profile() {
   const { user, setUser } = useContext(UserContext);
 
   const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
-  const [profile, setProfile] = useState(< />);
+  const [profile, setProfile] = useState(<React.Fragment />);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
   const [toggledProfile, setToggledProfile] = useState(false);
@@ -62,7 +62,7 @@ export default function Profile() {
 
   function logout() {
     setForm(<h1>You have logged out</h1>);
-    setProfile(< />);
+    setProfile(<React.Fragment />);
     setToggledLogin(false);
     setToggledRegister(false);
     setToggledProfile(false);
@@ -82,7 +82,7 @@ export default function Profile() {
       setToggledLogin(false);
       setToggledRegister(false);
       setToggledProfile(false);
-      setProfile(< />);
+      setProfile(<React.Fragment />);
     }
   }, [user]);
 

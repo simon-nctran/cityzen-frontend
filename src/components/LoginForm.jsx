@@ -7,7 +7,7 @@ export default function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(< />);
+  const [output, setOutput] = useState(<React.Fragment />);
 
   function handleSubmit(event) {
     event.preventDefault();

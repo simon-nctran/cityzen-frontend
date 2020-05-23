@@ -8,7 +8,7 @@ export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [output, setOutput] = useState(< />);
+  const [output, setOutput] = useState(<React.Fragment />);
 
   function handleSubmit(event) {
     event.preventDefault();
