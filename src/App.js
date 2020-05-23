@@ -19,6 +19,7 @@ export default function App() {
     <Router>
       <div className="App">
         <SimpleBar style={{ height: '100vh' }}>
+          {/*https://stackoverflow.com/questions/12172177/set-div-height-equal-to-screen-size/41537811#41537811 */}
           <Nav />
           <Switch>
             <UserContext.Provider value={{user, setUser}}>
