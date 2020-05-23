@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
 import Button from "../components/Button";
 
+import UserContext from "../UserContext";
+
 export default function Profile() {
+  const [user, setUser] = useContext(UserContext);
+
   const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
   const [profile, setProfile] = useState(<React.Fragment />);
   const [toggledLogin, setToggledLogin] = useState(false);
