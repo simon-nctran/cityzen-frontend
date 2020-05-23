@@ -8,6 +8,9 @@ import "./App.css";
 
 import UserContext from "./UserContext";
 
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
+
 export default function App() {
   const [user, setUser] = useState(localStorage.getItem("username"))
   // useContext Hook Tutorial: https://www.youtube.com/watch?v=lhMKvyLRWo0
@@ -15,17 +18,19 @@ export default function App() {
   return (
     <Router>
       <div className="App">
-        <Nav />
-        <Switch>
-          <UserContext.Provider value={{user, setUser}}>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/profile">
-              <Profile />
-            </Route>
-          </UserContext.Provider>
-        </Switch>
+        <SimpleBar style={{ height: '100vh' }}>
+          <Nav />
+          <Switch>
+            <UserContext.Provider value={{user, setUser}}>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/profile">
+                <Profile />
+              </Route>
+            </UserContext.Provider>
+          </Switch>
+        </SimpleBar>
       </div>
     </Router>
   );
