@@ -10,6 +10,7 @@ import UserContext from "./UserContext";
 
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
+// Why use SimpleBar: https://stackoverflow.com/questions/57862671/how-to-make-scroll-bar-overlay-content
 
 export default function App() {
   const [user, setUser] = useState(localStorage.getItem("username"))
