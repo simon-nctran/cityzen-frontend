@@ -44,8 +44,32 @@ export default function Map(props) {
       });
     });
 
-
-
+    // dummy marker
+    map.on("load", () => {
+      map.addLayer({
+        id: 'point',
+        type: 'circle',
+        source: {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [{
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: [144.966316, -37.803921]
+              }
+            }
+            ]
+          }
+        },
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#3887be'
+        }
+      });  
+    })
   }, []);
 
   useEffect(() => {
@@ -60,7 +84,6 @@ export default function Map(props) {
           if (data.features[0] === undefined) { //features[0] is undefined if the place doesnt exist
             reject("its undefined here")
           } else {
-            console.log(data.features[0].geometry.coordinates)
             resolve(data.features[0].geometry.coordinates)
           }
         })
@@ -70,15 +93,13 @@ export default function Map(props) {
     function getRoute(start, end) {
       return new Promise(function(resolve, reject) {
         let getRouteUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/" + start[0] + "," + start[1] + ";" + end[0] + "," + end[1] + "?access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
-        console.log(getRouteUrl)
         fetch(getRouteUrl)
         .then(response => response.json())
         .then(data => {
           if (data.routes === undefined) {
             reject("route is undefined")
           } else {
-            console.log(data.routes[0])
-            resolve(data.routes[0])
+            resolve(data)
           }
         })
       })
@@ -92,7 +113,9 @@ export default function Map(props) {
     getLngLat(start)
     .then(startCoord => getLngLat(end)
       .then(endCoord => getRoute(startCoord, endCoord))
+      .then(route => console.log(route))
     )
+    
   }, [props.journey]);
 
   const { lng, lat, zoom } = lngLatZoom;
