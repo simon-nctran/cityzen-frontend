@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
-import Button from "../components/Button";
+import { Button } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 import { getUser } from "../api";
@@ -102,11 +102,15 @@ export default function Profile() {
           {form}
 
           {!toggledLogin && (
-            <Button onClick={displayLogin}>I want to Log In</Button>
+            <Button variant="dark" onClick={displayLogin}>
+              I want to Log In
+            </Button>
           )}
 
           {!toggledRegister && (
-            <Button onClick={displayRegister}>I want to Register</Button>
+            <Button variant="dark" onClick={displayRegister}>
+              I want to Register
+            </Button>
           )}
         </>
       )}
