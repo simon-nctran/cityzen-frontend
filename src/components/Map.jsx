@@ -44,32 +44,32 @@ export default function Map(props) {
       });
     });
 
-    // create a dummy marker
+    // create a dummy route
     map.on("load", () => {
-      map.addLayer({
-        id: 'point',
-        type: 'circle',
-        source: {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [{
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Point',
-                coordinates: [144.966316, -37.803921]
-              }
-            }
-            ]
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+        'type': 'Feature',
+        'properties': {},
+        'geometry': {
+          'type': 'LineString',
+          'coordinates': [[144.966995,-37.800068],[144.967117,-37.799343],[144.967194,-37.798923],[144.967209,-37.79882],[144.967224,-37.798775],[144.967239,-37.798702],[144.967255,-37.798607],[144.967255,-37.798542],[144.967316,-37.798271],[144.967361,-37.797989],[144.967407,-37.797695],[144.967422,-37.797626],[144.967422,-37.797581],[144.967438,-37.797413],[144.967468,-37.797264],[144.967468,-37.797192],[144.967484,-37.797127],[144.967499,-37.797089],[144.967499,-37.797031],[144.967499,-37.797024],[144.967529,-37.796852],[144.967545,-37.796749],[144.967651,-37.796173],[144.967667,-37.79604],[144.967697,-37.795918],[144.967804,-37.795296],[144.967941,-37.794498],[144.967941,-37.794434],[144.967941,-37.794361],[144.967941,-37.7943],[144.967972,-37.79414],[144.967987,-37.794071],[144.968002,-37.794022],[144.968018,-37.79393],[144.968048,-37.793804],[144.968063,-37.79372],[144.968079,-37.79369],[144.968094,-37.793579],[144.96817,-37.793152],[144.96817,-37.793056],[144.968185,-37.793026],[144.968185,-37.79298],[144.968185,-37.792938],[144.968201,-37.792843],[144.968246,-37.792625],[144.968246,-37.792599],[144.968277,-37.792477]]
           }
-        },
-        paint: {
-          'circle-radius': 10,
-          'circle-color': '#3887be'
         }
-      });  
-    })
+        });
+        map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+        },
+        'paint': {
+        'line-color': '#888',
+        'line-width': 8
+        }
+        });    })
   }, []);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function Map(props) {
           if (data.features[0] === undefined) { //features[0] is undefined if the place doesnt exist
             reject("its undefined here")
           } else {
-            resolve(data.features[0].geometry.coordinates)
+            resolve(data.features[0].geometry.coordinates)  //extract the coordinates
           }
         })
       })
@@ -92,7 +92,7 @@ export default function Map(props) {
 
     function getRoute(start, end) {
       return new Promise(function(resolve, reject) {
-        let getRouteUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/" + start[0] + "," + start[1] + ";" + end[0] + "," + end[1] + "?geometries=geojson&access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
+        let getRouteUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/" + start[0] + "," + start[1] + ";" + end[0] + "," + end[1] + "?steps=true&geometries=geojson&access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
         fetch(getRouteUrl)
         .then(response => response.json())
         .then(data => {
@@ -113,7 +113,9 @@ export default function Map(props) {
     getLngLat(start)
     .then(startCoord => getLngLat(end)
       .then(endCoord => getRoute(startCoord, endCoord))
-      .then(route => console.log(route))
+      .then(route => {
+        console.log(route)
+        return route})
     )
     
   }, [props.journey]);
