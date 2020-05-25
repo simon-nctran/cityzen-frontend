@@ -44,7 +44,7 @@ export default function Map(props) {
       });
     });
 
-    // dummy marker
+    // create a dummy marker
     map.on("load", () => {
       map.addLayer({
         id: 'point',
@@ -92,7 +92,7 @@ export default function Map(props) {
 
     function getRoute(start, end) {
       return new Promise(function(resolve, reject) {
-        let getRouteUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/" + start[0] + "," + start[1] + ";" + end[0] + "," + end[1] + "?access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
+        let getRouteUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/" + start[0] + "," + start[1] + ";" + end[0] + "," + end[1] + "?geometries=geojson&access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA"
         fetch(getRouteUrl)
         .then(response => response.json())
         .then(data => {
