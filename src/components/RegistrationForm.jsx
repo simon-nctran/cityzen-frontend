@@ -14,16 +14,21 @@ export default function RegistrationForm() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setOutput(
+      <>
+        <p>Registering..</p>
+      </>
+    );
 
     addUser(username, password, email)
       .then((res) => {
         console.log(res);
         if (res.data === "Registration successful") {
           setUser(username);
+          setOutput(<React.Fragment />);
           if (remember) {
-            localStorage.setItem("username",username);
+            localStorage.setItem("username", username);
           }
-
         } else if (res.data === "Username already exists") {
           setOutput(
             <>

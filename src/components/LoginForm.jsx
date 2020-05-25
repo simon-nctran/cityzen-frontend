@@ -13,23 +13,27 @@ export default function LoginForm() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setOutput(
+      <>
+        <p>Logging in..</p>
+      </>
+    );
 
     getLogin(username, password)
       .then((res) => {
         console.log(res);
         if (res.data === "Login successful") {
           setUser(username);
+          setOutput(<React.Fragment />);
           if (remember) {
-            localStorage.setItem("username",username);
+            localStorage.setItem("username", username);
           }
-
         } else if (res.data === "Username not found") {
           setOutput(
             <>
               <p>Username not found</p>
             </>
           );
-
         } else if (res.data === "Invalid password") {
           setOutput(
             <>
@@ -75,7 +79,6 @@ export default function LoginForm() {
         />
       </label>
       {output}
-      <br />
       <br />
     </>
   );

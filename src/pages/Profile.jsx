@@ -15,6 +15,8 @@ export default function Profile() {
   const [toggledRegister, setToggledRegister] = useState(false);
   const [toggledProfile, setToggledProfile] = useState(false);
 
+  const [loading, setLoading] = useState(true);
+
   function displayLogin() {
     setToggledLogin(true);
     setToggledRegister(false);
@@ -36,8 +38,12 @@ export default function Profile() {
   }
 
   function displayUser(username) {
+    setProfile(
+      <>
+        <h1>Loading your profile..</h1>
+      </>
+    );
     getUser(username).then((res) => {
-      console.log(res.data);
       setProfile(
         <>
           <h1>Hi there, {username}</h1>
@@ -89,9 +95,9 @@ export default function Profile() {
 
   return (
     <>
-      {toggledProfile && <>{profile}</>}
-
-      {!toggledProfile && (
+      {toggledProfile ? (
+        <>{profile}</>
+      ) : (
         <>
           {form}
 
