@@ -15,8 +15,6 @@ export default function Profile() {
   const [toggledRegister, setToggledRegister] = useState(false);
   const [toggledProfile, setToggledProfile] = useState(false);
 
-  const [loading, setLoading] = useState(true);
-
   function displayLogin() {
     setToggledLogin(true);
     setToggledRegister(false);

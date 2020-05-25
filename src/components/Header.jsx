@@ -80,7 +80,7 @@ export default function Header({ getWayPoints }) {
                   <option>Food</option>
                   <option>Shopping</option>
                   <option>Fuel</option>
-                  <option>Accomodation</option>
+                  <option>Accommodation</option>
                 </Form.Control>
               </Form.Group>
             </Col>
