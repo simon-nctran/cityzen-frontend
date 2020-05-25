@@ -1,6 +1,7 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 
-import Button from "../components/Button";
+import { Button, Form, Row, Col } from "react-bootstrap";
+
 import UserContext from "../UserContext";
 
 // Header Component (child to App Component)
@@ -9,11 +10,13 @@ export default function Header({ getWayPoints }) {
 
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
+  const [poi, setPoi] = useState("Select...");
 
   function onSubmit() {
-    if (origin === "" || destination === "") {
-      alert("Origin and Destination cannot be empty!")
+    if (origin === "" || destination === "" || poi === "Select...") {
+      alert("Origin, Destination and/or Point of Interest cannot be empty!");
     } else {
+      console.log({ origin, destination, poi });
       getWayPoints({
         origin,
         destination,
@@ -25,42 +28,66 @@ export default function Header({ getWayPoints }) {
     <div>
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
-        {user !== null
-          ? <h2>Let's plan your journey {user}!</h2>
-          : <h2>Let's plan your journey!</h2>
-        }
+        {user !== null ? (
+          <h2>Let's plan your journey {user}!</h2>
+        ) : (
+          <h2>Let's plan your journey!</h2>
+        )}
       </div>
       <div className="getDirections">
-        <form id="getDirections">
-          <label>
-            Where are you right now?
-            <input
-              id="origin"
-              type="text"
-              placeholder="Origin"
-              name="origin"
-              value={origin}
-              onChange={(event) => {
-                setOrigin(event.target.value);
-              }}
-            />
-          </label>
-          <label>
-            Where do you want to go?
-            <input
-              id="destination"
-              type="text"
-              placeholder="Destination"
-              name="destination"
-              value={destination}
-              onChange={(event) => {
-                setDestination(event.target.value);
-              }}
-            />
-          </label>
-        </form>
+        <Form>
+          <Row>
+            <Col>
+              <Form.Group controlId="formJourneyOrigin">
+                <Form.Label>Where are you right now?</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Origin"
+                  value={origin}
+                  onChange={(event) => {
+                    setOrigin(event.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="formJourneyDestination">
+                <Form.Label>Where do you want to go?</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Destination"
+                  value={destination}
+                  onChange={(event) => {
+                    setDestination(event.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="formJourneyPOI">
+                <Form.Label>What would you like?</Form.Label>
+                <Form.Control
+                  as="select"
+                  defaultValue={poi}
+                  value={poi}
+                  onChange={(event) => {
+                    setPoi(event.target.value);
+                  }}
+                >
+                  <option disabled>Select...</option>
+                  <option>Coffee</option>
+                  <option>Toilet</option>
+                  <option>Food</option>
+                  <option>Shopping</option>
+                  <option>Fuel</option>
+                  <option>Accomodation</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+        </Form>
       </div>
-      <Button className={"btn-success"} onClick={onSubmit}>
+      <Button variant="success" onClick={onSubmit}>
         Submit
       </Button>
     </div>
