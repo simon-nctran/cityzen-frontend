@@ -56,26 +56,14 @@ export default function Profile() {
     getUser(username).then((res) => {
       setProfile(
         <>
-          <h1>
-            Hi there,
-            {username}
-          </h1>
+          <h1>Hi there, {username}</h1>
           <br />
           <h3>Your Profile:</h3>
 
           <div className="profileDetails">
-            <p>
-              Username:
-              {res.data.username}
-            </p>
-            <p>
-              Password:
-              {res.data.password}
-            </p>
-            <p>
-              Email Address:
-              {res.data.emailAddress}
-            </p>
+            <p>Username: {res.data.username}</p>
+            <p>Password: {res.data.password}</p>
+            <p>Email Address: {res.data.emailAddress}</p>
           </div>
 
           <br />
