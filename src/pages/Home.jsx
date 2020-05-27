@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Header getWayPoints={getWayPoints} />
-      <Map journey={journey}/>
+      <Map journey={journey} />
     </>
   );
 }

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
+// Why use SimpleBar: https://stackoverflow.com/questions/57862671/how-to-make-scroll-bar-overlay-content
+
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
@@ -10,10 +14,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import UserContext from "./UserContext";
 
-import SimpleBar from "simplebar-react";
-import "simplebar/dist/simplebar.min.css";
-// Why use SimpleBar: https://stackoverflow.com/questions/57862671/how-to-make-scroll-bar-overlay-content
-
 export default function App() {
   const [user, setUser] = useState(localStorage.getItem("username"));
   // useContext Hook Tutorial: https://www.youtube.com/watch?v=lhMKvyLRWo0
@@ -22,7 +22,7 @@ export default function App() {
     <Router>
       <div className="App">
         <SimpleBar style={{ height: "100vh" }}>
-          {/*https://stackoverflow.com/questions/12172177/set-div-height-equal-to-screen-size/41537811#41537811 */}
+          {/* https://stackoverflow.com/questions/12172177/set-div-height-equal-to-screen-size/41537811#41537811 */}
           <Nav />
           <Switch>
             <UserContext.Provider value={{ user, setUser }}>
