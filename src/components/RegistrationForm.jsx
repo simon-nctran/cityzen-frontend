@@ -8,7 +8,7 @@ export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState(<></>);
 
   const [remember, setRemember] = useState(false);
 
@@ -25,7 +25,7 @@ export default function RegistrationForm() {
         console.log(res);
         if (res.data === "Registration successful") {
           setUser(username);
-          setOutput(<React.Fragment />);
+          setOutput(<></>);
           if (remember) {
             localStorage.setItem("username", username);
           }

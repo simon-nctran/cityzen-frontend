@@ -7,7 +7,7 @@ export default function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState(<></>);
 
   const [remember, setRemember] = useState(false);
 
@@ -24,7 +24,7 @@ export default function LoginForm() {
         console.log(res);
         if (res.data === "Login successful") {
           setUser(username);
-          setOutput(<React.Fragment />);
+          setOutput(<></>);
           if (remember) {
             localStorage.setItem("username", username);
           }

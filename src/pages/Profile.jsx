@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Button } from "react-bootstrap";
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
-import { Button } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 import { getUser } from "../api";
@@ -10,7 +10,7 @@ export default function Profile() {
   const { user, setUser } = useContext(UserContext);
 
   const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
-  const [profile, setProfile] = useState(<React.Fragment />);
+  const [profile, setProfile] = useState(<></>);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
   const [toggledProfile, setToggledProfile] = useState(false);
@@ -24,15 +24,27 @@ export default function Profile() {
   function displayRegister() {
     setToggledRegister(true);
     setToggledLogin(false);
-    setForm(<RegistrationForm registrationSuccess={displayProfile} />);
+    setForm(<RegistrationForm />);
   }
 
-  function displayProfile(profile) {
+  /*
+  function displayProfile(newProfile) {
     setToggledProfile(true);
     setToggledLogin(false);
     setToggledRegister(false);
 
-    setProfile(profile);
+    setProfile(newProfile);
+  }
+   */
+
+  function logout() {
+    setForm(<h1>You have logged out</h1>);
+    setProfile(<></>);
+    setToggledLogin(false);
+    setToggledRegister(false);
+    setToggledProfile(false);
+    setUser(null);
+    localStorage.removeItem("username");
   }
 
   function displayUser(username) {
@@ -44,14 +56,26 @@ export default function Profile() {
     getUser(username).then((res) => {
       setProfile(
         <>
-          <h1>Hi there, {username}</h1>
+          <h1>
+            Hi there,
+            {username}
+          </h1>
           <br />
           <h3>Your Profile:</h3>
 
           <div className="profileDetails">
-            <p>Username: {res.data.username}</p>
-            <p>Password: {res.data.password}</p>
-            <p>Email Address: {res.data.emailAddress}</p>
+            <p>
+              Username:
+              {res.data.username}
+            </p>
+            <p>
+              Password:
+              {res.data.password}
+            </p>
+            <p>
+              Email Address:
+              {res.data.emailAddress}
+            </p>
           </div>
 
           <br />
@@ -62,16 +86,6 @@ export default function Profile() {
       // NOTE: Placed logout button in here so that it displays at the same time as profile text
       // If it were outside it would display earlier
     });
-  }
-
-  function logout() {
-    setForm(<h1>You have logged out</h1>);
-    setProfile(<React.Fragment />);
-    setToggledLogin(false);
-    setToggledRegister(false);
-    setToggledProfile(false);
-    setUser(null);
-    localStorage.removeItem("username");
   }
 
   useEffect(() => {
@@ -87,7 +101,7 @@ export default function Profile() {
       setToggledLogin(false);
       setToggledRegister(false);
       setToggledProfile(false);
-      setProfile(<React.Fragment />);
+      setProfile(<></>);
     }
   }, [user]);
 
