@@ -14,8 +14,9 @@ const TOKEN =
 // Main reference used to convert to functional component:
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
-  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9, lat: -37.8, zoom: 10 });
+  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 10 });
   const [routeCoords, setRouteCoords] = useState(null);
+  const [endCoord, setEndCoord] = useState(null);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
@@ -44,7 +45,7 @@ export default function Map(props) {
       });
     });
 
-    // create a route
+    // create a route source and add its layer
     map.on("load", () => {
       map.addSource("route", {
         type: "geojson",
@@ -70,6 +71,11 @@ export default function Map(props) {
           "line-width": 8,
         },
       });
+
+      // display the end marker
+      if (endCoord != null) {
+        new mapboxgl.Marker().setLngLat(endCoord[0]).addTo(map);
+      }
     });
   }, [routeCoords]);
 
@@ -81,7 +87,7 @@ export default function Map(props) {
         const getLngLatUrl =
           "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
           place +
-          ".json?proximity=144.9,-37.8&country=AU&access_token=" +
+          ".json?proximity=144.9631,-37.8136&country=AU&access_token=" +
           TOKEN;
         fetch(getLngLatUrl)
           .then((response) => response.json())
@@ -90,6 +96,7 @@ export default function Map(props) {
               // features[0] is undefined if the place doesnt exist
               reject("its undefined here");
             } else {
+              console.log(data);
               resolve(data.features[0].geometry.coordinates); // extract the coordinates
             }
           });
@@ -107,7 +114,7 @@ export default function Map(props) {
           end[0] +
           "," +
           end[1] +
-          "?steps=true&geometries=geojson&access_token=pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
+          "?steps=true&geometries=geojson&access_token=" + TOKEN;
         fetch(getRouteUrl)
           .then((response) => response.json())
           .then((data) => {
@@ -127,9 +134,11 @@ export default function Map(props) {
     // get the startCoord, then get the endCoord, then get the Route
     getLngLat(start).then((startCoord) =>
       getLngLat(end)
-        .then((endCoord) => getRoute(startCoord, endCoord))
+        .then((endCoord) => {
+          return getRoute(startCoord, endCoord)})
         .then((route) => {
           console.log(route.routes[0].geometry.coordinates);
+          setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
           setRouteCoords(route.routes[0].geometry.coordinates);
         })
     );
