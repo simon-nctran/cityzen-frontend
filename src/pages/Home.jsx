@@ -11,9 +11,14 @@ export default function Home() {
   }
 
   return (
-    <>
-      <Header getWayPoints={getWayPoints} />
-      <Map journey={journey} />
-    </>
+    <div className="home">
+      <div className="header">
+        <Header getWayPoints={getWayPoints} />
+      </div>
+
+      <div className="map">
+        <Map journey={journey} />
+      </div>
+    </div>
   );
 }
