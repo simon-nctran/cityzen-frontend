@@ -14,7 +14,7 @@ const TOKEN =
 // Main reference used to convert to functional component:
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
-  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 10 });
+  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
   const [routeCoords, setRouteCoords] = useState(null);
   const [endCoord, setEndCoord] = useState(null);
   const mapContainer = useRef(null);
@@ -77,6 +77,116 @@ export default function Map(props) {
         new mapboxgl.Marker().setLngLat(endCoord[0]).addTo(map);
       }
     });
+
+    //
+    map.on('load', function() {
+      map.loadImage(
+        'https://commons.wikimedia.org/wiki/Location_markers#/media/File:Red_Arrow_Down.svg', function(error, image) {if (error) throw error; map.addImage('cat', image)});
+      map.addSource('places', {
+      'type': 'geojson',
+      'data': {
+      'type': 'FeatureCollection',
+      'features': [
+          {
+            "id": "poi.154618893324",
+            "type": "Feature",
+            "place_type": [
+              "poi"
+            ],
+            "relevance": 1,
+            "properties": {
+              "description": "have no idea why .place_name doesnt work but .properties.description works",
+              "landmark": true,
+              "address": "297 Little Collins St.",
+              "category": "cafe, coffee, tea, tea house",
+              "maki": "cafe"
+            },
+            "text": "Sensory Lab",
+            "place_name": "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
+            "center": [
+              144.965098,
+              -37.814806
+            ],
+            "geometry": {
+              "coordinates": [
+                144.965098,
+                -37.814806
+              ],
+              "type": "Point"
+            },
+            "context": [
+              {
+                "id": "locality.5321754973111320",
+                "wikidata": "Q6811747",
+                "text": "Melbourne"
+              },
+              {
+                "id": "postcode.12767122704801890",
+                "text": "3000"
+              },
+              {
+                "id": "place.7068896531111320",
+                "wikidata": "Q3141",
+                "text": "Melbourne"
+              },
+              {
+                "id": "region.9994502542038050",
+                "short_code": "AU-VIC",
+                "wikidata": "Q36687",
+                "text": "Victoria"
+              },
+              {
+                "id": "country.9665923154346070",
+                "short_code": "au",
+                "wikidata": "Q408",
+                "text": "Australia"
+              }
+            ]
+          }
+      ]
+      }
+      });
+      // Add a layer showing the places.
+      map.addLayer({
+      'id': 'places',
+      'type': 'symbol',
+      'source': 'places',
+      'layout': {
+      'icon-image': '{maki}-15',
+      'icon-allow-overlap': true
+      }
+      });
+       
+      // When a click event occurs on a feature in the places layer, open a popup at the
+      // location of the feature, with description HTML from its properties.
+      map.on('click', 'places', function(e) {
+      var coordinates = e.features[0].geometry.coordinates.slice();
+      var description = e.features[0].properties.description;
+       
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+       
+      new mapboxgl.Popup()
+      .setLngLat(coordinates)
+      .setHTML(description)
+      .addTo(map);
+      });
+       
+      // Change the cursor to a pointer when the mouse is over the places layer.
+      map.on('mouseenter', 'places', function() {
+      map.getCanvas().style.cursor = 'pointer';
+      });
+       
+      // Change it back to a pointer when it leaves.
+      map.on('mouseleave', 'places', function() {
+      map.getCanvas().style.cursor = '';
+      });
+      });
+    //
   }, [routeCoords]);
 
   useEffect(() => {
