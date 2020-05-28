@@ -6,20 +6,24 @@ const BASE_URL = "https://cityzen-app.herokuapp.com";
 const MAPBOX_BASE_URL = "https://api.mapbox.com";
 const API_TOKEN =
   "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
+
+// Axios documentation: https://github.com/axios/axios
+// One important difference between fetch and axios is that axios's Promise automatically resolved to an Object.
+// This means that you don't need to call res.json()
 axios.defaults.baseURL = BASE_URL;
 
 export function getLogin(username, password) {
-  const endpoint = BASE_URL + "/users/login";
+  const path = "/users/login";
 
-  return axios.post(endpoint, {
+  return axios.post(path, {
     username,
     password,
   });
 }
 
-export function getUser(username) {
-  const endpoint = BASE_URL + `/users/${username}`;
-  return axios.get(endpoint);
+function getUser(username) {
+  const path = /users/ + username;
+  return axios.get(path);
 }
 
 export function useUser(username) {
@@ -28,8 +32,7 @@ export function useUser(username) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(/users/ + username)
+    getUser(username)
       .then((res) => {
         setUserData(res.data);
         setLoading(false);
@@ -48,9 +51,9 @@ export function useUser(username) {
 }
 
 export function addUser(username, password, emailAddress) {
-  const endpoint = BASE_URL + "/users/new";
+  const path = "/users/new";
 
-  return axios.post(endpoint, {
+  return axios.post(path, {
     username,
     password,
     emailAddress,
