@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 
 import { Button, Form, Row, Col } from "react-bootstrap";
 
+import Favourites from "./Favourites";
+
 import UserContext from "../UserContext";
 
 // Header Component (child to App Component)

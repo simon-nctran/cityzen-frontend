@@ -30,11 +30,22 @@ export function useUser(username) {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+  const dummyFavourites = [
+    {
+      origin: "Flinders Street Station",
+      destination: "Melbourne Central Station",
+      poi: "Toilet",
+      mode: "Walking",
+    },
+  ];
 
   useEffect(() => {
     getUser(username)
       .then((res) => {
-        setUserData(res.data);
+        setUserData({
+          ...res.data,
+          favourites: dummyFavourites, // adding dummy to actual data
+        });
         setLoading(false);
       })
       .catch((err) => {
