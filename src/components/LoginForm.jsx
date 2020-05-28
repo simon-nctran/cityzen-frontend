@@ -7,17 +7,13 @@ export default function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(<></>);
+  const [output, setOutput] = useState("");
 
   const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setOutput(
-      <>
-        <p>Logging in..</p>
-      </>
-    );
+    setOutput("Logging in..");
 
     getLogin(username, password)
       .then((res) => {
@@ -29,22 +25,14 @@ export default function LoginForm() {
             localStorage.setItem("username", username);
           }
         } else if (res.data === "Username not found") {
-          setOutput(
-            <>
-              <p>Username not found</p>
-            </>
-          );
+          setOutput("Username not found");
         } else if (res.data === "Invalid password") {
-          setOutput(
-            <>
-              <p>Invalid password </p>
-            </>
-          );
+          setOutput("Invalid password ");
         }
       })
       .catch((err) => {
         console.log(err);
-        setOutput(JSON.stringify(err));
+        setOutput("Something went wrong: {err.message}");
       });
   }
 
@@ -70,15 +58,16 @@ export default function LoginForm() {
           Login
         </button>
       </form>
-      <label>
+      <label htmlFor="login-checkbox">
         Remember me
         <input
           type="checkbox"
+          id="login-checkbox"
           checked={remember}
           onChange={(event) => setRemember(event.target.checked)}
         />
       </label>
-      {output}
+      <div className="login-output">{output}</div>
       <br />
     </>
   );

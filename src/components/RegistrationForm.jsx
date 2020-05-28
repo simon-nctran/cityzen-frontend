@@ -8,17 +8,13 @@ export default function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [output, setOutput] = useState(<></>);
+  const [output, setOutput] = useState("");
 
   const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
-    setOutput(
-      <>
-        <p>Registering..</p>
-      </>
-    );
+    setOutput("Registering..");
 
     addUser(username, password, email)
       .then((res) => {
@@ -30,11 +26,7 @@ export default function RegistrationForm() {
             localStorage.setItem("username", username);
           }
         } else if (res.data === "Username already exists") {
-          setOutput(
-            <>
-              <p>Username already exists</p>
-            </>
-          );
+          setOutput("Username already exists");
         }
       })
       .catch((err) => {
@@ -72,16 +64,16 @@ export default function RegistrationForm() {
           Register
         </button>
       </form>
-      <label>
+      <label htmlFor="registration-checkbox">
         Remember me
         <input
           type="checkbox"
+          id="registration-checkbox"
           checked={remember}
           onChange={(event) => setRemember(event.target.checked)}
         />
       </label>
-      {output}
-      <br />
+      <div className="registration-output">{output}</div>
       <br />
     </>
   );
