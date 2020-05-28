@@ -52,7 +52,7 @@ export default function Profile() {
       {toggledProfile ? (
         <ProfileContents username={user} logout={logout} />
       ) : (
-        <>
+        <div>
           {form}
 
           {!toggledLogin && (
@@ -66,7 +66,7 @@ export default function Profile() {
               I want to Register
             </Button>
           )}
-        </>
+        </div>
       )}
     </>
   );
