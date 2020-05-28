@@ -29,9 +29,9 @@ export default function Header({ getWayPoints }) {
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
         {user !== null ? (
-          <h2>Let's plan your journey {user}!</h2>
+          <h2>Let&apos;s plan your journey {user}!</h2>
         ) : (
-          <h2>Let's plan your journey!</h2>
+          <h2>Let&apos;s plan your journey!</h2>
         )}
       </div>
       <div className="getDirections">
