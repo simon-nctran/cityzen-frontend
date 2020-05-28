@@ -1,63 +1,43 @@
-import React, { useState } from "react";
-import { getLogin, getUser } from "../api";
+import React, { useContext, useState } from "react";
+import { getLogin } from "../api";
+import UserContext from "../UserContext";
 
-export default function LoginForm({ loginSuccess }) {
+export default function LoginForm() {
+  const { setUser } = useContext(UserContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState("");
+
+  const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
+    setOutput("Logging in..");
 
     getLogin(username, password)
       .then((res) => {
         console.log(res);
         if (res.data === "Login successful") {
-          successfulLogin(username);
+          setUser(username);
+          setOutput(<></>);
+          if (remember) {
+            localStorage.setItem("username", username);
+          }
         } else if (res.data === "Username not found") {
-          setOutput(
-            <React.Fragment>
-              <p>Username not found</p>
-            </React.Fragment>
-          );
+          setOutput("Username not found");
         } else if (res.data === "Invalid password") {
-          setOutput(
-            <React.Fragment>
-              <p>Invalid password </p>
-            </React.Fragment>
-          );
+          setOutput("Invalid password ");
         }
       })
       .catch((err) => {
         console.log(err);
-        setOutput(JSON.stringify(err));
+        setOutput("Something went wrong: {err.message}");
       });
   }
 
-  function successfulLogin(username) {
-    getUser(username).then((res) => {
-      console.log(res.data);
-      loginSuccess(
-        <React.Fragment>
-          <h1>Hi there, {username}</h1>
-          <br />
-          <h3>Your Profile:</h3>
-
-          <div className="profileDetails">
-            <p>Username: {res.data.username}</p>
-            <p>Password: {res.data.password}</p>
-            <p>Email Address: {res.data.emailAddress}</p>
-          </div>
-
-          <br />
-          <h2>Thank you for trying out Cityzen!</h2>
-        </React.Fragment>
-      );
-    });
-  }
-
   return (
-    <React.Fragment>
+    <>
       <h1>Login Form:</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -78,9 +58,17 @@ export default function LoginForm({ loginSuccess }) {
           Login
         </button>
       </form>
-      {output}
+      <label htmlFor="login-checkbox">
+        Remember me
+        <input
+          type="checkbox"
+          id="login-checkbox"
+          checked={remember}
+          onChange={(event) => setRemember(event.target.checked)}
+        />
+      </label>
+      <div className="login-output">{output}</div>
       <br />
-      <br />
-    </React.Fragment>
+    </>
   );
 }

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 // const BASE_URL = "http://localhost:3001";
@@ -6,27 +7,67 @@ const MAPBOX_BASE_URL = "https://api.mapbox.com";
 const API_TOKEN =
   "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
 
-export function getLogin(username, password) {
-  const endpoint = BASE_URL + "/users/login";
+// Axios documentation: https://github.com/axios/axios
+// One important difference between fetch and axios is that axios's Promise automatically resolved to an Object.
+// This means that you don't need to call res.json()
+axios.defaults.baseURL = BASE_URL;
 
-  return axios.post(endpoint, {
-    username: username,
-    password: password,
+export function getLogin(username, password) {
+  const path = "/users/login";
+
+  return axios.post(path, {
+    username,
+    password,
   });
 }
 
-export function getUser(username) {
-  const endpoint = BASE_URL + `/users/${username}`;
-  return axios.get(endpoint);
+function getUser(username) {
+  const path = /users/ + username;
+  return axios.get(path);
+}
+
+export function useUser(username) {
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
+  const dummyFavourites = [
+    {
+      origin: "Flinders Street Station",
+      destination: "Melbourne Central Station",
+      poi: "Toilet",
+      mode: "Walking",
+    },
+  ];
+
+  useEffect(() => {
+    getUser(username)
+      .then((res) => {
+        setUserData({
+          ...res.data,
+          favourites: dummyFavourites, // adding dummy to actual data
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setLoading(false);
+      });
+  }, [username]);
+
+  return {
+    loading,
+    userData,
+    error,
+  };
 }
 
 export function addUser(username, password, emailAddress) {
-  const endpoint = BASE_URL + "/users/new";
+  const path = "/users/new";
 
-  return axios.post(endpoint, {
-    username: username,
-    password: password,
-    emailAddress: emailAddress,
+  return axios.post(path, {
+    username,
+    password,
+    emailAddress,
   });
 }
 
