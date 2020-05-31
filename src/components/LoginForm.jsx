@@ -18,22 +18,31 @@ export default function LoginForm() {
     getLogin(username, password)
       .then((res) => {
         console.log(res);
-        console.log(res.headers);
         if (res.data === "Login successful") {
           setToken(res.headers["x-auth-token"]);
           setOutput(<></>);
           if (remember) {
             localStorage.setItem("auth-token", res.headers["x-auth-token"]);
           }
-        } else if (res.data === "Username not found") {
-          setOutput("Username not found");
-        } else if (res.data === "Invalid password") {
-          setOutput("Invalid password ");
+        } else {
+          setOutput("Something went wrong");
         }
       })
       .catch((err) => {
         console.log(err);
-        setOutput(`Something went wrong: ${err.message}, ${err.response.data}`);
+        if (err.response) {
+          // error has .response property if the error was explicitly sent by the server
+          setOutput(err.response.data);
+          /*
+          if (err.response.data === "Username not found") {
+            setOutput("Username not found");
+          } else if (err.response.data === "Invalid password") {
+            setOutput("Invalid password");
+          }
+           */
+        } else {
+          setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
+        }
       });
   }
 

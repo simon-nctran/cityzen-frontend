@@ -24,13 +24,23 @@ export default function RegistrationForm() {
           if (remember) {
             localStorage.setItem("auth-token", res.headers["x-auth-token"]);
           }
-        } else if (res.data === "Username already exists") {
-          setOutput("Username already exists");
+        } else {
+          setOutput("Something went wrong");
         }
       })
       .catch((err) => {
         console.log(err);
-        setOutput(`Something went wrong: ${err.message}, ${err.response.data}`);
+        if (err.response) {
+          // error has .response property if the error was explicitly sent by the server
+          setOutput(err.response.data);
+          /*
+          if (res.data === "Username already exists") {
+            setOutput("Username already exists");
+          }
+           */
+        } else {
+          setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
+        }
       });
   }
 

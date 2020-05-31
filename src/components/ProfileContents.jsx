@@ -18,9 +18,7 @@ export default function ProfileContents({ logout }) {
       ) : (
         <>
           {error ? (
-            <h1>
-              Something went wrong: {error.response.data}, {error.message}
-            </h1>
+            <h1>Something went wrong: {error.message}</h1>
           ) : (
             <>
               {userData && (
