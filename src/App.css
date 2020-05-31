@@ -1,14 +1,21 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.home {
+  display: flex;
+  flex-flow: column;
+  background-color: white;
+  height: 100vh;
 }
 
 .getDirections {
   background-color: lightgrey;
+  padding: 10px;
 }
 
 nav {
@@ -42,10 +49,9 @@ label {
 input {
   display: inline-block;
   width: 150px;
-  margin-top: 10px;
   padding: 8px;
   border-radius: 2px;
-  border: #f2f2f2 solid 1px;
+  border: grey solid 1px;
 }
 
 select {
@@ -58,31 +64,28 @@ select {
 .btn {
   display: inline-block;
   position: relative;
-  margin-bottom: 0;
   text-align: center;
   vertical-align: middle;
-  cursor: pointer;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-size: 1rem;
-  border-radius: 3px;
-  border: 1px solid transparent;
-  text-decoration: none;
-  user-select: none;
-  margin: 5px 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 
-  color: #4ba4e0;
-  border-color: transparent;
-  background: #3bace4;
-  box-shadow: none;
+.btn-dark {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.map {
+  flex-grow: 1;
+  background-color: #404040;
+  display: flex;
+  flex-flow: column;
 }
 
 .mapContainer {
   position: relative;
   width: 100%;
-  height: 465px;
-  /* margin: 50px; */
-  /* border: 3px solid dodgerblue; */
+  flex-grow: 1;
 }
 
 .mapboxgl-popup {
@@ -91,7 +94,7 @@ select {
   }
 
 .sidebarStyle {
-  /* display: none; */
+  display: none;
   position: absolute;
   top: 0;
   left: 0;

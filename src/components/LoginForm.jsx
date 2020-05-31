@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { getLogin } from "../api";
+import { getLogin } from "../apiUser";
 import UserContext from "../UserContext";
 
 export default function LoginForm() {
-  const { setUser } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,11 +18,12 @@ export default function LoginForm() {
     getLogin(username, password)
       .then((res) => {
         console.log(res);
+        console.log(res.headers);
         if (res.data === "Login successful") {
-          setUser(username);
+          setToken(res.headers["x-auth-token"]);
           setOutput(<></>);
           if (remember) {
-            localStorage.setItem("username", username);
+            localStorage.setItem("auth-token", res.headers["x-auth-token"]);
           }
         } else if (res.data === "Username not found") {
           setOutput("Username not found");
@@ -32,7 +33,7 @@ export default function LoginForm() {
       })
       .catch((err) => {
         console.log(err);
-        setOutput("Something went wrong: {err.message}");
+        setOutput(`Something went wrong: ${err.message}, ${err.response.data}`);
       });
   }
 

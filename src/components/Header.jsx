@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 
-import { Button, Form, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Row,
+  Col,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 
 import Favourites from "./Favourites";
 
@@ -8,17 +15,19 @@ import UserContext from "../UserContext";
 
 // Header Component (child to App Component)
 export default function Header({ getWayPoints }) {
-  const { user } = useContext(UserContext);
+  const { userStatus } = useContext(UserContext);
+  const { userData, error } = userStatus;
 
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [poi, setPoi] = useState("Select...");
+  const [transportType, setTransportType] = useState("Walk");
 
   function onSubmit() {
     if (origin === "" || destination === "" || poi === "Select...") {
       alert("Origin, Destination and/or Point of Interest cannot be empty!");
     } else {
-      console.log({ origin, destination, poi });
+      console.log({ origin, destination, poi, transportType });
       getWayPoints({
         origin,
         destination,
@@ -30,8 +39,8 @@ export default function Header({ getWayPoints }) {
     <div>
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
-        {user !== null ? (
-          <h2>Let&apos;s plan your journey {user}!</h2>
+        {userData !== null && error == null ? (
+          <h2>Let&apos;s plan your journey {userData.username}!</h2>
         ) : (
           <h2>Let&apos;s plan your journey!</h2>
         )}
@@ -60,6 +69,7 @@ export default function Header({ getWayPoints }) {
                   placeholder="Destination"
                   value={destination}
                   onChange={(event) => {
+                    // console.log(event.target.value);
                     setDestination(event.target.value);
                   }}
                 />
@@ -73,6 +83,7 @@ export default function Header({ getWayPoints }) {
                   defaultValue={poi}
                   value={poi}
                   onChange={(event) => {
+                    console.log(event.target.value);
                     setPoi(event.target.value);
                   }}
                 >
@@ -87,11 +98,33 @@ export default function Header({ getWayPoints }) {
               </Form.Group>
             </Col>
           </Row>
+          <Row>
+            <Col>
+              <ToggleButtonGroup
+                name="transportType"
+                defaultValue={transportType}
+                value={transportType}
+                onChange={(value) => {
+                  console.log(value);
+                  setTransportType(value);
+                }}
+              >
+                <ToggleButton
+                  value="Driving"
+                  onClick={(event) => (event.target.variant = "success")}
+                >
+                  Car
+                </ToggleButton>
+                <ToggleButton value="Walking">Walk</ToggleButton>
+                <ToggleButton value="Cycling">Bike</ToggleButton>
+              </ToggleButtonGroup>
+            </Col>
+          </Row>
         </Form>
+        <Button variant="success" onClick={onSubmit}>
+          Submit
+        </Button>
       </div>
-      <Button variant="success" onClick={onSubmit}>
-        Submit
-      </Button>
     </div>
   );
 }

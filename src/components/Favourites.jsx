@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "../api";
+import { useUser } from "../apiUser";
 
 export default function Favourites({ username }) {
   const { loading, userData, error } = useUser(username);
