@@ -15,7 +15,8 @@ import UserContext from "../UserContext";
 
 // Header Component (child to App Component)
 export default function Header({ getWayPoints }) {
-  const { user } = useContext(UserContext);
+  const { userStatus } = useContext(UserContext);
+  const { userData, error } = userStatus;
 
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
@@ -38,8 +39,8 @@ export default function Header({ getWayPoints }) {
     <div>
       <div className="appName">
         <h1>Welcome to Cityzen!</h1>
-        {user !== null ? (
-          <h2>Let&apos;s plan your journey {user}!</h2>
+        {userData !== null && error == null ? (
+          <h2>Let&apos;s plan your journey {userData.username}!</h2>
         ) : (
           <h2>Let&apos;s plan your journey!</h2>
         )}

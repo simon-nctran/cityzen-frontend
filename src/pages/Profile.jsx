@@ -2,17 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { Button } from "react-bootstrap";
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
-
-import UserContext from "../UserContext";
 import ProfileContents from "../components/ProfileContents";
 
+import UserContext from "../UserContext";
+
 export default function Profile() {
-  const { user, setUser } = useContext(UserContext);
+  const { userStatus, token, setToken } = useContext(UserContext);
 
   const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
-  const [toggledProfile, setToggledProfile] = useState(false);
+  const [toggledProfile, setToggledProfile] = useState(Boolean(userStatus.userData));
+  // Boolean(): https://stackoverflow.com/questions/31155477/convert-truthy-or-falsy-to-an-explicit-boolean
 
   function displayLogin() {
     setToggledLogin(true);
@@ -27,46 +28,53 @@ export default function Profile() {
   }
 
   function logout() {
+    console.log("logging out");
     setForm(<h1>You have logged out</h1>);
     setToggledLogin(false);
     setToggledRegister(false);
     setToggledProfile(false);
-    setUser(null);
-    localStorage.removeItem("username");
+    setToken(null);
+    localStorage.removeItem("auth-token");
   }
 
   useEffect(() => {
-    console.log(user);
+    console.log("entered use effect in profile.jsx");
     setToggledLogin(false);
     setToggledRegister(false);
 
-    if (user !== null) {
+    if (token !== null) {
       setToggledProfile(true);
     } else {
       setToggledProfile(false);
     }
-  }, [user]);
+  }, [token]);
 
   return (
     <>
-      {toggledProfile ? (
-        <ProfileContents username={user} logout={logout} />
+      {userStatus.loading ? (
+        <p>Checking if logged in..{console.log("checking log")}</p>
       ) : (
-        <div>
-          {form}
+        <>
+          {toggledProfile ? (
+            <ProfileContents logout={logout} />
+          ) : (
+            <div>
+              {form}
 
-          {!toggledLogin && (
-            <Button variant="dark" onClick={displayLogin}>
-              I want to Log In
-            </Button>
-          )}
+              {!toggledLogin && (
+                <Button variant="dark" onClick={displayLogin}>
+                  I want to Log In
+                </Button>
+              )}
 
-          {!toggledRegister && (
-            <Button variant="dark" onClick={displayRegister}>
-              I want to Register
-            </Button>
+              {!toggledRegister && (
+                <Button variant="dark" onClick={displayRegister}>
+                  I want to Register
+                </Button>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
     </>
   );

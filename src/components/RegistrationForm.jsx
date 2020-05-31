@@ -1,13 +1,12 @@
 import React, { useContext, useState } from "react";
-import { addUser } from "../api";
+import { addUser } from "../apiUser";
 import UserContext from "../UserContext";
 
 export default function RegistrationForm() {
-  const { setUser } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [output, setOutput] = useState("");
 
   const [remember, setRemember] = useState(false);
@@ -16,14 +15,14 @@ export default function RegistrationForm() {
     event.preventDefault();
     setOutput("Registering..");
 
-    addUser(username, password, email)
+    addUser(username, password)
       .then((res) => {
         console.log(res);
         if (res.data === "Registration successful") {
-          setUser(username);
+          setToken(res.headers["x-auth-token"]);
           setOutput(<></>);
           if (remember) {
-            localStorage.setItem("username", username);
+            localStorage.setItem("auth-token", res.headers["x-auth-token"]);
           }
         } else if (res.data === "Username already exists") {
           setOutput("Username already exists");
@@ -31,7 +30,7 @@ export default function RegistrationForm() {
       })
       .catch((err) => {
         console.log(err);
-        setOutput(JSON.stringify(err));
+        setOutput(`Something went wrong: ${err.message}, ${err.response.data}`);
       });
   }
 
@@ -51,13 +50,6 @@ export default function RegistrationForm() {
           placeholder="Password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
           required
         />
         <button className="btn btn-success" type="submit">
