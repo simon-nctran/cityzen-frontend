@@ -80,7 +80,6 @@ export default function Header({ getWayPoints }) {
                 <Form.Label>What would you like?</Form.Label>
                 <Form.Control
                   as="select"
-                  defaultValue={poi}
                   value={poi}
                   onChange={(event) => {
                     console.log(event.target.value);
