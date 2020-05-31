@@ -109,6 +109,7 @@ export default function Map(props) {
                 address: "297 Little Collins St.",
                 category: "cafe, coffee, tea, tea house",
                 maki: "cafe",
+                name: "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
               },
               text: "Sensory Lab",
               place_name:
@@ -156,7 +157,7 @@ export default function Map(props) {
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": "{maki}-15",
+          "icon-image": "cat",
           "icon-allow-overlap": true,
         },
       });
@@ -164,8 +165,8 @@ export default function Map(props) {
       // When a click event occurs on a feature in the places layer, open a popup at the
       // location of the feature, with description HTML from its properties.
       map.on("click", "places", function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice();
-        var description = e.features[0].properties.description;
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const { description } = e.features[0].properties;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -204,6 +205,7 @@ export default function Map(props) {
           .then((response) => response.json())
           .then((data) => {
             if (data.features[0] === undefined) {
+              // features is list of possible places
               // features[0] is undefined if the place doesnt exist
               reject("its undefined here");
             } else {
@@ -253,6 +255,10 @@ export default function Map(props) {
           console.log(route.routes[0].geometry.coordinates);
           setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
           setRouteCoords(route.routes[0].geometry.coordinates);
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Map failed");
         })
     );
   }, [props.journey]);
