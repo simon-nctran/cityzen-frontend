@@ -13,7 +13,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 /* https://react-bootstrap.netlify.app/getting-started/introduction */
 
-import { useUser } from "./apiUser";
+import { useUser } from "./api/apiUser";
 import UserContext from "./UserContext";
 
 export default function App() {

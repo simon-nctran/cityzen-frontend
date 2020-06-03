@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { addUser } from "../apiUser";
+import { addUser } from "../api/apiUser";
 import UserContext from "../UserContext";
 
 export default function RegistrationForm() {
