@@ -21,16 +21,18 @@ export default function Header({ getWayPoints }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [poi, setPoi] = useState("Select...");
-  const [transportType, setTransportType] = useState("Walk");
+  const [mode, setMode] = useState("Walk");
 
   function onSubmit() {
     if (origin === "" || destination === "" || poi === "Select...") {
       alert("Origin, Destination and/or Point of Interest cannot be empty!");
     } else {
-      console.log({ origin, destination, poi, transportType });
+      console.log({ origin, destination, poi, mode });
       getWayPoints({
         origin,
         destination,
+        poi,
+        mode,
       });
     }
   }
@@ -101,20 +103,14 @@ export default function Header({ getWayPoints }) {
           <Row>
             <Col>
               <ToggleButtonGroup
-                name="transportType"
-                defaultValue={transportType}
-                value={transportType}
+                name="mode"
+                value={mode}
                 onChange={(value) => {
                   console.log(value);
-                  setTransportType(value);
+                  setMode(value);
                 }}
               >
-                <ToggleButton
-                  value="Driving"
-                  onClick={(event) => (event.target.variant = "success")}
-                >
-                  Car
-                </ToggleButton>
+                <ToggleButton value="Driving">Car</ToggleButton>
                 <ToggleButton value="Walking">Walk</ToggleButton>
                 <ToggleButton value="Cycling">Bike</ToggleButton>
               </ToggleButtonGroup>
