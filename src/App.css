@@ -13,6 +13,16 @@
   height: 100vh;
 }
 
+.favourites-shown {
+  display: none;
+  background-color: cornflowerblue;
+  padding: 5px;
+}
+
+.favourites-shown.show {
+  display: block;
+}
+
 .getDirections {
   background-color: lightgrey;
   padding: 10px;
@@ -40,10 +50,7 @@ nav a.active {
 
 label {
   font-weight: bold;
-  display: inline-block;
-  width: 250px;
-  padding: 15px;
-  position: relative;
+  text-align: left;
 }
 
 input {
@@ -90,8 +97,8 @@ select {
 
 .mapboxgl-popup {
   max-width: 400px;
-  font: 18px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  }
+  font: 18px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
 
 .sidebarStyle {
   display: none;
