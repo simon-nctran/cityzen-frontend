@@ -165,6 +165,7 @@ export default function Map(props) {
           .then((data) => {
             if (data.features[0] === undefined) {
               // features[0] is undefined if the place doesnt exist
+              alert("Places could not be found");
               reject("its undefined here");
             } else {
               console.log("searchWaypoint data:", data);
