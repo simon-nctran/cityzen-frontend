@@ -14,19 +14,16 @@ const TOKEN =
 // Main reference used to convert to functional component:
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
+  const [map, setMap] = useState(null);
   const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
   const [routeCoords, setRouteCoords] = useState(null);
-  const [endCoord, setEndCoord] = useState(null);
   const [poiFeatures, setPoiFeatures] = useState(null);
-  const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
   // https://reactjs.org/docs/refs-and-the-dom.html
 
-  // Run at initialisation and everytime props.journey is updated.
-  // second argument of useEffect is an array which defines the variables it tracks for changes
-  // it runs whenever one of these variables changes
+  //run only at initialisation
   useEffect(() => {
     console.log("Map Component has been mounted");
     const { lng, lat, zoom } = lngLatZoom;
@@ -48,106 +45,120 @@ export default function Map(props) {
       });
     });
 
+    newMap.loadImage("/poiMarker.png", function (error, image) {
+      if (error) throw error;
+      newMap.addImage("cat", image);
+    });
+
+
     setMap(newMap);
   }, []);
 
   useEffect(() => {
-    if (map && routeCoords != null) {
-      /*
-      // things to do when loading map
-      map.on("load", () => {
-        );
 
-       */
+    if (poiFeatures != null) {
 
-      // add a "route" resource to map
-      map.addSource("route", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: routeCoords,
-          },
-        },
-      });
-      // add a layer to map that displays "route" resource
-      map.addLayer({
-        id: "route",
-        type: "line",
-        source: "route",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#888",
-          "line-width": 8,
-        },
-      });
-
-      // display the end marker
-      if (endCoord != null) {
-        new mapboxgl.Marker().setLngLat(endCoord[0]).addTo(map);
+      let poiData = {
+          type: "FeatureCollection",
+          features: poiFeatures,
       }
 
-      // things to do when loading map
-      if (routeCoords != null) {
-        map.on("load", function () {
-          map.loadImage("/poiMarker.png", function (error, image) {
-            if (error) throw error;
-            map.addImage("cat", image);
-          });
 
-          map.addSource("places", {
-            type: "geojson",
-            data: {
-              type: "FeatureCollection",
-              features: poiFeatures,
+      if (map.getSource("places")) {
+        map.getSource("places").setData(poiData);
+      } else {
+        map.addSource("places", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: poiFeatures,
+          },
+        });
+
+        // Add a layer showing the places.
+        map.addLayer({
+          id: "places",
+          type: "symbol",
+          source: "places",
+          layout: {
+            "icon-image": "cat",
+            "icon-allow-overlap": true,
+          },
+        });
+
+        // Create a popup, but don't add it to the map yet.
+        let popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+
+        map.on("mouseenter", "places", function (e) {
+          // Change the cursor style as a UI indicator.
+          map.getCanvas().style.cursor = "pointer";
+
+          let coordinates = e.features[0].geometry.coordinates.slice();
+          let description = e.features[0].properties.address;
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup.setLngLat(coordinates).setHTML(description).addTo(map);
+        });
+
+        map.on("mouseleave", "places", function () {
+          map.getCanvas().style.cursor = "";
+          popup.remove();
+        });
+      }
+    }
+  }, [poiFeatures]);
+
+  useEffect(() => {
+    if (map && routeCoords) {  //run only once the map is loaded and coordinates of a route exist
+
+      let routeData = {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: routeCoords,
+        }
+      };
+
+      // add a "route" resource to map
+      if (map.getSource("route")) {
+        map.getSource("route").setData(routeData);
+      } else {
+        map.addSource("route", {
+          type: "geojson",
+          data: {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "LineString",
+              coordinates: routeCoords,
             },
-          });
-
-          // Add a layer showing the places.
-          map.addLayer({
-            id: "places",
-            type: "symbol",
-            source: "places",
-            layout: {
-              "icon-image": "cat",
-              "icon-allow-overlap": true,
-            },
-          });
-
-          // Create a popup, but don't add it to the map yet.
-          var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false,
-          });
-
-          map.on("mouseenter", "places", function (e) {
-            // Change the cursor style as a UI indicator.
-            map.getCanvas().style.cursor = "pointer";
-
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var description = e.features[0].properties.address;
-
-            // Ensure that if the map is zoomed out such that multiple
-            // copies of the feature are visible, the popup appears
-            // over the copy being pointed to.
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-
-            // Populate the popup and set its coordinates
-            // based on the feature found.
-            popup.setLngLat(coordinates).setHTML(description).addTo(map);
-          });
-
-          map.on("mouseleave", "places", function () {
-            map.getCanvas().style.cursor = "";
-            popup.remove();
-          });
+          },
+        });
+        // add a layer to map that displays "route" resource
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: "route",
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#888",
+            "line-width": 8,
+          },
         });
       }
     }
@@ -224,7 +235,6 @@ export default function Map(props) {
           })
           .then((route) => {
             console.log("route coordinates", route.routes[0].geometry.coordinates);
-            setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
             setRouteCoords(route.routes[0].geometry.coordinates);
           })
       );
