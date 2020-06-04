@@ -88,10 +88,10 @@ export default function Map(props) {
 
         map.loadImage(
           '/poiMarker.png',
-          function(error, image) {
-          if (error) throw error;
-          map.addImage('cat', image);
-        });
+          function (error, image) {
+            if (error) throw error;
+            map.addImage('cat', image);
+          });
 
         map.addSource('places', {
           'type': 'geojson',
@@ -156,8 +156,8 @@ export default function Map(props) {
       return new Promise((resolve, reject) => {
         const searchWaypointUrl =
           "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-          place + ".json?proximity=" + 
-          lngLatZoom.lng + "," + 
+          place + ".json?proximity=" +
+          lngLatZoom.lng + "," +
           lngLatZoom.lat + "&country=AU&access_token=" +
           TOKEN;
         fetch(searchWaypointUrl)
