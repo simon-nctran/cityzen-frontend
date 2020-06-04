@@ -17,6 +17,7 @@ export default function Map(props) {
   const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
   const [routeCoords, setRouteCoords] = useState(null);
   const [endCoord, setEndCoord] = useState(null);
+  const [poiFeatures, setPoiFeatures] = useState(null);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
@@ -82,133 +83,92 @@ export default function Map(props) {
     });
 
     // things to do when loading map
-    map.on("load", function () {
-      // load image onto map
-      map.loadImage(
-        "/logo192.png", // https://commons.wikimedia.org/wiki/Location_markers#/media/File:Red_Arrow_Down.svg",
-        function (error, image) {
+    if (routeCoords != null) {
+      map.on('load', function () {
+
+        map.loadImage(
+          '/poiMarker.png',
+          function(error, image) {
           if (error) throw error;
-          map.addImage("cat", image);
-        }
-      );
-      // add "places" resource to map
-      map.addSource("places", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              id: "poi.154618893324",
-              type: "Feature",
-              place_type: ["poi"],
-              relevance: 1,
-              properties: {
-                description:
-                  "have no idea why .place_name doesnt work but .properties.description works",
-                landmark: true,
-                address: "297 Little Collins St.",
-                category: "cafe, coffee, tea, tea house",
-                maki: "cafe",
-              },
-              text: "Sensory Lab",
-              place_name:
-                "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
-              center: [144.965098, -37.814806],
-              geometry: {
-                coordinates: [144.965098, -37.814806],
-                type: "Point",
-              },
-              context: [
-                {
-                  id: "locality.5321754973111320",
-                  wikidata: "Q6811747",
-                  text: "Melbourne",
-                },
-                {
-                  id: "postcode.12767122704801890",
-                  text: "3000",
-                },
-                {
-                  id: "place.7068896531111320",
-                  wikidata: "Q3141",
-                  text: "Melbourne",
-                },
-                {
-                  id: "region.9994502542038050",
-                  short_code: "AU-VIC",
-                  wikidata: "Q36687",
-                  text: "Victoria",
-                },
-                {
-                  id: "country.9665923154346070",
-                  short_code: "au",
-                  wikidata: "Q408",
-                  text: "Australia",
-                },
-              ],
-            },
-          ],
-        },
-      });
-      // add a layer to map that displays "places" resource
-      map.addLayer({
-        id: "places",
-        type: "symbol",
-        source: "places",
-        layout: {
-          "icon-image": "{maki}-15",
-          "icon-allow-overlap": true,
-        },
-      });
+          map.addImage('cat', image);
+        });
 
-      // When a click event occurs on a feature in the places layer, open a popup at the
-      // location of the feature, with description HTML from its properties.
-      map.on("click", "places", function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice();
-        var description = e.features[0].properties.description;
+        map.addSource('places', {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': poiFeatures,
+          }
+        });
 
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+        // Add a layer showing the places.
+        map.addLayer({
+          'id': 'places',
+          'type': 'symbol',
+          'source': 'places',
+          'layout': {
+            'icon-image': 'cat',
+            'icon-allow-overlap': true
+          }
+        });
 
-        new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+        // Create a popup, but don't add it to the map yet.
+        var popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        });
+
+        map.on('mouseenter', 'places', function (e) {
+          // Change the cursor style as a UI indicator.
+          map.getCanvas().style.cursor = 'pointer';
+
+          var coordinates = e.features[0].geometry.coordinates.slice();
+          var description = e.features[0].properties.address;
+
+          // Ensure that if the map is zoomed out such that multiple
+          // copies of the feature are visible, the popup appears
+          // over the copy being pointed to.
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+
+          // Populate the popup and set its coordinates
+          // based on the feature found.
+          popup
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+        });
+
+        map.on('mouseleave', 'places', function () {
+          map.getCanvas().style.cursor = '';
+          popup.remove();
+        });
       });
-
-      // Change the cursor to a pointer when the mouse is over the places layer.
-      map.on("mouseenter", "places", function () {
-        map.getCanvas().style.cursor = "pointer";
-      });
-
-      // Change it back to a pointer when it leaves.
-      map.on("mouseleave", "places", function () {
-        map.getCanvas().style.cursor = "";
-      });
-    });
+    }
     //
   }, [routeCoords]);
 
   useEffect(() => {
     console.log("props.journey has been updated");
 
-    function getLngLat(place) {
+    function searchWaypoint(place) {
       return new Promise((resolve, reject) => {
-        const getLngLatUrl =
+        const searchWaypointUrl =
           "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-          place +
-          ".json?proximity=144.9631,-37.8136&country=AU&access_token=" +
+          place + ".json?proximity=" + 
+          lngLatZoom.lng + "," + 
+          lngLatZoom.lat + "&country=AU&access_token=" +
           TOKEN;
-        fetch(getLngLatUrl)
+        fetch(searchWaypointUrl)
           .then((response) => response.json())
           .then((data) => {
             if (data.features[0] === undefined) {
               // features[0] is undefined if the place doesnt exist
               reject("its undefined here");
             } else {
-              console.log(data);
-              resolve(data.features[0].geometry.coordinates); // extract the coordinates
+              console.log("searchWaypoint data:", data);
+              resolve(data); // extract the coordinates
             }
           });
       });
@@ -242,19 +202,25 @@ export default function Map(props) {
     // if start and end are not undefined then
     const start = props.journey.origin;
     const end = props.journey.destination;
+    const poi = "Coffee";
 
     // get the startCoord, then get the endCoord, then get the Route
-    getLngLat(start).then((startCoord) =>
-      getLngLat(end)
-        .then((endCoord) => {
-          return getRoute(startCoord, endCoord);
+    searchWaypoint(start).then((start) =>
+      searchWaypoint(end)
+        .then((end) => {
+          return getRoute(start.features[0].geometry.coordinates, end.features[0].geometry.coordinates);
         })
         .then((route) => {
-          console.log(route.routes[0].geometry.coordinates);
+          console.log("route coordinates", route.routes[0].geometry.coordinates);
           setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
           setRouteCoords(route.routes[0].geometry.coordinates);
         })
     );
+    searchWaypoint(poi).then((poi) => {
+      console.log("poi features:", poi.features);
+      // add place names to the description to display on marker
+      setPoiFeatures(poi.features);
+    })
   }, [props.journey]);
 
   const { lng, lat, zoom } = lngLatZoom;
