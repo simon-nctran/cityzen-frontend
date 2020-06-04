@@ -45,6 +45,9 @@ export default function Header({ getWayPoints }) {
           <h2>Let&apos;s plan your journey!</h2>
         )}
       </div>
+      <div className="userFavorites">
+        {userData !== null && error == null ? <Favourites /> : <> </>}
+      </div>
       <div className="getDirections">
         <Form>
           <Row>
@@ -60,8 +63,6 @@ export default function Header({ getWayPoints }) {
                   }}
                 />
               </Form.Group>
-            </Col>
-            <Col>
               <Form.Group controlId="formJourneyDestination">
                 <Form.Label>Where do you want to go?</Form.Label>
                 <Form.Control
@@ -95,33 +96,31 @@ export default function Header({ getWayPoints }) {
                   <option>Accommodation</option>
                 </Form.Control>
               </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <ToggleButtonGroup
-                name="transportType"
-                defaultValue={transportType}
-                value={transportType}
-                onChange={(value) => {
-                  console.log(value);
-                  setTransportType(value);
-                }}
-              >
-                <ToggleButton
-                  value="Driving"
-                  onClick={(event) => (event.target.variant = "success")}
+              <Form.Group>
+                <Form.Label>How will you be travelling? </Form.Label>
+                <br />
+                <ToggleButtonGroup
+                  name="transportType"
+                  defaultValue={transportType}
+                  value={transportType}
+                  onChange={(value) => {
+                    console.log(value);
+                    setTransportType(value);
+                  }}
                 >
-                  Car
-                </ToggleButton>
-                <ToggleButton value="Walking">Walk</ToggleButton>
-                <ToggleButton value="Cycling">Bike</ToggleButton>
-              </ToggleButtonGroup>
+                  <ToggleButton value="Driving">Car</ToggleButton>
+                  <ToggleButton value="Walking">Walk</ToggleButton>
+                  <ToggleButton value="Cycling">Bike</ToggleButton>
+                </ToggleButtonGroup>
+              </Form.Group>
             </Col>
           </Row>
         </Form>
         <Button variant="success" onClick={onSubmit}>
           Submit
+        </Button>
+        <Button variant="info" onClick>
+          Save
         </Button>
       </div>
     </div>
