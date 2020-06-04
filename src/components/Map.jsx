@@ -18,6 +18,7 @@ export default function Map(props) {
   const [routeCoords, setRouteCoords] = useState(null);
   const [endCoord, setEndCoord] = useState(null);
   const [poiFeatures, setPoiFeatures] = useState(null);
+  const [map, setMap] = useState(null);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
@@ -29,7 +30,7 @@ export default function Map(props) {
   useEffect(() => {
     console.log("Map Component has been mounted");
     const { lng, lat, zoom } = lngLatZoom;
-    const map = new mapboxgl.Map({
+    const newMap = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
@@ -37,18 +38,28 @@ export default function Map(props) {
     });
 
     // add event listener that responds to moving the map
-    map.on("move", () => {
+    newMap.on("move", () => {
       setLngLatZoom({
-        lng: map.getCenter().lng,
-        lat: map.getCenter().lat,
-        zoom: map.getZoom(),
+        lng: newMap.getCenter().lng,
+        lat: newMap.getCenter().lat,
+        zoom: newMap.getZoom(),
         // removed .toFixed as that converts to String,
         // but latLngZoom uses Number as defined in the argument of useState above
       });
     });
 
-    // things to do when loading map
-    map.on("load", () => {
+    setMap(newMap);
+  }, []);
+
+  useEffect(() => {
+    if (map && routeCoords != null) {
+      /*
+      // things to do when loading map
+      map.on("load", () => {
+        );
+
+       */
+
       // add a "route" resource to map
       map.addSource("route", {
         type: "geojson",
@@ -80,148 +91,149 @@ export default function Map(props) {
       if (endCoord != null) {
         new mapboxgl.Marker().setLngLat(endCoord[0]).addTo(map);
       }
-    });
 
-    // things to do when loading map
-    if (routeCoords != null) {
-      map.on('load', function () {
+      // things to do when loading map
+      if (routeCoords != null) {
+        map.on("load", function () {
+          map.loadImage("/poiMarker.png", function (error, image) {
+            if (error) throw error;
+            map.addImage("cat", image);
+          });
 
-        map.loadImage(
-          '/poiMarker.png',
-          function(error, image) {
-          if (error) throw error;
-          map.addImage('cat', image);
+          map.addSource("places", {
+            type: "geojson",
+            data: {
+              type: "FeatureCollection",
+              features: poiFeatures,
+            },
+          });
+
+          // Add a layer showing the places.
+          map.addLayer({
+            id: "places",
+            type: "symbol",
+            source: "places",
+            layout: {
+              "icon-image": "cat",
+              "icon-allow-overlap": true,
+            },
+          });
+
+          // Create a popup, but don't add it to the map yet.
+          var popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+          });
+
+          map.on("mouseenter", "places", function (e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = "pointer";
+
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = e.features[0].properties.address;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            popup.setLngLat(coordinates).setHTML(description).addTo(map);
+          });
+
+          map.on("mouseleave", "places", function () {
+            map.getCanvas().style.cursor = "";
+            popup.remove();
+          });
         });
-
-        map.addSource('places', {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': poiFeatures,
-          }
-        });
-
-        // Add a layer showing the places.
-        map.addLayer({
-          'id': 'places',
-          'type': 'symbol',
-          'source': 'places',
-          'layout': {
-            'icon-image': 'cat',
-            'icon-allow-overlap': true
-          }
-        });
-
-        // Create a popup, but don't add it to the map yet.
-        var popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false
-        });
-
-        map.on('mouseenter', 'places', function (e) {
-          // Change the cursor style as a UI indicator.
-          map.getCanvas().style.cursor = 'pointer';
-
-          var coordinates = e.features[0].geometry.coordinates.slice();
-          var description = e.features[0].properties.address;
-
-          // Ensure that if the map is zoomed out such that multiple
-          // copies of the feature are visible, the popup appears
-          // over the copy being pointed to.
-          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          }
-
-          // Populate the popup and set its coordinates
-          // based on the feature found.
-          popup
-            .setLngLat(coordinates)
-            .setHTML(description)
-            .addTo(map);
-        });
-
-        map.on('mouseleave', 'places', function () {
-          map.getCanvas().style.cursor = '';
-          popup.remove();
-        });
-      });
+      }
     }
-    //
   }, [routeCoords]);
 
   useEffect(() => {
-    console.log("props.journey has been updated");
+    if (map && props.journey !== {}) {
+      console.log("props.journey has been updated");
 
-    function searchWaypoint(place) {
-      return new Promise((resolve, reject) => {
-        const searchWaypointUrl =
-          "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-          place + ".json?proximity=" + 
-          lngLatZoom.lng + "," + 
-          lngLatZoom.lat + "&country=AU&access_token=" +
-          TOKEN;
-        fetch(searchWaypointUrl)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.features[0] === undefined) {
-              // features[0] is undefined if the place doesnt exist
-              alert("Places could not be found");
-              reject("its undefined here");
-            } else {
-              console.log("searchWaypoint data:", data);
-              resolve(data); // extract the coordinates
-            }
-          });
+      function searchWaypoint(place) {
+        return new Promise((resolve, reject) => {
+          const searchWaypointUrl =
+            "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
+            place +
+            ".json?proximity=" +
+            lngLatZoom.lng +
+            "," +
+            lngLatZoom.lat +
+            "&country=AU&access_token=" +
+            TOKEN;
+          fetch(searchWaypointUrl)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.features[0] === undefined) {
+                // features[0] is undefined if the place doesnt exist
+                alert("Places could not be found");
+                reject("its undefined here");
+              } else {
+                console.log("searchWaypoint data:", data);
+                resolve(data); // extract the coordinates
+              }
+            });
+        });
+      }
+
+      function getRoute(start, end) {
+        return new Promise((resolve, reject) => {
+          const getRouteUrl =
+            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            start[0] +
+            "," +
+            start[1] +
+            ";" +
+            end[0] +
+            "," +
+            end[1] +
+            "?steps=true&geometries=geojson&access_token=" +
+            TOKEN;
+          fetch(getRouteUrl)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.routes === undefined) {
+                reject(new Error("route is undefined"));
+              } else {
+                resolve(data);
+              }
+            });
+        });
+      }
+
+      // if start and end are not undefined then
+      const start = props.journey.origin;
+      const end = props.journey.destination;
+      const poi = "Coffee";
+
+      // get the startCoord, then get the endCoord, then get the Route
+      searchWaypoint(start).then((start) =>
+        searchWaypoint(end)
+          .then((end) => {
+            return getRoute(
+              start.features[0].geometry.coordinates,
+              end.features[0].geometry.coordinates
+            );
+          })
+          .then((route) => {
+            console.log("route coordinates", route.routes[0].geometry.coordinates);
+            setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
+            setRouteCoords(route.routes[0].geometry.coordinates);
+          })
+      );
+      searchWaypoint(poi).then((poi) => {
+        console.log("poi features:", poi.features);
+        // add place names to the description to display on marker
+        setPoiFeatures(poi.features);
       });
     }
-
-    function getRoute(start, end) {
-      return new Promise((resolve, reject) => {
-        const getRouteUrl =
-          "https://api.mapbox.com/directions/v5/mapbox/driving/" +
-          start[0] +
-          "," +
-          start[1] +
-          ";" +
-          end[0] +
-          "," +
-          end[1] +
-          "?steps=true&geometries=geojson&access_token=" +
-          TOKEN;
-        fetch(getRouteUrl)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.routes === undefined) {
-              reject(new Error("route is undefined"));
-            } else {
-              resolve(data);
-            }
-          });
-      });
-    }
-
-    // if start and end are not undefined then
-    const start = props.journey.origin;
-    const end = props.journey.destination;
-    const poi = "Coffee";
-
-    // get the startCoord, then get the endCoord, then get the Route
-    searchWaypoint(start).then((start) =>
-      searchWaypoint(end)
-        .then((end) => {
-          return getRoute(start.features[0].geometry.coordinates, end.features[0].geometry.coordinates);
-        })
-        .then((route) => {
-          console.log("route coordinates", route.routes[0].geometry.coordinates);
-          setEndCoord(route.routes[0].geometry.coordinates.slice(-1));
-          setRouteCoords(route.routes[0].geometry.coordinates);
-        })
-    );
-    searchWaypoint(poi).then((poi) => {
-      console.log("poi features:", poi.features);
-      // add place names to the description to display on marker
-      setPoiFeatures(poi.features);
-    })
   }, [props.journey]);
 
   const { lng, lat, zoom } = lngLatZoom;
