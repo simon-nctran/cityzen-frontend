@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { searchWaypoint, getRoute } from "../apiMap";
+import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
+import { getRoute, searchWaypoint } from "../apiMap";
 
 // mapbox
 mapboxgl.accessToken =
@@ -21,96 +21,22 @@ export default function Map(props) {
   // https://reactjs.org/docs/hooks-reference.html#useref
   // https://reactjs.org/docs/refs-and-the-dom.html
 
-  //run only at initialisation
-  useEffect(() => {
-    console.log("Map Component has been mounted");
-    const { lng, lat, zoom } = lngLatZoom;
-    const newMap = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom, // short hand for zoom: zoom
-    });
+  const routeData = {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "LineString",
+      coordinates: "",
+    },
+  };
 
-    // add event listener that responds to moving the map
-    newMap.on("move", () => {
-      setLngLatZoom({
-        lng: newMap.getCenter().lng,
-        lat: newMap.getCenter().lat,
-        zoom: newMap.getZoom(),
-        // removed .toFixed as that converts to String,
-        // but latLngZoom uses Number as defined in the argument of useState above
-      });
-    });
-
-    newMap.loadImage("/poiMarker.png", function (error, image) {
-      if (error) throw error;
-      newMap.addImage("cat", image);
-    });
-
-    setMap(newMap);
-  }, []);
-
-  // Search for the Route
-  useEffect(() => {
-    if (map && props.journey !== {}) {
-      console.log("props.journey has been updated");
-
-      // extract the user input into their respective fields
-      const start = props.journey.origin;
-      const end = props.journey.destination;
-      const mode = props.journey.mode;
-
-      // get the startCoord, then get the endCoord, then get the Route
-      searchWaypoint(start, lngLatZoom.lng, lngLatZoom.lat).then((start) =>
-        searchWaypoint(end, lngLatZoom.lng, lngLatZoom.lat)
-          .then((end) => {
-            return getRoute(
-              start[0].geometry.coordinates,
-              end[0].geometry.coordinates,
-              mode
-            );
-          })
-          .then((route) => {
-            console.log("route coordinates", route.routes[0].geometry.coordinates);
-            setRouteCoords(route.routes[0].geometry.coordinates);
-          })
-      );
-    }
-  }, [props.journey]);
-
-  // draw the Route and the POIs when route coordinates are updated
-  useEffect(() => {
-    if (map && routeCoords) {
-      // const source = "route";
-      routeData.geometry.coordinates = routeCoords;
-
-      // add a "route" resource to map
-      mapAddRoute(routeData, routeCoords);
-
-      const poi = props.journey.poi;
-
-      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((poi) => {
-        setPoiFeatures(poi);
-      });
-    }
-  }, [routeCoords]);
-
-
-  //draw the POIs (run when POIs are updated)
-  useEffect(() => {
-
-    if (poiFeatures != null) {
-
-      poiData.features = poiFeatures;
-
-      mapAddPOI(poiData, poiFeatures);
-
-    }
-  }, [poiFeatures]);
+  const poiData = {
+    type: "FeatureCollection",
+    features: "",
+  };
 
   // draw the Route onto the map
-  function mapAddRoute(routeData, routeCoords) {
+  function mapAddRoute() {
     if (map.getSource("route")) {
       map.getSource("route").setData(routeData);
     } else {
@@ -143,7 +69,7 @@ export default function Map(props) {
   }
 
   // draw the POIs onto the map
-  function mapAddPOI(poiData, poiFeatures) {
+  function mapAddPOI() {
     if (map.getSource("places")) {
       map.getSource("places").setData(poiData);
     } else {
@@ -167,17 +93,17 @@ export default function Map(props) {
       });
 
       // Create a popup, but don't add it to the map yet.
-      let popup = new mapboxgl.Popup({
+      const popup = new mapboxgl.Popup({
         closeButton: false,
         closeOnClick: false,
       });
 
-      map.on("mouseenter", "places", function (e) {
+      map.on("mouseenter", "places", (e) => {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = "pointer";
 
-        let coordinates = e.features[0].geometry.coordinates.slice();
-        let description = e.features[0].properties.address;
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const description = e.features[0].properties.address;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -191,33 +117,131 @@ export default function Map(props) {
         popup.setLngLat(coordinates).setHTML(description).addTo(map);
       });
 
-      map.on("mouseleave", "places", function () {
+      map.on("mouseleave", "places", () => {
         map.getCanvas().style.cursor = "";
         popup.remove();
       });
     }
   }
 
-  let routeData = {
-    type: 'Feature',
-    properties: {},
-    geometry: {
-      type: 'LineString',
-      coordinates: "",
-    }
-  };
+  async function searchRoute(origin, destination, mode) {
+    const { lng, lat } = lngLatZoom;
+    const start = await searchWaypoint(origin, lng, lat);
+    const end = await searchWaypoint(destination, lng, lat);
+    const startCoordinate = start[0].geometry.coordinates;
+    const endCoordinate = end[0].geometry.coordinates;
 
-  let poiData = {
-    type: "FeatureCollection",
-    features: "",
+    return getRoute(startCoordinate, endCoordinate, mode);
   }
 
+  // Mount the map
+  useEffect(() => {
+    console.log("Map Component has been mounted");
+    const { lng, lat, zoom } = lngLatZoom;
+    const newMap = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom, // short hand for zoom: zoom
+    });
+
+    // add event listener that responds to moving the map
+    newMap.on("move", () => {
+      setLngLatZoom({
+        lng: newMap.getCenter().lng,
+        lat: newMap.getCenter().lat,
+        zoom: newMap.getZoom(),
+        // removed .toFixed as that converts to String,
+        // but latLngZoom uses Number as defined in the argument of useState above
+      });
+    });
+
+    newMap.loadImage("/poiMarker.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("cat", image);
+    });
+
+    setMap(newMap);
+  }, []);
+
+  // Search for the Route
+  useEffect(() => {
+    if (map && props.journey !== {}) {
+      console.log("props.journey has been updated");
+
+      // extract the user input into their respective fields
+      const { origin, destination, mode } = props.journey;
+
+      // const start = props.journey.origin;
+      // const end = props.journey.destination;
+      // const mode = props.journey.mode;
+
+      searchRoute(origin, destination, mode)
+        .then((route) => {
+          const { coordinates } = route.routes[0].geometry;
+          console.log("route coordinates", coordinates);
+          setRouteCoords(coordinates);
+        })
+        .catch((err) => {
+          console.error("error has occurred when searching for routes");
+          console.error(err);
+        });
+
+      /*
+      searchWaypoint(origin, lngLatZoom.lng, lngLatZoom.lat).then((start) =>
+        searchWaypoint(destination, lngLatZoom.lng, lngLatZoom.lat)
+          .then((end) => {
+            const { startCoordinate } = start[0].geometry;
+            const { endCoordinate } = end[0].geometry;
+            getRoute(startCoordinate, endCoordinate, mode);
+          })
+          .then((route) => {
+            const { coordinates } = route.routes[0].geometry;
+            console.log("route coordinates", coordinates);
+            setRouteCoords(coordinates);
+          })
+          .catch((err) => {
+            console.error(
+              "error has occurred when resolving searchWaypoint() to search for routes"
+            );
+            console.error(err);
+          })
+      );
+      
+       */
+    }
+  }, [props.journey]);
+
+  // draw the Route and the POIs when route coordinates are updated
+  useEffect(() => {
+    if (map && routeCoords) {
+      // const source = "route";
+      routeData.geometry.coordinates = routeCoords;
+
+      // add a "route" resource to map
+      mapAddRoute(routeData, routeCoords);
+
+      const { poi } = props.journey;
+
+      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((data) => {
+        setPoiFeatures(data);
+      });
+    }
+  }, [routeCoords]);
+
+  // draw the POIs (run when POIs are updated)
+  useEffect(() => {
+    if (poiFeatures != null) {
+      poiData.features = poiFeatures;
+
+      mapAddPOI(poiData, poiFeatures);
+    }
+  }, [poiFeatures]);
+
   const { lng, lat, zoom } = lngLatZoom;
-  
   return (
-    // Using Fragments:
-    // https://reactjs.org/docs/fragments.html#short-syntax
-    // https://stackoverflow.com/questions/47761894/why-are-fragments-in-react-16-better-than-container-divs
     <>
       <>
         <div className="sidebarStyle">

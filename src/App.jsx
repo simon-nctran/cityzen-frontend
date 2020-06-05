@@ -24,6 +24,9 @@ export default function App() {
   const { loading } = userStatus;
 
   return (
+    // Using Fragments:
+    // https://reactjs.org/docs/fragments.html#short-syntax
+    // https://stackoverflow.com/questions/47761894/why-are-fragments-in-react-16-better-than-container-divs
     <Router>
       <div className="App">
         {/* <SimpleBar style={{ height: "100vh" }}> */}
