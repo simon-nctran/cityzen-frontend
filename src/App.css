@@ -43,10 +43,6 @@
   margin: 0px;
 }
 
-p {
-  margin: 10px;
-}
-
 nav {
   background-color: dodgerblue;
   height: 45px;
@@ -72,7 +68,7 @@ nav a.active {
 }
 
 nav p {
-  margin: 0px;
+  margin: 2px;
 }
 
 label {
