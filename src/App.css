@@ -14,16 +14,15 @@
 }
 
 .favouriteDetails {
-  margin: 0;
+  margin: 1px;
   padding: 0;
-  background-color: grey;
-  border-bottom: 1px lightgrey solid;
+  background-color: ghostwhite;
+  border: 1px black solid;
 }
 
 .favourites-shown {
   display: none;
-  background-color: cornflowerblue;
-  padding: 5px;
+  background-color: grey;
 }
 
 .favourites-shown.show {
@@ -42,6 +41,10 @@
   color: #ffffff;
   padding: 3.5px;
   margin: 0px;
+}
+
+p {
+  margin: 10px;
 }
 
 nav {
@@ -107,6 +110,11 @@ select {
 }
 
 .btn-dark {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.btn-warning {
   margin-left: 5px;
   margin-right: 5px;
 }
