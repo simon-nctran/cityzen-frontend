@@ -18,7 +18,7 @@ export function searchWaypoint(place, longitude, latitude) {
       .then((data) => {
         if (data.features === undefined) {
           // features is undefined if the place doesnt exist
-          alert("Places could not be found");
+          // alert("Places could not be found");
           reject(new Error("searchWaypoint reject"));
         } else {
           console.log("searchWaypoint data:", data);

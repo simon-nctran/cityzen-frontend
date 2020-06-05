@@ -103,7 +103,7 @@ export default function Map(props) {
         map.getCanvas().style.cursor = "pointer";
 
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const description = e.features[0].properties.address;
+        const description = e.features[0].properties.place_name;
 
         // Ensure that if the map is zoomed out such that multiple
         // copies of the feature are visible, the popup appears
@@ -187,6 +187,7 @@ export default function Map(props) {
         .catch((err) => {
           console.error("error has occurred when searching for routes");
           console.error(err);
+          alert("Places could not be found");
         });
 
       /*
@@ -225,9 +226,48 @@ export default function Map(props) {
 
       const { poi } = props.journey;
 
-      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((data) => {
-        setPoiFeatures(data);
+      // !!!! This uses searchWaypoint but assumes that there are no errors, cannot handle errors
+      const promises = [];
+      // https://stackoverflow.com/questions/50243782/create-array-of-promises
+      for (let i = 0; i < routeCoords.length; i += 1) {
+        const promise = searchWaypoint(poi, routeCoords[i][0], routeCoords[i][1]);
+        promises.push(promise);
+      }
+
+      Promise.all(promises).then((poiArrayArray) => {
+        // https://stackoverflow.com/questions/43455911/using-es6-spread-to-concat-multiple-arrays
+        const mergedPoiArrays = [].concat(...poiArrayArray);
+
+        // how to remove duplicates: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
+        const poiSet = new Set(mergedPoiArrays.map((a) => a.id));
+        const poiArray = Array.from(poiSet).map((id) => mergedPoiArrays.find((a) => a.id === id));
+
+        console.log("poi features");
+        console.log(poiArray);
+
+        const updatedPoiArray = poiArray.map((poiJson) => {
+          const newPoiJson = { ...poiJson };
+          newPoiJson.properties.place_name = poiJson.place_name;
+          return newPoiJson;
+        });
+
+        setPoiFeatures(updatedPoiArray);
       });
+
+      /*
+      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((poiArray) => {
+        console.log("poi features");
+        console.log(poiArray);
+
+        const updatedPoiArray = poiArray.map((poiJson) => {
+          const newPoiJson = { ...poiJson };
+          newPoiJson.properties.place_name = poiJson.place_name;
+          return newPoiJson;
+        });
+        
+       */
+
+      // setPoiFeatures(updatedPoiArray);
     }
   }, [routeCoords]);
 
