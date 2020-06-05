@@ -110,9 +110,9 @@ export default function Header({ getWayPoints }) {
                   setMode(value);
                 }}
               >
-                <ToggleButton value="Driving">Car</ToggleButton>
-                <ToggleButton value="Walking">Walk</ToggleButton>
-                <ToggleButton value="Cycling">Bike</ToggleButton>
+                <ToggleButton value="driving">Car</ToggleButton>
+                <ToggleButton value="walking">Walk</ToggleButton>
+                <ToggleButton value="cycling">Bike</ToggleButton>
               </ToggleButtonGroup>
             </Col>
           </Row>
