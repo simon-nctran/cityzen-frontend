@@ -37,17 +37,17 @@ export default function Header({ getWayPoints }) {
 
   return (
     <div>
-      <div className="appName">
-        <h1>Welcome to Cityzen!</h1>
+      <div className="header">
         {userData !== null && error == null ? (
-          <h2>Let&apos;s plan your journey {userData.username}!</h2>
+          <h2>Welcome {userData.username}! Let&apos;s plan your journey!</h2>
         ) : (
-          <h2>Let&apos;s plan your journey!</h2>
+          <h2>Welcome! Let&apos;s plan your journey!</h2>
         )}
       </div>
       <div className="userFavorites">
         {userData !== null && error == null ? <Favourites /> : <> </>}
       </div>
+
       <div className="getDirections">
         <Form>
           <Row>
@@ -63,6 +63,8 @@ export default function Header({ getWayPoints }) {
                   }}
                 />
               </Form.Group>
+            </Col>
+            <Col>
               <Form.Group controlId="formJourneyDestination">
                 <Form.Label>Where do you want to go?</Form.Label>
                 <Form.Control
@@ -96,6 +98,8 @@ export default function Header({ getWayPoints }) {
                   <option>Accommodation</option>
                 </Form.Control>
               </Form.Group>
+            </Col>
+            <Col>
               <Form.Group>
                 <Form.Label>How will you be travelling? </Form.Label>
                 <br />
@@ -119,9 +123,13 @@ export default function Header({ getWayPoints }) {
         <Button variant="success" onClick={onSubmit}>
           Submit
         </Button>
-        <Button variant="info" onClick>
-          Save
-        </Button>
+        {userData !== null && error == null ? (
+          <Button variant="info" onClick>
+            Save
+          </Button>
+        ) : (
+          <> </>
+        )}
       </div>
     </div>
   );
