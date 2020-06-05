@@ -14,7 +14,11 @@ const TOKEN =
 // Main reference used to convert to functional component:
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
-  const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
+  const [lngLatZoom, setLngLatZoom] = useState({
+    lng: 144.9631,
+    lat: -37.8136,
+    zoom: 14,
+  });
   const [routeCoords, setRouteCoords] = useState(null);
   const [endCoord, setEndCoord] = useState(null);
   const mapContainer = useRef(null);
@@ -88,7 +92,7 @@ export default function Map(props) {
         "/logo192.png", // https://commons.wikimedia.org/wiki/Location_markers#/media/File:Red_Arrow_Down.svg",
         function (error, image) {
           if (error) throw error;
-          map.addImage("cat", image);
+          // map.addImage("cat", image);
         }
       );
       // add "places" resource to map
@@ -109,7 +113,8 @@ export default function Map(props) {
                 address: "297 Little Collins St.",
                 category: "cafe, coffee, tea, tea house",
                 maki: "cafe",
-                name: "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
+                name:
+                  "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
               },
               text: "Sensory Lab",
               place_name:
@@ -175,7 +180,10 @@ export default function Map(props) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(description)
+          .addTo(map);
       });
 
       // Change the cursor to a pointer when the mouse is over the places layer.
