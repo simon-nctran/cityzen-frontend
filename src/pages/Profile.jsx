@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import LoginForm from "../components/LoginForm";
 import RegistrationForm from "../components/RegistrationForm";
 import ProfileContents from "../components/ProfileContents";
@@ -9,10 +9,12 @@ import UserContext from "../UserContext";
 export default function Profile() {
   const { userStatus, token, setToken } = useContext(UserContext);
 
-  const [form, setForm] = useState(<h1>How would you like to proceed?</h1>);
+  const [form, setForm] = useState(<h2>How would you like to proceed?</h2>);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
-  const [toggledProfile, setToggledProfile] = useState(Boolean(userStatus.userData));
+  const [toggledProfile, setToggledProfile] = useState(
+    Boolean(userStatus.userData)
+  );
   // Boolean(): https://stackoverflow.com/questions/31155477/convert-truthy-or-falsy-to-an-explicit-boolean
 
   function displayLogin() {
@@ -29,7 +31,7 @@ export default function Profile() {
 
   function logout() {
     console.log("logging out");
-    setForm(<h1>You have logged out</h1>);
+    setForm(<h2>You have logged out</h2>);
     setToggledLogin(false);
     setToggledRegister(false);
     setToggledProfile(false);
@@ -56,9 +58,15 @@ export default function Profile() {
       ) : (
         <>
           {toggledProfile ? (
-            <ProfileContents logout={logout} />
+            <Row>
+              <Col></Col>
+              <Col className="profile" xs="auto">
+                <ProfileContents logout={logout} />
+              </Col>
+              <Col></Col>
+            </Row>
           ) : (
-            <div>
+            <div className="centre">
               {form}
 
               {!toggledLogin && (
