@@ -44,9 +44,7 @@ export default function Header({ getWayPoints }) {
           <h2>Welcome! Let&apos;s plan your journey!</h2>
         )}
       </div>
-      <div className="userFavorites">
-        {userData !== null && error == null ? <Favourites /> : <> </>}
-      </div>
+      <div className="userFavorites"></div>
 
       <div className="getDirections">
         <Form>
@@ -130,6 +128,7 @@ export default function Header({ getWayPoints }) {
         ) : (
           <> </>
         )}
+        {userData !== null && error == null ? <Favourites /> : <> </>}
       </div>
     </div>
   );
