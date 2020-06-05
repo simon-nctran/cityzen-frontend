@@ -5,6 +5,8 @@ import { Button } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
+import { deleteFavourite } from "../api/apiFavourites";
+
 export default function Favourites() {
   const { token } = useContext(UserContext);
   const [showFavourites, setShowFavourites] = useState(false);
@@ -41,6 +43,8 @@ function Favourite(favourite) {
       <div className="favouriteDetails">
         Origin: {origin} | Destination: {destination} | Point of Interest: {poi}{" "}
         | Mode: {mode}
+        <Button variant="warning">Apply</Button>
+        <Button variant="danger">X</Button>
       </div>
     </div>
   );
@@ -51,7 +55,7 @@ function FavouritesExtended(props) {
 
   return (
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
-      <h3>Favourite Options</h3>
+      <p>Favourite Options</p>
       {userData.searchOptions.map((favourite) => (
         <Favourite key={favourite.id} {...favourite} />
       ))}
