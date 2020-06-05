@@ -171,7 +171,7 @@ export default function Map(props) {
     });
 
     setMap(newMap);
-  }, []);
+  }, [props.journey]);
 
   // Search for the Route
   useEffect(() => {
