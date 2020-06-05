@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useUser } from "../api/apiUser";
 
-import { Button } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
@@ -41,10 +41,18 @@ function Favourite(favourite) {
   return (
     <div className={`favourite favourite-${id}`} key={id}>
       <div className="favouriteDetails">
-        Origin: {origin} | Destination: {destination} | Point of Interest: {poi}{" "}
-        | Mode: {mode}
-        <Button variant="warning">Apply</Button>
-        <Button variant="danger">X</Button>
+        <Row>
+          <Col>Origin: {origin}</Col>
+          <Col>Destination: {destination}</Col>
+          <Col>Point of Interest: {poi}</Col>
+          <Col>Mode: {mode}</Col>
+        </Row>
+        <Row>
+          <Col>
+            <Button variant="warning">Apply</Button>
+            <Button variant="danger">X</Button>
+          </Col>
+        </Row>
       </div>
     </div>
   );
@@ -55,7 +63,7 @@ function FavouritesExtended(props) {
 
   return (
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
-      <p>Favourite Options</p>
+      <h3>Favourite Options</h3>
       {userData.searchOptions.map((favourite) => (
         <Favourite key={favourite.id} {...favourite} />
       ))}
