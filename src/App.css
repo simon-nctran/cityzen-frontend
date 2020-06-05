@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  font-family: sans-serif;
   display: flex;
   flex-flow: column;
   height: 100vh;
@@ -11,6 +11,13 @@
   flex-flow: column;
   background-color: white;
   height: 100vh;
+}
+
+.favouriteDetails {
+  margin: 0;
+  padding: 0;
+  background-color: grey;
+  border-bottom: 1px lightgrey solid;
 }
 
 .favourites-shown {
@@ -26,10 +33,20 @@
 .getDirections {
   background-color: lightgrey;
   padding: 10px;
+  text-align: center;
+}
+
+.title h2 {
+  text-align: left;
+  font: bold;
+  color: #ffffff;
+  padding: 3.5px;
+  margin: 0px;
 }
 
 nav {
   background-color: dodgerblue;
+  height: 45px;
 }
 
 nav a {
@@ -41,11 +58,18 @@ nav a {
 
 nav a:hover {
   color: white;
+  text-decoration: none;
 }
 
 nav a.active {
-  padding-bottom: 8px;
-  border-bottom: 2px solid white;
+  color: white;
+  padding: 5px;
+  border-bottom: 10px solid white;
+  margin: 0px;
+}
+
+nav p {
+  margin: 0px;
 }
 
 label {
@@ -75,6 +99,11 @@ select {
   vertical-align: middle;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+.btn-success {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .btn-dark {
@@ -113,6 +142,36 @@ select {
   font-weight: bold;
 }
 
+.profile {
+  padding: 25px;
+}
+
 .profileDetails {
   display: inline-block;
+}
+
+.forms {
+  text-align: center;
+}
+
+.formHeader {
+  padding-top: 50px;
+}
+
+.savedSearchOptions {
+  text-align: left;
+}
+
+.logout {
+  text-align: center;
+  padding-top: 15px;
+}
+
+.centre {
+  text-align: center;
+}
+
+h2 {
+  padding: 20px;
+  text-align: center;
 }
