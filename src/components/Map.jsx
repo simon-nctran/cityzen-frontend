@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { searchWaypoint, getRoute } from "../apiMap";
 import mapboxgl from "mapbox-gl";
 
 // mapbox
 mapboxgl.accessToken =
-  "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
-
-const TOKEN =
   "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
 
 // MapBox API: https://docs.mapbox.com/mapbox-gl-js/api/
@@ -50,7 +48,6 @@ export default function Map(props) {
       newMap.addImage("cat", image);
     });
 
-
     setMap(newMap);
   }, []);
 
@@ -64,66 +61,14 @@ export default function Map(props) {
       const end = props.journey.destination;
       const mode = props.journey.mode;
 
-      // finds the relevant data on a waypoint
-      function searchWaypoint(place) {
-        return new Promise((resolve, reject) => {
-          const searchWaypointUrl =
-            "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-            place +
-            ".json?proximity=" +
-            lngLatZoom.lng +
-            "," +
-            lngLatZoom.lat +
-            "&country=AU&access_token=" +
-            TOKEN;
-          fetch(searchWaypointUrl)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.features[0] === undefined) {
-                // features[0] is undefined if the place doesnt exist
-                alert("Places could not be found");
-                reject("searchWaypoint reject");
-              } else {
-                console.log("searchWaypoint data:", data);
-                resolve(data); // extract the coordinates
-              }
-            });
-        });
-      }
-
-      // gets the route from a start and end latitude and longitude
-      function getRoute(start, end) {
-        return new Promise((resolve, reject) => {
-          const getRouteUrl =
-            "https://api.mapbox.com/directions/v5/mapbox/" + mode +
-            start[0] +
-            "," +
-            start[1] +
-            ";" +
-            end[0] +
-            "," +
-            end[1] +
-            "?steps=true&geometries=geojson&access_token=" +
-            TOKEN;
-          fetch(getRouteUrl)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.routes === undefined) {
-                reject(new Error("getRoute reject"));
-              } else {
-                resolve(data);
-              }
-            });
-        });
-      }
-
       // get the startCoord, then get the endCoord, then get the Route
-      searchWaypoint(start).then((start) =>
-        searchWaypoint(end)
+      searchWaypoint(start, lngLatZoom.lng, lngLatZoom.lat).then((start) =>
+        searchWaypoint(end, lngLatZoom.lng, lngLatZoom.lat)
           .then((end) => {
             return getRoute(
-              start.features[0].geometry.coordinates,
-              end.features[0].geometry.coordinates
+              start[0].geometry.coordinates,
+              end[0].geometry.coordinates,
+              mode
             );
           })
           .then((route) => {
@@ -186,35 +131,7 @@ export default function Map(props) {
 
       const poi = props.journey.poi;
 
-      // finds the relevant data on a POI
-      function searchPOI(place, proximity) {
-        return new Promise((resolve, reject) => {
-          // search for POIs near along the route
-          const searchPOIUrl =
-            "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
-            place +
-            ".json?proximity=" +
-            proximity[0] +
-            "," +
-            proximity[1] +
-            "&country=AU&access_token=" +
-            TOKEN;
-          fetch(searchPOIUrl)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.features === undefined) {
-                // features is undefined if the place doesnt exist
-                alert("Places could not be found");
-                reject("searchPOI reject");
-              } else {
-                console.log("searchPOI data:", data);
-                resolve(data.features); // extract the coordinates
-              }
-            });
-        });
-      }
-
-      searchPOI(poi, routeCoords[0]).then((poi) => {
+      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((poi) => {
         setPoiFeatures(poi);
       });
     }
@@ -285,7 +202,6 @@ export default function Map(props) {
       }
     }
   }, [poiFeatures]);
-
 
   const { lng, lat, zoom } = lngLatZoom;
   return (
