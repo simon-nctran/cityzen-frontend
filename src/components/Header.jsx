@@ -21,7 +21,7 @@ export default function Header({ getWayPoints }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [poi, setPoi] = useState("Select...");
-  const [mode, setMode] = useState("Walk");
+  const [mode, setMode] = useState("");
 
   function onSubmit() {
     if (origin === "" || destination === "" || poi === "Select...") {
