@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { getLogin } from "../api/apiUser";
 import UserContext from "../UserContext";
 
+import { Button, Form, Row, Col } from "react-bootstrap";
+
 export default function LoginForm() {
   const { setToken } = useContext(UserContext);
 
@@ -47,38 +49,51 @@ export default function LoginForm() {
   }
 
   return (
-    <>
-      <h1>Login Form:</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="username"
-          placeholder="Username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
-        <button className="btn btn-success" type="submit">
-          Login
-        </button>
-      </form>
-      <label htmlFor="login-checkbox">
-        Remember me
-        <input
-          type="checkbox"
-          id="login-checkbox"
-          checked={remember}
-          onChange={(event) => setRemember(event.target.checked)}
-        />
-      </label>
-      <div className="login-output">{output}</div>
-      <br />
-    </>
+    <div className="forms">
+      <h1 className="formHeader">Login</h1>
+      <div className="formInputs">
+        <Form>
+          <Row>
+            <Col></Col>
+            <Col xs={2}>
+              <Form.Group controlId="formProfileUsername">
+                <Form.Control
+                  type="username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formProfilePassword">
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col></Col>
+          </Row>
+          <Button variant="success" onClick={handleSubmit}>
+            Login
+          </Button>
+        </Form>
+        <br />
+        <label htmlFor="login-checkbox">
+          <input
+            type="checkbox"
+            id="login-checkbox"
+            checked={remember}
+            onChange={(event) => setRemember(event.target.checked)}
+          />
+          Remember me
+        </label>
+        <div className="login-output">{output}</div>
+        <br />
+      </div>
+    </div>
   );
 }
