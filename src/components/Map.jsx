@@ -62,7 +62,7 @@ export default function Map(props) {
       // extract the user input into their respective fields
       const start = props.journey.origin;
       const end = props.journey.destination;
-      // const mode = props.journey.mode;
+      const mode = props.journey.mode;
 
       // finds the relevant data on a waypoint
       function searchWaypoint(place) {
@@ -95,7 +95,7 @@ export default function Map(props) {
       function getRoute(start, end) {
         return new Promise((resolve, reject) => {
           const getRouteUrl =
-            "https://api.mapbox.com/directions/v5/mapbox/driving/" +
+            "https://api.mapbox.com/directions/v5/mapbox/" + mode +
             start[0] +
             "," +
             start[1] +
@@ -184,19 +184,19 @@ export default function Map(props) {
   useEffect(() => {
     if (routeCoords) {
 
-      const poi = "Coffee";
+      const poi = props.journey.poi;
 
       // finds the relevant data on a POI
-      function searchPOI(place) {
+      function searchPOI(place, proximity) {
         return new Promise((resolve, reject) => {
           // search for POIs near along the route
           const searchPOIUrl =
             "https://api.mapbox.com/geocoding/v5/mapbox.places/" +
             place +
             ".json?proximity=" +
-            routeCoords[0][0] +
+            proximity[0] +
             "," +
-            routeCoords[0][1] +
+            proximity[1] +
             "&country=AU&access_token=" +
             TOKEN;
           fetch(searchPOIUrl)
@@ -214,9 +214,7 @@ export default function Map(props) {
         });
       }
 
-      searchPOI(poi).then((poi) => {
-        console.log("poi features:", poi);
-        // add place names to the description to display on marker
+      searchPOI(poi, routeCoords[0]).then((poi) => {
         setPoiFeatures(poi);
       });
     }
