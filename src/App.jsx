@@ -32,9 +32,9 @@ export default function App() {
           <></>
         ) : (
           <>
-            <Nav />
             <Switch>
               <UserContext.Provider value={{ userStatus, token, setToken }}>
+                <Nav />
                 <Route exact path="/">
                   <Home />
                 </Route>
