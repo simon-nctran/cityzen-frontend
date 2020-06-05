@@ -55,3 +55,47 @@ export function getRoute(start, end, mode) {
       });
   });
 }
+
+export async function searchRoute(origin, destination, mode, lng, lat) {
+
+  const start = await searchWaypoint(origin, lng, lat);
+  const end = await searchWaypoint(destination, lng, lat);
+  const startCoordinate = start[0].geometry.coordinates;
+  const endCoordinate = end[0].geometry.coordinates;
+
+  return getRoute(startCoordinate, endCoordinate, mode);
+}
+
+/////////////////////////////////////////////////////////////////////
+//  dodgy code
+/////////////////////////////////////////////////////////////////////
+export function getPoiRoute(start, middle, end, mode) {
+  return new Promise((resolve, reject) => {
+    const getRouteUrl =
+      "https://api.mapbox.com/directions/v5/mapbox/" +
+      mode +
+      "/" +
+      start[0] +
+      "," +
+      start[1] +
+      ";" +
+      middle[0] +
+      "," +
+      middle[1] +
+      ";" +
+      end[0] +
+      "," +
+      end[1] +
+      "?steps=true&geometries=geojson&access_token=" +
+      TOKEN;
+    fetch(getRouteUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.routes === undefined) {
+          reject(new Error("getRoute reject"));
+        } else {
+          resolve(data);
+        }
+      });
+  });
+}

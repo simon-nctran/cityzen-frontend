@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import { getRoute, searchWaypoint } from "../apiMap";
+import { searchRoute, searchWaypoint, getPoiRoute, searchPoiRoute } from "../apiMap";
 
 // mapbox
 mapboxgl.accessToken =
@@ -20,6 +20,8 @@ export default function Map(props) {
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
   // https://reactjs.org/docs/refs-and-the-dom.html
+
+  const { lng, lat, zoom } = lngLatZoom;
 
   const routeData = {
     type: "Feature",
@@ -117,6 +119,20 @@ export default function Map(props) {
         popup.setLngLat(coordinates).setHTML(description).addTo(map);
       });
 
+      const { mode } = props.journey;
+
+      map.on("click", "places", function(e) {
+        const poi = e.features[0].geometry.coordinates.slice();
+        console.log(poi);
+        getPoiRoute(routeCoords[0], poi, routeCoords.slice(-1)[0], mode)
+          .then((route) => {
+            // const { newCoordinates } = route.routes[0].geometry.coordinates;
+            console.log("POI route coordinates", route.routes[0].geometry.coordinates);
+            setRouteCoords(route.routes[0].geometry.coordinates);
+          });
+        
+      });
+
       map.on("mouseleave", "places", () => {
         map.getCanvas().style.cursor = "";
         popup.remove();
@@ -124,15 +140,6 @@ export default function Map(props) {
     }
   }
 
-  async function searchRoute(origin, destination, mode) {
-    const { lng, lat } = lngLatZoom;
-    const start = await searchWaypoint(origin, lng, lat);
-    const end = await searchWaypoint(destination, lng, lat);
-    const startCoordinate = start[0].geometry.coordinates;
-    const endCoordinate = end[0].geometry.coordinates;
-
-    return getRoute(startCoordinate, endCoordinate, mode);
-  }
 
   // Mount the map
   useEffect(() => {
@@ -174,11 +181,7 @@ export default function Map(props) {
       // extract the user input into their respective fields
       const { origin, destination, mode } = props.journey;
 
-      // const start = props.journey.origin;
-      // const end = props.journey.destination;
-      // const mode = props.journey.mode;
-
-      searchRoute(origin, destination, mode)
+      searchRoute(origin, destination, mode, lng, lat)
         .then((route) => {
           const { coordinates } = route.routes[0].geometry;
           console.log("route coordinates", coordinates);
@@ -190,28 +193,6 @@ export default function Map(props) {
           alert("Places could not be found");
         });
 
-      /*
-      searchWaypoint(origin, lngLatZoom.lng, lngLatZoom.lat).then((start) =>
-        searchWaypoint(destination, lngLatZoom.lng, lngLatZoom.lat)
-          .then((end) => {
-            const { startCoordinate } = start[0].geometry;
-            const { endCoordinate } = end[0].geometry;
-            getRoute(startCoordinate, endCoordinate, mode);
-          })
-          .then((route) => {
-            const { coordinates } = route.routes[0].geometry;
-            console.log("route coordinates", coordinates);
-            setRouteCoords(coordinates);
-          })
-          .catch((err) => {
-            console.error(
-              "error has occurred when resolving searchWaypoint() to search for routes"
-            );
-            console.error(err);
-          })
-      );
-      
-       */
     }
   }, [props.journey]);
 
@@ -280,7 +261,6 @@ export default function Map(props) {
     }
   }, [poiFeatures]);
 
-  const { lng, lat, zoom } = lngLatZoom;
   return (
     <>
       <>
