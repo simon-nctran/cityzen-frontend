@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps,react/destructuring-assignment */
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import { searchRoute, searchWaypoint, getPoiRoute, searchPoiRoute } from "../apiMap";
+import { searchWaypoint, getPoiRoute, getRoute } from "../apiMap";
 
 // mapbox
 mapboxgl.accessToken =
@@ -9,6 +10,34 @@ mapboxgl.accessToken =
 // MapBox API: https://docs.mapbox.com/mapbox-gl-js/api/
 // Official examples for MapBox with React: https://github.com/mapbox/mapbox-react-examples
 
+const routeDataTemplate = {
+  type: "Feature",
+  properties: {},
+  geometry: {
+    type: "LineString",
+    // add a coordinate property
+  },
+};
+
+const poiDataTemplate = {
+  type: "FeatureCollection",
+  // add a features property
+};
+
+const locationDataTemplate = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        // add a coordinates property
+      },
+      properties: {},
+    },
+  ],
+};
+
 // Main reference used to convert to functional component:
 // https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
 export default function Map(props) {
@@ -16,6 +45,9 @@ export default function Map(props) {
   const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
   const [routeCoords, setRouteCoords] = useState(null);
   const [poiFeatures, setPoiFeatures] = useState(null);
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const [selection, setSelection] = useState(null);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
@@ -23,35 +55,14 @@ export default function Map(props) {
 
   const { lng, lat, zoom } = lngLatZoom;
 
-  const routeData = {
-    type: "Feature",
-    properties: {},
-    geometry: {
-      type: "LineString",
-      coordinates: "",
-    },
-  };
-
-  const poiData = {
-    type: "FeatureCollection",
-    features: "",
-  };
-
   // draw the Route onto the map
-  function mapAddRoute() {
+  function mapAddRoute(routeData) {
     if (map.getSource("route")) {
       map.getSource("route").setData(routeData);
     } else {
       map.addSource("route", {
         type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: routeCoords,
-          },
-        },
+        data: routeData,
       });
       // add a layer to map that displays "route" resource
       map.addLayer({
@@ -71,16 +82,13 @@ export default function Map(props) {
   }
 
   // draw the POIs onto the map
-  function mapAddPOI() {
+  function mapAddPOI(poiData, poiIcon) {
     if (map.getSource("places")) {
       map.getSource("places").setData(poiData);
     } else {
       map.addSource("places", {
         type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: poiFeatures,
-        },
+        data: poiData,
       });
 
       // Add a layer showing the places.
@@ -89,7 +97,7 @@ export default function Map(props) {
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": "POI",
+          "icon-image": poiIcon,
           "icon-allow-overlap": true,
         },
       });
@@ -103,6 +111,8 @@ export default function Map(props) {
       map.on("mouseenter", "places", (e) => {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = "pointer";
+        console.log("e.features", e.features);
+        console.log("e.features[0]", e.features[0]);
 
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties.place_name;
@@ -119,42 +129,49 @@ export default function Map(props) {
         popup.setLngLat(coordinates).setHTML(description).addTo(map);
       });
 
-      const { mode } = props.journey;
-
-      map.on("click", "places", function(e) {
-        const poi = e.features[0].geometry.coordinates.slice();
-        console.log(poi);
-        getPoiRoute(routeCoords[0], poi, routeCoords.slice(-1)[0], mode)
-          .then((route) => {
-            // const { newCoordinates } = route.routes[0].geometry.coordinates;
-            console.log("POI route coordinates", route.routes[0].geometry.coordinates);
-            setRouteCoords(route.routes[0].geometry.coordinates);
-          });
-        
-      });
-
       map.on("mouseleave", "places", () => {
         map.getCanvas().style.cursor = "";
         popup.remove();
+      });
+
+      const { mode } = props.journey;
+      map.on("click", "places", (e) => {
+        const poiSelection = e.features[0].geometry.coordinates.slice();
+        console.log("e.features[0]", e.features[0]);
+        setSelection(e.features[0]);
+        getPoiRoute(routeCoords[0], poiSelection, routeCoords.slice(-1)[0], mode).then((route) => {
+          const { coordinates: newCoordinates } = route.routes[0].geometry;
+          console.log("new route coordinates", newCoordinates);
+          setRouteCoords(newCoordinates);
+        });
       });
     }
   }
 
   function mapFlyTo(Coords) {
     map.flyTo({
-      center: [
-      Coords[0],
-      Coords[1],
-      ],
-      essential: true // this animation is considered essential with respect to prefers-reduced-motion
-      });
+      center: [Coords[0], Coords[1]],
+      essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+    });
   }
 
+  async function searchRoute(start, end) {
+    const { mode } = props.journey;
+    const startPoint = await searchWaypoint(start, lng, lat);
+    console.log("start point", startPoint);
+    setOrigin(startPoint);
+    const endPoint = await searchWaypoint(end, lng, lat);
+    console.log("end point", endPoint);
+    setDestination(endPoint);
+    const startCoordinate = startPoint[0].geometry.coordinates;
+    const endCoordinate = endPoint[0].geometry.coordinates;
+
+    return getRoute(startCoordinate, endCoordinate, mode);
+  }
 
   // Mount the map
   useEffect(() => {
     console.log("Map Component has been mounted");
-    const { lng, lat, zoom } = lngLatZoom;
     const newMap = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/cityzen-app/ckb39zgvw0ord1gnyzgpb5kfg",
@@ -179,27 +196,48 @@ export default function Map(props) {
       }
       newMap.addImage("POI", image);
     });
-
     newMap.loadImage("/marker.png", (error, image) => {
       if (error) {
         throw error;
       }
-      newMap.addImage("Marker", image, {pixelRatio: 2});
+      newMap.addImage("Marker", image, { pixelRatio: 2 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/near-me--v1.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("origin", image, { pixelRatio: 4 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/place-marker.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("destination", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/place-marker.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("selection", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/cafe.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Coffee", image, { pixelRatio: 3 });
     });
 
-
     setMap(newMap);
-  }, [props.journey]);
 
-  // Search for the Route
-  useEffect(() => {
-    if (map && props.journey !== {}) {
+    // Search for a route
+    console.log("props.journey", props.journey);
+    if (props.journey !== null) {
       console.log("props.journey has been updated");
 
       // extract the user input into their respective fields
-      const { origin, destination, mode } = props.journey;
+      const { origin: start, destination: end } = props.journey;
 
-      searchRoute(origin, destination, mode, lng, lat)
+      searchRoute(start, end)
         .then((route) => {
           const { coordinates } = route.routes[0].geometry;
           console.log("route coordinates", coordinates);
@@ -210,136 +248,204 @@ export default function Map(props) {
           console.error(err);
           alert("Places could not be found");
         });
-
     }
   }, [props.journey]);
 
   // draw the Route and the POIs when route coordinates are updated
   useEffect(() => {
     if (map && routeCoords) {
-      // const source = "route";
+      console.log("routeCoords has been updated");
+      const routeData = { ...routeDataTemplate };
       routeData.geometry.coordinates = routeCoords;
 
       // add a "route" resource to map
-      mapAddRoute(routeData, routeCoords);
-      mapFlyTo(routeCoords[0]);
-      const { poi } = props.journey;
+      mapAddRoute(routeData);
 
-      // !!!! This uses searchWaypoint but assumes that there are no errors, cannot handle errors
-      const promises = [];
-      // https://stackoverflow.com/questions/50243782/create-array-of-promises
-      for (let i = 0; i < routeCoords.length; i += 1) {
-        const promise = searchWaypoint(poi, routeCoords[i][0], routeCoords[i][1]);
-        promises.push(promise);
-      }
+      // only generate poi once
+      if (poiFeatures === null) {
+        mapFlyTo(routeCoords[0]);
+        // add markers for origin and destination
+        const originData = { ...locationDataTemplate }; // shallow copy location data template (this means the properties share references)
+        originData.features[0].geometry.coordinates = [routeCoords[0][0], routeCoords[0][1]];
+        console.log("origin", origin);
+        originData.features[0].properties.place_name = origin[0].place_name;
+        console.log("originData", originData);
+        if (map.getSource("origin")) {
+          map.getSource("origin").setData(originData);
+        } else {
+          map.addSource("origin", {
+            type: "geojson",
+            data: originData,
+          });
+          map.addLayer({
+            id: "origin",
+            type: "symbol",
+            source: "origin",
+            layout: {
+              "icon-image": "origin",
+              "icon-size": 1.5,
+              "icon-allow-overlap": true,
+            },
+          });
+          const originPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+          });
+          map.on("mouseenter", "origin", (e) => {
+            map.getCanvas().style.cursor = "pointer";
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.place_name;
+            const html = "<h3>Origin</h3><p>" + description + "</p>";
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            originPopup.setLngLat(coordinates).setHTML(html).addTo(map);
+          });
+          map.on("mouseleave", "origin", () => {
+            map.getCanvas().style.cursor = "";
+            originPopup.remove();
+          });
+        }
+        const destinationData = { ...locationDataTemplate };
+        destinationData.features[0].geometry.coordinates = [
+          routeCoords.slice(-1)[0][0],
+          routeCoords.slice(-1)[0][1],
+        ];
+        console.log("destination", destination);
+        destinationData.features[0].properties.place_name = destination[0].place_name;
+        console.log("destinationData", destinationData);
+        if (map.getSource("destination")) {
+          map.getSource("destination").setData(destinationData);
+        } else {
+          map.addSource("destination", {
+            type: "geojson",
+            data: destinationData,
+          });
+          map.addLayer({
+            id: "destination",
+            type: "symbol",
+            source: "destination",
+            layout: {
+              "icon-image": "destination",
+              "icon-size": 1.5,
+              "icon-allow-overlap": true,
+            },
+          });
+          const destinationPopup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+          });
+          map.on("mouseenter", "destination", (e) => {
+            map.getCanvas().style.cursor = "pointer";
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const description = e.features[0].properties.place_name;
+            const html = "<h3>Destination</h3><p>" + description + "</p>";
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+            destinationPopup.setLngLat(coordinates).setHTML(html).addTo(map);
+          });
+          map.on("mouseleave", "destination", () => {
+            map.getCanvas().style.cursor = "";
+            destinationPopup.remove();
+          });
+        }
 
-      Promise.all(promises).then((poiArrayArray) => {
-        // https://stackoverflow.com/questions/43455911/using-es6-spread-to-concat-multiple-arrays
-        const mergedPoiArrays = [].concat(...poiArrayArray);
+        const { poi } = props.journey;
 
-        // how to remove duplicates: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
-        const poiSet = new Set(mergedPoiArrays.map((a) => a.id));
-        const poiArray = Array.from(poiSet).map((id) => mergedPoiArrays.find((a) => a.id === id));
+        // !!!! This uses searchWaypoint but assumes that there are no errors, cannot handle errors
+        const promises = [];
+        // https://stackoverflow.com/questions/50243782/create-array-of-promises
+        for (let i = 0; i < routeCoords.length; i += 1) {
+          const promise = searchWaypoint(poi, routeCoords[i][0], routeCoords[i][1]);
+          promises.push(promise);
+        }
 
-        console.log("poi features");
-        console.log(poiArray);
+        Promise.all(promises).then((poiArrayArray) => {
+          // https://stackoverflow.com/questions/43455911/using-es6-spread-to-concat-multiple-arrays
+          const mergedPoiArrays = [].concat(...poiArrayArray);
 
-        const updatedPoiArray = poiArray.map((poiJson) => {
-          const newPoiJson = { ...poiJson };
-          newPoiJson.properties.place_name = poiJson.place_name;
-          return newPoiJson;
+          // how to remove duplicates: https://dev.to/marinamosti/removing-duplicates-in-an-array-of-objects-in-js-with-sets-3fep
+          const poiSet = new Set(mergedPoiArrays.map((a) => a.id));
+          const poiArray = Array.from(poiSet).map((id) => mergedPoiArrays.find((a) => a.id === id));
+          const updatedPoiArray = poiArray.map((poiJson) => {
+            const newPoiJson = { ...poiJson };
+            newPoiJson.properties.place_name = poiJson.place_name;
+            return newPoiJson;
+          });
+
+          setPoiFeatures(updatedPoiArray);
         });
-
-        setPoiFeatures(updatedPoiArray);
-      });
-
+      } else {
+        setPoiFeatures(null);
+      }
     }
   }, [routeCoords]);
 
   // draw the POIs (run when POIs are updated)
   useEffect(() => {
-    if (poiFeatures != null) {
-      poiData.features = poiFeatures;
-
-      mapAddPOI(poiData, poiFeatures);
-
-      const markerData = {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]]
-              },
-              "properties": {
-                "name": "Dinagat Islands"
-              }
-            },
-            {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [routeCoords[0][0], routeCoords[0][1]]
-              },
-              "properties": {
-                "name": "Dinagat Islands"
-              }
-            }
-          ],
-        },
-      }
-    
-
-      if (map.getSource("markers")) {
-        map.getSource("markers").setData(markerData);
+    if (map) {
+      console.log("poiFeatures has been updated", poiFeatures);
+      const poiData = { ...poiDataTemplate };
+      if (poiFeatures === null) {
+        poiData.features = [];
       } else {
-        map.addSource("markers", {
+        poiData.features = poiFeatures;
+      }
+      const { poi } = props.journey;
+      mapAddPOI(poiData, poi);
+    }
+  }, [poiFeatures]);
+
+  useEffect(() => {
+    if (map && selection !== null) {
+      console.log("selection has been updated", selection);
+      const selectionData = { ...locationDataTemplate };
+      mapFlyTo(selection.geometry.coordinates);
+      selectionData.features[0].geometry.coordinates = selection.geometry.coordinates;
+      selectionData.features[0].properties.place_name = selection.properties.place_name;
+      console.log("selectionData", selectionData);
+      if (map.getSource("selection")) {
+        console.log("already have selection data");
+        map.getSource("selection").setData(selectionData);
+      } else {
+        map.addSource("selection", {
           type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [
-              {
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]]
-                },
-                "properties": {
-                  "name": "Dinagat Islands"
-                }
-              },
-              {
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [routeCoords[0][0], routeCoords[0][1]]
-                },
-                "properties": {
-                  "name": "Dinagat Islands"
-                }
-              }
-  
-            ],
-          },
+          data: selectionData,
         });
-  
-        // Add a layer showing the places.
+        const { poi } = props.journey;
         map.addLayer({
-          id: "markers",
+          id: "selection",
           type: "symbol",
-          source: "markers",
+          source: "selection",
           layout: {
-            "icon-image": "Marker",
+            "icon-image": poi,
+            "icon-size": 1.5,
             "icon-allow-overlap": true,
           },
         });
+        console.log("added selection layer");
+        const selectionPopup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+        map.on("mouseenter", "selection", (e) => {
+          map.getCanvas().style.cursor = "pointer";
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const description = e.features[0].properties.place_name;
+          const html = "<h3>Selection</h3><p>" + description + "</p>";
+          while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          }
+          selectionPopup.setLngLat(coordinates).setHTML(html).addTo(map);
+        });
+        map.on("mouseleave", "selection", () => {
+          map.getCanvas().style.cursor = "";
+          selectionPopup.remove();
+        });
       }
-
     }
-  }, [poiFeatures]);
+  }, [selection]);
 
   return (
     <>

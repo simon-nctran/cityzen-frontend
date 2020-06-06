@@ -21,7 +21,7 @@ export function searchWaypoint(place, longitude, latitude) {
           // alert("Places could not be found");
           reject(new Error("searchWaypoint reject"));
         } else {
-          console.log("searchWaypoint data:", data);
+          //console.log("searchWaypoint data:", data);
           resolve(data.features); // extract the coordinates
         }
       });
@@ -57,7 +57,6 @@ export function getRoute(start, end, mode) {
 }
 
 export async function searchRoute(origin, destination, mode, lng, lat) {
-
   const start = await searchWaypoint(origin, lng, lat);
   const end = await searchWaypoint(destination, lng, lat);
   const startCoordinate = start[0].geometry.coordinates;
