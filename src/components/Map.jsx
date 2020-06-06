@@ -63,7 +63,7 @@ export default function Map(props) {
           "line-cap": "round",
         },
         paint: {
-          "line-color": "#888",
+          "line-color": "#FFFF66",
           "line-width": 8,
         },
       });
@@ -89,7 +89,7 @@ export default function Map(props) {
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": "cat",
+          "icon-image": "POI",
           "icon-allow-overlap": true,
         },
       });
@@ -157,7 +157,7 @@ export default function Map(props) {
     const { lng, lat, zoom } = lngLatZoom;
     const newMap = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/cityzen-app/ckb39zgvw0ord1gnyzgpb5kfg",
       center: [lng, lat],
       zoom, // short hand for zoom: zoom
     });
@@ -173,11 +173,11 @@ export default function Map(props) {
       });
     });
 
-    newMap.loadImage("/poiMarker.png", (error, image) => {
+    newMap.loadImage("/flag.png", (error, image) => {
       if (error) {
         throw error;
       }
-      newMap.addImage("cat", image);
+      newMap.addImage("POI", image);
     });
 
     setMap(newMap);
