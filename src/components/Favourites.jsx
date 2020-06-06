@@ -1,26 +1,14 @@
 import React, { useContext, useState } from "react";
-import { useUser } from "../api/apiUser";
 
 import { Button, Row, Col } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
-import { deleteFavourite } from "../api/apiFavourites";
+import { useFavourites, deleteFavourite } from "../api/apiFavourites";
 
 export default function Favourites() {
   const { token } = useContext(UserContext);
   const [showFavourites, setShowFavourites] = useState(false);
-
-  const { loading, userData, error } = useUser(token);
-
-  if (loading) {
-    return <p>Hold tight while we get your Favourites...</p>;
-  }
-  if (error) {
-    return <p>We weren't able to get your Favourites :'(: {error.message}</p>;
-  }
-
-  console.log(userData.searchOptions);
 
   return (
     <div className="favourites">
@@ -30,17 +18,40 @@ export default function Favourites() {
       >
         {showFavourites ? "Hide Favourites" : "Show Favourites"}
       </Button>
-      <FavouritesExtended userData={userData} showFavourites={showFavourites} />
+      {showFavourites ? (
+        <FavouritesExtended token={token} showFavourites={showFavourites} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
 
 function Favourite(favourite) {
-  const { id, origin, destination, poi, mode } = favourite;
+  const { token } = useContext(UserContext);
+  const { _id, origin, destination, poi, mode } = favourite;
+
+  const [hide, setHide] = useState(false);
+
+  function handleSubmit(event) {
+    console.log({ origin, destination, poi, mode });
+    event.preventDefault();
+    deleteFavourite(token, _id)
+      .then((res) => {
+        console.log(res);
+        if (res.data === "Delete favourite successfully") {
+          alert(res.data);
+          setHide(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
-    <div className={`favourite favourite-${id}`} key={id}>
-      <div className="favouriteDetails">
+    <div className={`favourite favourite-${_id}`} key={_id}>
+      <div className={`favouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
           <Col>Origin: {origin}</Col>
           <Col>Destination: {destination}</Col>
@@ -50,7 +61,9 @@ function Favourite(favourite) {
         <Row>
           <Col>
             <Button variant="warning">Apply</Button>
-            <Button variant="danger">X</Button>
+            <Button variant="danger" onClick={handleSubmit}>
+              X
+            </Button>
           </Col>
         </Row>
       </div>
@@ -59,13 +72,22 @@ function Favourite(favourite) {
 }
 
 function FavouritesExtended(props) {
-  const { userData, showFavourites } = props;
+  const { token, showFavourites } = props;
+
+  const { loading, favourites, error } = useFavourites(token);
+
+  if (loading) {
+    return <p>Hold tight while we get your Favourites...</p>;
+  }
+  if (error) {
+    return <p>We weren't able to get your Favourites :'(: {error.message}</p>;
+  }
 
   return (
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
       <h3>Favourite Options</h3>
-      {userData.searchOptions.map((favourite) => (
-        <Favourite key={favourite.id} {...favourite} />
+      {favourites.map((favourite) => (
+        <Favourite key={favourite._id} {...favourite} />
       ))}
     </div>
   );
