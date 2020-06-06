@@ -140,6 +140,16 @@ export default function Map(props) {
     }
   }
 
+  function mapFlyTo(Coords) {
+    map.flyTo({
+      center: [
+      Coords[0],
+      Coords[1],
+      ],
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
+      });
+  }
+
 
   // Mount the map
   useEffect(() => {
@@ -204,7 +214,7 @@ export default function Map(props) {
 
       // add a "route" resource to map
       mapAddRoute(routeData, routeCoords);
-
+      mapFlyTo(routeCoords[0]);
       const { poi } = props.journey;
 
       // !!!! This uses searchWaypoint but assumes that there are no errors, cannot handle errors
@@ -235,20 +245,6 @@ export default function Map(props) {
         setPoiFeatures(updatedPoiArray);
       });
 
-      /*
-      searchWaypoint(poi, routeCoords[0][0], routeCoords[0][1]).then((poiArray) => {
-        console.log("poi features");
-        console.log(poiArray);
-
-        const updatedPoiArray = poiArray.map((poiJson) => {
-          const newPoiJson = { ...poiJson };
-          newPoiJson.properties.place_name = poiJson.place_name;
-          return newPoiJson;
-        });
-        
-       */
-
-      // setPoiFeatures(updatedPoiArray);
     }
   }, [routeCoords]);
 
