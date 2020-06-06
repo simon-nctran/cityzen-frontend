@@ -6,11 +6,17 @@
   overflow-x: hidden;
 }
 
-.home {
+.main {
   display: flex;
   flex-flow: column;
   background-color: white;
   height: 100vh;
+}
+
+.favourites {
+  background-color: lightgrey;
+  padding-bottom: 5px;
+  text-align: center;
 }
 
 .favouriteDetails {
@@ -20,16 +26,21 @@
   border: 1px black solid;
 }
 
+.favouriteDetails.hide {
+  display: none;
+}
+
 .favourites-shown {
   display: none;
   background-color: grey;
+  justify-content: center;
 }
 
 .favourites-shown.show {
   display: block;
 }
 
-.getDirections {
+.input {
   background-color: lightgrey;
   padding: 10px;
   text-align: center;
@@ -41,9 +52,14 @@
   color: #ffffff;
   padding: 3.5px;
   margin: 0px;
+  text-decoration: none;
 }
 
-nav {
+.title a:hover {
+  text-decoration: none;
+}
+
+.navigation {
   background-color: dodgerblue;
   height: 45px;
 }
@@ -61,14 +77,14 @@ nav a:hover {
 }
 
 nav a.active {
-  color: white;
-  padding: 5px;
-  border-bottom: 10px solid white;
+  color: black;
+  background-color: white;
   margin: 0px;
+  height: fit-content;
 }
 
 nav p {
-  margin: 2git px;
+  margin: 2px;
 }
 
 label {
@@ -152,6 +168,15 @@ select {
 
 .profileDetails {
   display: inline-block;
+}
+
+/* .userFavourites {
+  background-color: lightblue;
+  border: 1px black solid;
+} */
+
+.profileFavouriteDetails.hide {
+  display: none;
 }
 
 .forms {

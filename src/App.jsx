@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import Journey from "./pages/Journey";
 import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -37,6 +38,9 @@ export default function App() {
                 <Nav />
                 <Route exact path="/">
                   <Home />
+                </Route>
+                <Route path="/journey">
+                  <Journey />
                 </Route>
                 <Route path="/profile">
                   <Profile />
