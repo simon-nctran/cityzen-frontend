@@ -4,7 +4,7 @@ import { searchRoute, searchWaypoint, getPoiRoute, searchPoiRoute } from "../api
 
 // mapbox
 mapboxgl.accessToken =
-  "pk.eyJ1IjoiYW50aGdpYW5nIiwiYSI6ImNrOXdtNmJpZDBhem4zbG1rODNrYmxrZnAifQ.QyMjlGdfO2PcviXkyb_xVA";
+  "pk.eyJ1IjoiY2l0eXplbi1hcHAiLCJhIjoiY2thdjIyZ2Z6MmU0NjJ4cDE2NHI1bzh2NSJ9.ZFCggjeuB6rV6qnUtjHvTQ";
 
 // MapBox API: https://docs.mapbox.com/mapbox-gl-js/api/
 // Official examples for MapBox with React: https://github.com/mapbox/mapbox-react-examples
@@ -35,11 +35,6 @@ export default function Map(props) {
   const poiData = {
     type: "FeatureCollection",
     features: "",
-  };
-
-  const markerData = {
-    type: "FeatureCollection",
-    features: ""
   };
 
   // draw the Route onto the map
@@ -185,6 +180,14 @@ export default function Map(props) {
       newMap.addImage("POI", image);
     });
 
+    newMap.loadImage("/marker.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Marker", image, {pixelRatio: 2});
+    });
+
+
     setMap(newMap);
   }, [props.journey]);
 
@@ -260,9 +263,81 @@ export default function Map(props) {
 
       mapAddPOI(poiData, poiFeatures);
 
-      var marker = new mapboxgl.Marker()
-      .setLngLat([routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]])
-      .addTo(map);
+      const markerData = {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]]
+              },
+              "properties": {
+                "name": "Dinagat Islands"
+              }
+            },
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [routeCoords[0][0], routeCoords[0][1]]
+              },
+              "properties": {
+                "name": "Dinagat Islands"
+              }
+            }
+          ],
+        },
+      }
+    
+
+      if (map.getSource("markers")) {
+        map.getSource("markers").setData(markerData);
+      } else {
+        map.addSource("markers", {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [
+              {
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]]
+                },
+                "properties": {
+                  "name": "Dinagat Islands"
+                }
+              },
+              {
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [routeCoords[0][0], routeCoords[0][1]]
+                },
+                "properties": {
+                  "name": "Dinagat Islands"
+                }
+              }
+  
+            ],
+          },
+        });
+  
+        // Add a layer showing the places.
+        map.addLayer({
+          id: "markers",
+          type: "symbol",
+          source: "markers",
+          layout: {
+            "icon-image": "Marker",
+            "icon-allow-overlap": true,
+          },
+        });
+      }
+
     }
   }, [poiFeatures]);
 
