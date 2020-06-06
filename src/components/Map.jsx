@@ -37,6 +37,11 @@ export default function Map(props) {
     features: "",
   };
 
+  const markerData = {
+    type: "FeatureCollection",
+    features: ""
+  };
+
   // draw the Route onto the map
   function mapAddRoute() {
     if (map.getSource("route")) {
@@ -254,6 +259,10 @@ export default function Map(props) {
       poiData.features = poiFeatures;
 
       mapAddPOI(poiData, poiFeatures);
+
+      var marker = new mapboxgl.Marker()
+      .setLngLat([routeCoords.slice(-1)[0][0], routeCoords.slice(-1)[0][1]])
+      .addTo(map);
     }
   }, [poiFeatures]);
 
