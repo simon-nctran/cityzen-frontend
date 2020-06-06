@@ -33,9 +33,13 @@ export function addFavourite(token, favourite) {
 // // note: ID should be a string
 // returns: promise that resolves to json object
 // res.data will be the response ?
-export function deleteFavourite(token, id) { // backend isn't done yet!
-  const path = "/favourites/" + id;
+export function deleteFavourite(token, id) {
+  // backend isn't done yet!
+  console.log(token);
+  console.log(id);
+  const path = `/favourites/${id}`;
 
+  console.log("DELETING A FAVOURITE");
   return axios.delete(path, {
     headers: { "x-auth-token": token },
   });
@@ -60,10 +64,10 @@ export function useFavourites(token) {
       setLoading(true);
       getFavourites(token)
         .then((res) => {
-          console.log(res);
-          setFavourites({
-            ...res.data, // might be wrong
-          });
+          console.log(res.data);
+          setFavourites(
+            res.data // might be wrong
+          );
           setLoading(false);
         })
         .catch((err) => {
