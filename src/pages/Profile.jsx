@@ -59,11 +59,9 @@ export default function Profile() {
         <>
           {toggledProfile ? (
             <Row>
-              <Col></Col>
-              <Col className="profile" xs="auto">
+              <Col className="profile">
                 <ProfileContents logout={logout} />
               </Col>
-              <Col></Col>
             </Row>
           ) : (
             <div className="centre">

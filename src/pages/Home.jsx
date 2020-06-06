@@ -1,24 +1,15 @@
-import React, { useState } from "react";
-import Header from "../components/Header";
-import Map from "../components/Map";
+import React from "react";
 
 export default function Home() {
-  const [journey, setJourney] = useState({});
-
-  function getWayPoints(points) {
-    setJourney(points);
-    console.log("The Journey is:", points);
-  }
-
   return (
-    <div className="home">
-      <div className="header">
-        <Header getWayPoints={getWayPoints} />
-      </div>
-
-      <div className="map">
-        <Map journey={journey} />
-      </div>
+    <div align="middle">
+      <h1>WELCOME TO ON THE WAY!</h1>
+      <p>
+        This app will help you find services and points of interest from your
+        origin on the way to your destination!
+      </p>
+      <p>This app was created by the members of Cityzen.</p>
+      <p>The University of Melbourne, 2020</p>
     </div>
   );
 }
