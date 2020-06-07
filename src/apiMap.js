@@ -56,14 +56,14 @@ export function getRoute(start, end, mode) {
   });
 }
 
-export async function searchRoute(origin, destination, mode, lng, lat) {
-  const start = await searchWaypoint(origin, lng, lat);
-  const end = await searchWaypoint(destination, lng, lat);
-  const startCoordinate = start[0].geometry.coordinates;
-  const endCoordinate = end[0].geometry.coordinates;
-
-  return getRoute(startCoordinate, endCoordinate, mode);
-}
+// export async function searchRoute(origin, destination, mode, lng, lat) {
+//   const start = await searchWaypoint(origin, lng, lat);
+//   const end = await searchWaypoint(destination, lng, lat);
+//   const startCoordinate = start[0].geometry.coordinates;
+//   const endCoordinate = end[0].geometry.coordinates;
+//
+//   return getRoute(startCoordinate, endCoordinate, mode);
+// }
 
 /////////////////////////////////////////////////////////////////////
 //  dodgy code

@@ -98,7 +98,7 @@ export default function Map(props) {
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": "Marker",
+          "icon-image": poiIcon,
           "icon-allow-overlap": true,
         },
       });
@@ -223,7 +223,7 @@ export default function Map(props) {
       if (error) {
         throw error;
       }
-      newMap.addImage("Coffee", image, { pixelRatio: 3 });
+      newMap.addImage("Cafe", image, { pixelRatio: 3 });
     });
 
     setMap(newMap);
