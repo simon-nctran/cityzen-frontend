@@ -1,9 +1,8 @@
 .App {
   font-family: sans-serif;
-  display: flex;
-  flex-flow: column;
   height: 100vh;
-  overflow-x: hidden;
+  width: 100%;
+  overflow: hidden;
 }
 
 .home {
@@ -28,6 +27,7 @@
 .main {
   display: flex;
   flex-flow: column;
+  flex-grow: 1;
   background-color: white;
   height: 100vh;
 }
@@ -229,16 +229,10 @@ select {
   margin-right: 5px;
 }
 
-.map {
-  flex-grow: 1;
-  display: flex;
-  flex-flow: column;
-}
-
 .mapContainer {
   position: relative;
   width: 100%;
-  flex-grow: 1;
+  height: 65vh;
 }
 
 .mapboxgl-popup {
