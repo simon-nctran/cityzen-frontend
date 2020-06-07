@@ -1,6 +1,12 @@
 import React, { useContext, useState } from "react";
 
-import { Button, Form, Col, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Col,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 
 import { addFavourite } from "../api/apiFavourites";
 
@@ -14,7 +20,7 @@ export default function Input({ getWayPoints, setInitial }) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [poi, setPoi] = useState("Select...");
-  const [mode, setMode] = useState("Walk");
+  const [mode, setMode] = useState("");
 
   const [save, setSave] = useState("Save");
 
@@ -32,13 +38,36 @@ export default function Input({ getWayPoints, setInitial }) {
   }
 
   function handleSubmit(event) {
-    if (origin === "" || destination === "" || poi === "Select...") {
-      alert("Origin, Destination and/or Point of Interest cannot be empty!");
+    if (
+      origin === "" ||
+      destination === "" ||
+      poi === "Select..." ||
+      mode === ""
+    ) {
+      alert(
+        "Origin, Destination, Point of Interest and/or Mode cannot be empty!"
+      );
     } else {
-      console.log({ origin, destination, poi, mode });
+      const originCapital = origin.charAt(0).toUpperCase() + origin.split(1);
+      const destintationCapital =
+        destination.charAt(0).toUpperCase() + origin.split(1);
+      const poiCapital = poi.charAt(0).toUpperCase() + origin.split(1);
+      const modeCapital = mode.charAt(0).toUpperCase() + origin.split(1);
+
+      console.log({
+        originCapital,
+        destintationCapital,
+        poiCapital,
+        modeCapital,
+      });
       event.preventDefault();
       setSave("Saving journey as favourite...");
-      addFavourite(token, { origin, destination, poi, mode })
+      addFavourite(token, {
+        originCapital,
+        destintationCapital,
+        poiCapital,
+        mode,
+      })
         .then((res) => {
           console.log(res);
           if (res.data === "Successfully added favourite") {
@@ -122,13 +151,13 @@ export default function Input({ getWayPoints, setInitial }) {
                   setMode(value);
                 }}
               >
-                <ToggleButton value="Driving" variant="dark-teal">
+                <ToggleButton value="driving" variant="dark-teal">
                   Car
                 </ToggleButton>
-                <ToggleButton value="Walking" variant="dark-teal">
+                <ToggleButton value="walking" variant="dark-teal">
                   Walk
                 </ToggleButton>
-                <ToggleButton value="Cycling" variant="dark-teal">
+                <ToggleButton value="cycling" variant="dark-teal">
                   Bike
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -153,14 +182,14 @@ export default function Input({ getWayPoints, setInitial }) {
 /* populate the drop down by mapping each option: https://stackoverflow.com/questions/43019816/populate-dropdown-select-with-props-react */
 function PopulateOptions() {
   const options = [
-    "Coffee",
-    "cafe",
-    "hotel",
-    "parking",
-    "police station",
-    "post office",
-    "restaurant",
-    "supermarket",
+    "Cafe",
+    "Hotel",
+    "Parking",
+    "Police station",
+    "Post office",
+    "Restaurant",
+    "Supermarket",
+    "Pharmacy",
   ];
 
   console.log(options);
