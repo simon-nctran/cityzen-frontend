@@ -1,86 +1,101 @@
-import React, { useState } from "react";
-import { getLogin, getUser } from "../api";
+import React, { useContext, useState } from "react";
+import { getLogin } from "../api/apiUser";
+import UserContext from "../UserContext";
 
-export default function LoginForm({ loginSuccess }) {
+import { Button, Form, Row, Col } from "react-bootstrap";
+
+export default function LoginForm() {
+  const { setToken } = useContext(UserContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState("");
+
+  const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
-    event.preventDefault();
+    if (!username || !password) {
+      alert("Username and/or password cannot be blank");
+    } else {
+      event.preventDefault();
+      setOutput("Logging in..");
 
-    getLogin(username, password)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "Login successful") {
-          successfulLogin(username);
-        } else if (res.data === "Username not found") {
-          setOutput(
-            <React.Fragment>
-              <p>Username not found</p>
-            </React.Fragment>
-          );
-        } else if (res.data === "Invalid password") {
-          setOutput(
-            <React.Fragment>
-              <p>Invalid password </p>
-            </React.Fragment>
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setOutput(JSON.stringify(err));
-      });
-  }
-
-  function successfulLogin(username) {
-    getUser(username).then((res) => {
-      console.log(res.data);
-      loginSuccess(
-        <React.Fragment>
-          <h1>Hi there, {username}</h1>
-          <br />
-          <h3>Your Profile:</h3>
-
-          <div className="profileDetails">
-            <p>Username: {res.data.username}</p>
-            <p>Password: {res.data.password}</p>
-            <p>Email Address: {res.data.emailAddress}</p>
-          </div>
-
-          <br />
-          <h2>Thank you for trying out Cityzen!</h2>
-        </React.Fragment>
-      );
-    });
+      getLogin(username, password)
+        .then((res) => {
+          console.log(res);
+          if (res.data === "Login successful") {
+            setToken(res.headers["x-auth-token"]);
+            setOutput(<></>);
+            if (remember) {
+              localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+            }
+          } else {
+            setOutput("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            // error has .response property if the error was explicitly sent by the server
+            // they're written to be user friendly
+            setOutput(err.response.data);
+          } else {
+            setOutput("Something went wrong, please try again later");
+          }
+        });
+    }
   }
 
   return (
-    <React.Fragment>
-      <h1>Login Form:</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="username"
-          placeholder="Username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-        />
-        <button className="btn btn-success" type="submit">
-          Login
-        </button>
-      </form>
-      {output}
-      <br />
-      <br />
-    </React.Fragment>
+    <div className="forms">
+      <h1 className="formHeader">Login</h1>
+      <div className="formInputs">
+        <Form>
+          <Row>
+            <Col></Col>
+            <Col xs="auto">
+              <Form.Group controlId="formProfileUsername">
+                <Form.Control
+                  as="input"
+                  type="username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formProfilePassword">
+                <Form.Control
+                  as="input"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col></Col>
+          </Row>
+          <Form.Group as={Row} controlId="formLoginRememberMe">
+            <Col>
+              <Form.Check
+                label="Remember me"
+                type="checkbox"
+                id="login-checkbox"
+                checked={remember}
+                onChange={(event) => setRemember(event.target.checked)}
+              />
+            </Col>
+          </Form.Group>
+          <Button variant="orange" onClick={handleSubmit}>
+            Login
+          </Button>
+        </Form>
+        <br />
+        <div className="login-output">{output}</div>
+        <br />
+      </div>
+    </div>
   );
 }

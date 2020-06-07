@@ -1,88 +1,100 @@
-import React, { useState } from "react";
-import { addUser, getUser } from "../api";
+import React, { useContext, useState } from "react";
+import { addUser } from "../api/apiUser";
+import UserContext from "../UserContext";
 
-export default function RegistrationForm({ registrationSuccess }) {
+import { Button, Form, Row, Col } from "react-bootstrap";
+
+export default function RegistrationForm() {
+  const { setToken } = useContext(UserContext);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [output, setOutput] = useState(<React.Fragment />);
+  const [output, setOutput] = useState("");
+
+  const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
-    event.preventDefault();
+    if (!username || !password) {
+      alert("Username and/or password cannot be blank");
+    } else {
+      event.preventDefault();
+      setOutput("Registering..");
 
-    addUser(username, password, email)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "Registration successful") {
-          successfulRegister(username)
-        } else if (res.data === "Username already exists") {
-          setOutput(
-            <React.Fragment>
-              <p>Username already exists</p>
-            </React.Fragment>
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setOutput(JSON.stringify(err));
-      });
-  }
-
-  function successfulRegister(username) {
-    getUser(username)
-      .then((res) => {
-        registrationSuccess(
-          <React.Fragment>
-            <h1>Hi there, {username}</h1>
-            <br />
-            <h3>Your Profile:</h3>
-
-            <div className="profileDetails">
-              <p>Username: {res.data.username}</p>
-              <p>Password: {res.data.password}</p>
-              <p>Email Address: {res.data.emailAddress}</p>
-            </div>
-
-            <br />
-            <h2>Thank you for trying out Cityzen!</h2>
-          </React.Fragment>
-        )
-      })
+      addUser(username, password)
+        .then((res) => {
+          console.log(res);
+          if (res.data === "Registration successful") {
+            setToken(res.headers["x-auth-token"]);
+            setOutput(<></>);
+            if (remember) {
+              localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+            }
+          } else {
+            setOutput("Something went wrong");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            // error has .response property if the error was explicitly sent by the server
+            // they're written to be user friendly
+            setOutput(err.response.data);
+          } else {
+            setOutput("Something went wrong, please try again later");
+          }
+        });
+    }
   }
 
   return (
-    <React.Fragment>
-      <h1>Registration Form:</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="username"
-          placeholder="Username"
-          value={username}
-          onChange={event => setUsername(event.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={event => setPassword(event.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={event => setEmail(event.target.value)}
-          required
-        />
-        <button className="btn btn-success" type="submit">
-          Register
-        </button>
-      </form>
-      {output}
-      <br />
-      <br />
-    </React.Fragment>
+    <div className="forms">
+      <h1 className="formHeader">Register</h1>
+      <div className="formInputs">
+        <Form>
+          <Row>
+            <Col></Col>
+            <Col xs="auto">
+              <Form.Group controlId="formProfileUsername">
+                <Form.Control
+                  type="username"
+                  placeholder="Username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group controlId="formProfilePassword">
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col></Col>
+          </Row>
+          <Form.Group as={Row} controlId="formRegistrationRememberMe">
+            <Col>
+              <Form.Check
+                label="Remember me"
+                type="checkbox"
+                id="login-checkbox"
+                checked={remember}
+                onChange={(event) => setRemember(event.target.checked)}
+              />
+            </Col>
+          </Form.Group>
+          <Button variant="dark-teal" onClick={handleSubmit}>
+            Register
+          </Button>
+        </Form>
+        <br />
+
+        <div className="registration-output">{output}</div>
+        <br />
+      </div>
+    </div>
   );
 }
