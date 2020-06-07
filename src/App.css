@@ -6,6 +6,10 @@
   overflow-x: hidden;
 }
 
+.home {
+  padding-top: 100px;
+}
+
 .main {
   display: flex;
   flex-flow: column;
@@ -20,10 +24,11 @@
 }
 
 .favouriteDetails {
-  margin: 1px;
   padding: 0;
   background-color: ghostwhite;
-  border: 1px black solid;
+  border: 2px black solid;
+  border-radius: 4px;
+  margin: 5px;
 }
 
 .favouriteDetails.hide {
@@ -32,11 +37,16 @@
 
 .favourites-shown {
   display: none;
-  background-color: rgb(253, 125, 61);
   justify-content: center;
 }
 
-.favourites-shown h3 {
+.favourites-list {
+  background-color: rgb(253, 125, 61);
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.favourites-shown h4 {
   color: white;
 }
 
@@ -100,24 +110,21 @@ label {
   text-align: left;
 }
 
+.form-control-custom {
+  width: 150px;
+}
+
 input {
   display: inline-block;
-  width: 150px;
+  width: 10px;
   padding: 8px;
 }
 
 select {
   display: inline-block;
   width: 150px;
-  margin-top: 18px;
+  margin-top: 10px;
   padding-top: 8px;
-}
-
-.btn-orange {
-  background-color: orange;
-  color: white;
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 .btn {
@@ -127,7 +134,36 @@ select {
   vertical-align: middle;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: transparent;
+}
+
+.btn-dark-teal {
+  background-color: rgb(18, 138, 140);
+  color: white;
+  margin: 0px;
+}
+
+.btn-dark-teal.active {
+  background-color: rgb(8, 128, 130);
+  color: white;
+}
+
+.btn-dark-teal:hover {
+  background-color: rgb(8, 128, 130);
+  color: white;
+}
+
+.btn-orange {
+  background-color: rgb(233, 124, 70);
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.btn-orange:hover {
+  background-color: rgb(223, 114, 60);
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .btn-dark {
@@ -136,6 +172,11 @@ select {
 }
 
 .btn-warning {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.btn-info {
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -174,6 +215,10 @@ select {
   display: inline;
 }
 
+.userProfile {
+  width: 500px;
+}
+
 .profile {
   padding: 25px;
 }
@@ -183,8 +228,11 @@ select {
 }
 
 .profileFavouriteDetails {
-  background-color: rgb(253, 125, 61, 0.5);
-  border: 1px black solid;
+  background-color: ghostwhite;
+  border: 2px black solid;
+  border-radius: 4px;
+  margin: 5px;
+  width: 500px;
   padding: 10px;
 }
 
@@ -216,4 +264,8 @@ select {
 h2 {
   padding: 20px;
   text-align: center;
+}
+
+#poi {
+  margin: 0px;
 }

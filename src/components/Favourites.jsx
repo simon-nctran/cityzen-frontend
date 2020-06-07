@@ -1,6 +1,7 @@
+/* eslint-disable react/destructuring-assignment,no-underscore-dangle */
 import React, { useContext, useState } from "react";
 
-import { Button, Row, Col } from "react-bootstrap";
+import { Row, Col, Button, Accordion, Card } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
@@ -15,7 +16,38 @@ export default function Favourites(props) {
 
   return (
     <div className="favourites">
-      <Button className={"btn"} onClick={() => setShowFavourites(!showFavourites)}>
+      {/* <Accordion>
+        <Card>
+          <Card.Header>
+            <Accordion.Toggle
+              as={Button}
+              variant="dark-teal"
+              eventKey="0"
+              onClick={() => setShowFavourites(!showFavourites)}
+            >
+              {showFavourites ? "Hide Favourites" : "Show Favourites"}
+            </Accordion.Toggle>
+          </Card.Header>
+          <Accordion.Collapse eventKey="0">
+            <Card.Body>
+              {showFavourites ? (
+                <FavouritesExtended
+                  token={token}
+                  showFavourites={showFavourites}
+                  get={props.getWayPoints}
+                />
+              ) : (
+                <></>
+              )}
+            </Card.Body>
+          </Accordion.Collapse>
+        </Card>
+      </Accordion> */}
+      <Button
+        size="sm"
+        className="dark-teal"
+        onClick={() => setShowFavourites(!showFavourites)}
+      >
         {showFavourites ? "Hide Favourites" : "Show Favourites"}
       </Button>
       {showFavourites ? (
@@ -78,10 +110,10 @@ function Favourite(props) {
         </Row>
         <Row>
           <Col>
-            <Button variant="warning" onClick={onSubmit}>
+            <Button size="sm" variant="warning" onClick={onSubmit}>
               Apply
             </Button>
-            <Button variant="danger" onClick={handleSubmit}>
+            <Button size="sm" variant="danger" onClick={handleSubmit}>
               X
             </Button>
           </Col>
@@ -93,7 +125,6 @@ function Favourite(props) {
 
 function FavouritesExtended(props) {
   const { token, showFavourites } = props;
-
   console.log(props.get);
 
   const { loading, favourites, error } = useFavourites(token);
@@ -107,10 +138,23 @@ function FavouritesExtended(props) {
 
   return (
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
-      <h3>Favourite Options</h3>
-      {favourites.map((favourite) => (
-        <Favourite key={favourite._id} {...favourite} get={props.get} setInitial={props.setInitial} />
-      ))}
+      <Row>
+        <Col></Col>
+        <Col xs="auto">
+          <div className="favourites-list">
+            <h4>Your Favourite Journeys</h4>
+            {favourites.map((favourite) => (
+              <Favourite
+                key={favourite._id}
+                {...favourite}
+                get={props.get}
+                setInitial={props.setInitial}
+              />
+            ))}
+          </div>
+        </Col>
+        <Col></Col>
+      </Row>
     </div>
   );
 }

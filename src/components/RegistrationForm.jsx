@@ -14,36 +14,40 @@ export default function RegistrationForm() {
   const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
-    event.preventDefault();
-    setOutput("Registering..");
+    if (!username || !password) {
+      alert("Username and/or password cannot be blank");
+    } else {
+      event.preventDefault();
+      setOutput("Registering..");
 
-    addUser(username, password)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "Registration successful") {
-          setToken(res.headers["x-auth-token"]);
-          setOutput(<></>);
-          if (remember) {
-            localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+      addUser(username, password)
+        .then((res) => {
+          console.log(res);
+          if (res.data === "Registration successful") {
+            setToken(res.headers["x-auth-token"]);
+            setOutput(<></>);
+            if (remember) {
+              localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+            }
+          } else {
+            setOutput("Something went wrong");
           }
-        } else {
-          setOutput("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response) {
-          // error has .response property if the error was explicitly sent by the server
-          setOutput(err.response.data);
-          /*
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            // error has .response property if the error was explicitly sent by the server
+            setOutput(err.response.data);
+            /*
           if (res.data === "Username already exists") {
             setOutput("Username already exists");
           }
            */
-        } else {
-          setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
-        }
-      });
+          } else {
+            setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
+          }
+        });
+    }
   }
 
   return (
@@ -53,7 +57,7 @@ export default function RegistrationForm() {
         <Form>
           <Row>
             <Col></Col>
-            <Col xs={2}>
+            <Col xs="auto">
               <Form.Group controlId="formProfileUsername">
                 <Form.Control
                   type="username"
@@ -86,7 +90,7 @@ export default function RegistrationForm() {
               />
             </Col>
           </Form.Group>
-          <Button variant="success" onClick={handleSubmit}>
+          <Button variant="dark-teal" onClick={handleSubmit}>
             Register
           </Button>
         </Form>

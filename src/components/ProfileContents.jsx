@@ -30,7 +30,7 @@ export default function ProfileContents({ logout }) {
       {userData && (
         <Row>
           <Col></Col>
-          <Col>
+          <Col xs="auto">
             <div className="userProfile">
               <h1>Hi there, {userData.username}</h1>
               <div className="profileDetails">
@@ -38,9 +38,8 @@ export default function ProfileContents({ logout }) {
                   <Col>
                     <h3>Your Profile:</h3>
                     <p>Username: {userData.username}</p>
-                    <div className="userFavourites">
-                      <MapFavourites token={token} />
-                    </div>
+
+                    <MapFavourites token={token} />
                   </Col>
                 </Row>
               </div>
@@ -102,7 +101,7 @@ function Favourite(favourite) {
     <div className={`profileFavourite profileFavourite-${_id}`} key={_id}>
       <div className={`profileFavouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
-          <Col xs={10}>
+          <Col xs={9}>
             Origin: {origin}
             <br />
             Destination: {destination}
@@ -110,7 +109,9 @@ function Favourite(favourite) {
             Point of Interest: {poi}
             <br />
             Mode: {mode}
-            <Button variant="danger" onClick={handleSubmit}>
+          </Col>
+          <Col>
+            <Button size="sm" variant="danger" onClick={handleSubmit}>
               Delete
             </Button>
           </Col>

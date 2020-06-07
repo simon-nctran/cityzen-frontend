@@ -14,38 +14,42 @@ export default function LoginForm() {
   const [remember, setRemember] = useState(false);
 
   function handleSubmit(event) {
-    event.preventDefault();
-    setOutput("Logging in..");
+    if (!username || !password) {
+      alert("Username and/or password cannot be blank");
+    } else {
+      event.preventDefault();
+      setOutput("Logging in..");
 
-    getLogin(username, password)
-      .then((res) => {
-        console.log(res);
-        if (res.data === "Login successful") {
-          setToken(res.headers["x-auth-token"]);
-          setOutput(<></>);
-          if (remember) {
-            localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+      getLogin(username, password)
+        .then((res) => {
+          console.log(res);
+          if (res.data === "Login successful") {
+            setToken(res.headers["x-auth-token"]);
+            setOutput(<></>);
+            if (remember) {
+              localStorage.setItem("auth-token", res.headers["x-auth-token"]);
+            }
+          } else {
+            setOutput("Something went wrong");
           }
-        } else {
-          setOutput("Something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response) {
-          // error has .response property if the error was explicitly sent by the server
-          setOutput(err.response.data);
-          /*
-          if (err.response.data === "Username not found") {
-            setOutput("Username not found");
-          } else if (err.response.data === "Invalid password") {
-            setOutput("Invalid password");
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response) {
+            // error has .response property if the error was explicitly sent by the server
+            setOutput(err.response.data);
+            /*
+            if (err.response.data === "Username not found") {
+              setOutput("Username not found");
+            } else if (err.response.data === "Invalid password") {
+              setOutput("Invalid password");
+            }
+             */
+          } else {
+            setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
           }
-           */
-        } else {
-          setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
-        }
-      });
+        });
+    }
   }
 
   return (
@@ -55,9 +59,10 @@ export default function LoginForm() {
         <Form>
           <Row>
             <Col></Col>
-            <Col xs={2}>
+            <Col xs="auto">
               <Form.Group controlId="formProfileUsername">
                 <Form.Control
+                  as="input"
                   type="username"
                   placeholder="Username"
                   value={username}
@@ -67,6 +72,7 @@ export default function LoginForm() {
               </Form.Group>
               <Form.Group controlId="formProfilePassword">
                 <Form.Control
+                  as="input"
                   type="password"
                   placeholder="Password"
                   value={password}
@@ -88,7 +94,7 @@ export default function LoginForm() {
               />
             </Col>
           </Form.Group>
-          <Button variant="success" onClick={handleSubmit}>
+          <Button variant="orange" onClick={handleSubmit}>
             Login
           </Button>
         </Form>
