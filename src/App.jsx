@@ -6,9 +6,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // Why use SimpleBar: https://stackoverflow.com/questions/57862671/how-to-make-scroll-bar-overlay-content
 
 import Nav from "./components/Nav";
-import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import Journey from "./pages/Journey";
+import Home from "./pages/Home";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 /* https://react-bootstrap.netlify.app/getting-started/introduction */
@@ -38,7 +37,7 @@ export default function App() {
               <UserContext.Provider value={{ userStatus, token, setToken }}>
                 <Nav />
                 <Route exact path="/">
-                  <Journey />
+                  <Home />
                 </Route>
                 <Route path="/profile">
                   <Profile />
