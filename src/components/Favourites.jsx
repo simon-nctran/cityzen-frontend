@@ -15,16 +15,14 @@ export default function Favourites(props) {
 
   return (
     <div className="favourites">
-      <Button
-        className={"btn"}
-        onClick={() => setShowFavourites(!showFavourites)}
-      >
+      <Button className={"btn"} onClick={() => setShowFavourites(!showFavourites)}>
         {showFavourites ? "Hide Favourites" : "Show Favourites"}
       </Button>
       {showFavourites ? (
         <FavouritesExtended
           token={token}
           showFavourites={showFavourites}
+          setInitial={props.setInitial}
           get={props.getWayPoints}
         />
       ) : (
@@ -60,6 +58,7 @@ function Favourite(props) {
 
   function onSubmit() {
     console.log({ origin, destination, poi, mode });
+    props.setInitial(false);
     props.get({
       origin,
       destination,
@@ -110,7 +109,7 @@ function FavouritesExtended(props) {
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
       <h3>Favourite Options</h3>
       {favourites.map((favourite) => (
-        <Favourite key={favourite._id} {...favourite} get={props.get} />
+        <Favourite key={favourite._id} {...favourite} get={props.get} setInitial={props.setInitial} />
       ))}
     </div>
   );

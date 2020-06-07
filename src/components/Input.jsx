@@ -1,19 +1,13 @@
 import React, { useContext, useState } from "react";
 
-import {
-  Button,
-  Form,
-  Col,
-  ToggleButtonGroup,
-  ToggleButton,
-} from "react-bootstrap";
+import { Button, Form, Col, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 import { addFavourite } from "../api/apiFavourites";
 
 import UserContext from "../UserContext";
 
 // Input Component (child to App Component)
-export default function Input({ getWayPoints }) {
+export default function Input({ getWayPoints, setInitial }) {
   const { userStatus, token } = useContext(UserContext);
   const { userData, error } = userStatus;
 
@@ -29,6 +23,7 @@ export default function Input({ getWayPoints }) {
       alert("Origin, Destination and/or Point of Interest cannot be empty!");
     } else {
       console.log({ origin, destination, poi, mode });
+      setInitial(false);
       getWayPoints({
         origin,
         destination,

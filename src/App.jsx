@@ -37,9 +37,6 @@ export default function App() {
               <UserContext.Provider value={{ userStatus, token, setToken }}>
                 <Nav />
                 <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/journey">
                   <Journey />
                 </Route>
                 <Route path="/profile">

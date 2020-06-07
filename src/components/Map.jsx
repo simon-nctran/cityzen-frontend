@@ -113,8 +113,7 @@ export default function Map(props) {
                 address: "297 Little Collins St.",
                 category: "cafe, coffee, tea, tea house",
                 maki: "cafe",
-                name:
-                  "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
+                name: "Sensory Lab, 297 Little Collins St., Melbourne, Victoria 3000, Australia",
               },
               text: "Sensory Lab",
               place_name:
@@ -180,10 +179,7 @@ export default function Map(props) {
           coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         }
 
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(description)
-          .addTo(map);
+        new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
       });
 
       // Change the cursor to a pointer when the mouse is over the places layer.
