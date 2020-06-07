@@ -10,7 +10,7 @@ import UserContext from "../UserContext";
 export default function Home() {
   const { userStatus } = useContext(UserContext);
   const { userData, error } = userStatus;
-  const [initial, setInitial] = useState(true);
+  const [initial, setInitial] = useState(Boolean(!userData)); // initial load of home; is always false if logged in
   const [journey, setJourney] = useState(null);
 
   function getWayPoints(points) {
@@ -38,7 +38,6 @@ export default function Home() {
       {initial ? (
         <div className="home" align="middle">
           <div className="welcome">
-            {console.log(initial)}
             <h1>
               <span role="img" aria-label="cityscape">
                 🏙
@@ -72,7 +71,6 @@ export default function Home() {
         </div>
       ) : (
         <div className="map">
-          {console.log(initial)}
           <Map journey={journey} />
         </div>
       )}

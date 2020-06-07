@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-// import SimpleBar from "simplebar-react";
-// import "simplebar/dist/simplebar.min.css";
-// Why use SimpleBar: https://stackoverflow.com/questions/57862671/how-to-make-scroll-bar-overlay-content
-
 import Nav from "./components/Nav";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
@@ -30,8 +26,6 @@ export default function App() {
     // https://stackoverflow.com/questions/47761894/why-are-fragments-in-react-16-better-than-container-divs
     <Router>
       <div className="App">
-        {/* <SimpleBar style={{ height: "100vh" }}> */}
-        {/* https://stackoverflow.com/questions/12172177/set-div-height-equal-to-screen-size/41537811#41537811 */}
         {loading ? (
           <></>
         ) : (
@@ -49,7 +43,6 @@ export default function App() {
             </Switch>
           </>
         )}
-        {/* </SimpleBar> */}
       </div>
     </Router>
   );

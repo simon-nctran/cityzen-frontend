@@ -12,9 +12,7 @@ export default function Profile() {
   const [form, setForm] = useState(<h2>How would you like to proceed?</h2>);
   const [toggledLogin, setToggledLogin] = useState(false);
   const [toggledRegister, setToggledRegister] = useState(false);
-  const [toggledProfile, setToggledProfile] = useState(
-    Boolean(userStatus.userData)
-  );
+  const [toggledProfile, setToggledProfile] = useState(Boolean(userStatus.userData));
   // Boolean(): https://stackoverflow.com/questions/31155477/convert-truthy-or-falsy-to-an-explicit-boolean
 
   function displayLogin() {
