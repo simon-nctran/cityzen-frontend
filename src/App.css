@@ -1,8 +1,11 @@
 .App {
   font-family: sans-serif;
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column;
   height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .home {
@@ -43,7 +46,7 @@
   background-color: ghostwhite;
   border: 2px black solid;
   border-radius: 4px;
-  margin: 5px;
+  margin: 6px;
 }
 
 .favouriteDetails.hide {
@@ -308,6 +311,6 @@ h2 {
   text-align: center;
 }
 
-#poi {
+#formJourneyPOI {
   margin: 0px;
 }

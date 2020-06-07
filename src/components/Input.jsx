@@ -101,7 +101,6 @@ export default function Input({ getWayPoints, setInitial }) {
             <Form.Group controlId="formJourneyPOI">
               <Form.Label>What would you like?</Form.Label>
               <Form.Control
-                id="poi"
                 as="select"
                 value={poi}
                 onChange={(event) => {
