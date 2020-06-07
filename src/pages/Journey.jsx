@@ -29,7 +29,11 @@ export default function Journey() {
       </div>
 
       <div className="favourites">
-        {userData !== null && error == null ? <Favourites /> : <> </>}
+        {userData !== null && error == null ? (
+          <Favourites getWayPoints={getWayPoints} />
+        ) : (
+          <> </>
+        )}
       </div>
 
       <div className="map">
