@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 
 import {
-  Button,
   Form,
   Col,
   ToggleButtonGroup,
   ToggleButton,
+  Button,
 } from "react-bootstrap";
 
 import { addFavourite } from "../api/apiFavourites";
@@ -57,6 +57,7 @@ export default function Input({ getWayPoints }) {
           console.log(err);
           if (err.response) {
             alert(err.response.data);
+            setSave("Save");
           } else {
             alert(`Something went wrong: ${err.message}`);
           }
@@ -126,15 +127,21 @@ export default function Input({ getWayPoints }) {
                   setMode(value);
                 }}
               >
-                <ToggleButton value="Driving">Car</ToggleButton>
-                <ToggleButton value="Walking">Walk</ToggleButton>
-                <ToggleButton value="Cycling">Bike</ToggleButton>
+                <ToggleButton value="Driving" variant="dark-teal">
+                  Car
+                </ToggleButton>
+                <ToggleButton value="Walking" variant="dark-teal">
+                  Walk
+                </ToggleButton>
+                <ToggleButton value="Cycling" variant="dark-teal">
+                  Bike
+                </ToggleButton>
               </ToggleButtonGroup>
             </Form.Group>
           </Col>
         </Form.Row>
       </Form>
-      <Button variant="success" onClick={onSubmit}>
+      <Button variant="orange" onClick={onSubmit}>
         Submit
       </Button>
       {userData !== null && error == null ? (
