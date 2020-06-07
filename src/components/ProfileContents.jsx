@@ -36,9 +36,6 @@ export default function ProfileContents({ logout }) {
               <div className="profileDetails">
                 <Row>
                   <Col>
-                    <h3>Your Profile:</h3>
-                    <p>Username: {userData.username}</p>
-
                     <MapFavourites token={token} />
                   </Col>
                 </Row>
@@ -67,7 +64,7 @@ function MapFavourites({ token }) {
 
   return (
     <div>
-      <p> Your Favourites:</p>
+      <h3>Here are your favourites:</h3>
       {favourites.map((favourite) => (
         <Favourite key={favourite._id} {...favourite} />
       ))}
@@ -78,6 +75,7 @@ function MapFavourites({ token }) {
 function Favourite(favourite) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = favourite;
+  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
 
   const [hide, setHide] = useState(false);
 
@@ -102,13 +100,7 @@ function Favourite(favourite) {
       <div className={`profileFavouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
           <Col xs={9}>
-            Origin: {origin}
-            <br />
-            Destination: {destination}
-            <br />
-            Point of Interest: {poi}
-            <br />
-            Mode: {mode}
+            {description}
           </Col>
           <Col>
             <Button size="sm" variant="danger" onClick={handleSubmit}>

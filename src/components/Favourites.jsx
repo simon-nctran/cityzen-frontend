@@ -67,6 +67,7 @@ export default function Favourites(props) {
 function Favourite(props) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = props;
+  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
 
   const [hide, setHide] = useState(false);
 
@@ -103,10 +104,7 @@ function Favourite(props) {
     <div className={`favourite favourite-${_id}`} key={_id}>
       <div className={`favouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
-          <Col xs={3}>Origin: {origin}</Col>
-          <Col xs={3}>Destination: {destination}</Col>
-          <Col xs={3}>Point of Interest: {poi}</Col>
-          <Col xs={3}>Mode: {mode}</Col>
+          <Col style={{}}>{description}</Col>
         </Row>
         <Row>
           <Col>
@@ -114,7 +112,7 @@ function Favourite(props) {
               Apply
             </Button>
             <Button size="sm" variant="danger" onClick={handleSubmit}>
-              X
+              Delete
             </Button>
           </Col>
         </Row>
