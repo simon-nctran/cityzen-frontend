@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment,no-underscore-dangle */
 import React, { useContext, useState } from "react";
 
-import { Row, Col, Button, Accordion, Card } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
@@ -16,33 +16,6 @@ export default function Favourites(props) {
 
   return (
     <div className="favourites">
-      {/* <Accordion>
-        <Card>
-          <Card.Header>
-            <Accordion.Toggle
-              as={Button}
-              variant="dark-teal"
-              eventKey="0"
-              onClick={() => setShowFavourites(!showFavourites)}
-            >
-              {showFavourites ? "Hide Favourites" : "Show Favourites"}
-            </Accordion.Toggle>
-          </Card.Header>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>
-              {showFavourites ? (
-                <FavouritesExtended
-                  token={token}
-                  showFavourites={showFavourites}
-                  get={props.getWayPoints}
-                />
-              ) : (
-                <></>
-              )}
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion> */}
       <Button
         size="sm"
         className="dark-teal"
@@ -67,7 +40,15 @@ export default function Favourites(props) {
 function Favourite(props) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = props;
-  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
+  const description =
+    "Find " +
+    poi +
+    " from '" +
+    origin +
+    "' to '" +
+    destination +
+    "' by " +
+    mode;
 
   const [hide, setHide] = useState(false);
 
