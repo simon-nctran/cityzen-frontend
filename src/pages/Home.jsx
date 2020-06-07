@@ -11,8 +11,7 @@ export default function Home() {
   const { userStatus } = useContext(UserContext);
   const { userData, error } = userStatus;
   const [initial, setInitial] = useState(true);
-
-  const [journey, setJourney] = useState({});
+  const [journey, setJourney] = useState(null);
 
   function getWayPoints(points) {
     setJourney(points);

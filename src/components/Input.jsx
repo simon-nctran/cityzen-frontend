@@ -182,14 +182,16 @@ export default function Input({ getWayPoints, setInitial }) {
 /* populate the drop down by mapping each option: https://stackoverflow.com/questions/43019816/populate-dropdown-select-with-props-react */
 function PopulateOptions() {
   const options = [
+    "Bagel",
     "Cafe",
+    "Fuel",
     "Hotel",
     "Parking",
+    "Pharmacy",
     "Police station",
     "Post office",
     "Restaurant",
     "Supermarket",
-    "Pharmacy",
   ];
 
   console.log(options);
