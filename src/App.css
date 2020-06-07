@@ -14,7 +14,7 @@
 }
 
 .favourites {
-  background-color: lightgrey;
+  background-color: lightgray;
   padding-bottom: 5px;
   text-align: center;
 }
@@ -32,8 +32,12 @@
 
 .favourites-shown {
   display: none;
-  background-color: grey;
+  background-color: rgb(253, 125, 61);
   justify-content: center;
+}
+
+.favourites-shown h3 {
+  color: white;
 }
 
 .favourites-shown.show {
@@ -60,12 +64,16 @@
 }
 
 .navigation {
-  background-color: dodgerblue;
+  background-color: rgb(24, 182, 192);
   height: 45px;
 }
 
+.links {
+  float: right;
+}
+
 nav a {
-  color: black;
+  color: white;
   text-decoration: none;
   padding: 10px;
   display: inline-block;
@@ -96,8 +104,6 @@ input {
   display: inline-block;
   width: 150px;
   padding: 8px;
-  border-radius: 2px;
-  border: grey solid 1px;
 }
 
 select {
@@ -107,6 +113,13 @@ select {
   padding-top: 8px;
 }
 
+.btn-orange {
+  background-color: orange;
+  color: white;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .btn {
   display: inline-block;
   position: relative;
@@ -114,11 +127,7 @@ select {
   vertical-align: middle;
   margin-top: 5px;
   margin-bottom: 5px;
-}
-
-.btn-success {
-  margin-left: 5px;
-  margin-right: 5px;
+  background-color: transparent;
 }
 
 .btn-dark {
@@ -133,7 +142,6 @@ select {
 
 .map {
   flex-grow: 1;
-  background-color: #404040;
   display: flex;
   flex-flow: column;
 }
@@ -162,6 +170,10 @@ select {
   font-weight: bold;
 }
 
+.user {
+  display: inline;
+}
+
 .profile {
   padding: 25px;
 }
@@ -170,10 +182,11 @@ select {
   display: inline-block;
 }
 
-/* .userFavourites {
-  background-color: lightblue;
+.profileFavouriteDetails {
+  background-color: rgb(253, 125, 61, 0.5);
   border: 1px black solid;
-} */
+  padding: 10px;
+}
 
 .profileFavouriteDetails.hide {
   display: none;
