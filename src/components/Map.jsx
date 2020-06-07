@@ -189,18 +189,6 @@ export default function Map(props) {
       });
     });
 
-    newMap.loadImage("/flag.png", (error, image) => {
-      if (error) {
-        throw error;
-      }
-      newMap.addImage("POI", image);
-    });
-    newMap.loadImage("/marker.png", (error, image) => {
-      if (error) {
-        throw error;
-      }
-      newMap.addImage("Marker", image, { pixelRatio: 2 });
-    });
     newMap.loadImage("https://img.icons8.com/color/96/000000/near-me--v1.png", (error, image) => {
       if (error) {
         throw error;
@@ -213,18 +201,75 @@ export default function Map(props) {
       }
       newMap.addImage("destination", image, { pixelRatio: 3 });
     });
-    newMap.loadImage("https://img.icons8.com/color/96/000000/place-marker.png", (error, image) => {
-      if (error) {
-        throw error;
-      }
-      newMap.addImage("selection", image, { pixelRatio: 3 });
-    });
     newMap.loadImage("https://img.icons8.com/color/96/000000/cafe.png", (error, image) => {
       if (error) {
         throw error;
       }
       newMap.addImage("Cafe", image, { pixelRatio: 3 });
     });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/bagel.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Bagel", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/gas-station.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Fuel", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/bed.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Hotel", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/parking.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Parking", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage("https://img.icons8.com/color/96/000000/pill.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Pharmacy", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage(
+      "https://img.icons8.com/color/96/000000/police-station.png",
+      (error, image) => {
+        if (error) {
+          throw error;
+        }
+        newMap.addImage("Police station", image, { pixelRatio: 3 });
+      }
+    );
+    newMap.loadImage(
+      "https://img.icons8.com/color/96/000000/mailbox-with-letter.png",
+      (error, image) => {
+        if (error) {
+          throw error;
+        }
+        newMap.addImage("Post office", image, { pixelRatio: 3 });
+      }
+    );
+    newMap.loadImage("https://img.icons8.com/color/96/000000/restaurant.png", (error, image) => {
+      if (error) {
+        throw error;
+      }
+      newMap.addImage("Restaurant", image, { pixelRatio: 3 });
+    });
+    newMap.loadImage(
+      "https://img.icons8.com/color/96/000000/shopping-basket-2.png",
+      (error, image) => {
+        if (error) {
+          throw error;
+        }
+        newMap.addImage("Supermarket", image, { pixelRatio: 3 });
+      }
+    );
 
     setMap(newMap);
 
