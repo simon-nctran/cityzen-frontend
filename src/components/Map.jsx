@@ -75,7 +75,7 @@ export default function Map(props) {
           "line-cap": "round",
         },
         paint: {
-          "line-color": "#FFFF66",
+          "line-color": "#00CCCC",
           "line-width": 8,
         },
       });
