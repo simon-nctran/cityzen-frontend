@@ -8,8 +8,23 @@
 
 .home {
   padding-top: 100px;
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column;
 }
 
+.welcome {
+  flex-grow: 1;
+  width: 100%;
+  flex-flow: column;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.icon {
+  padding-top: 1px;
+  padding-left: 10px;
+}
 .main {
   display: flex;
   flex-flow: column;
@@ -60,11 +75,16 @@
   text-align: center;
 }
 
+.title {
+  padding: 0;
+}
+
 .title h2 {
   text-align: left;
   font: bold;
   color: #ffffff;
-  padding: 3.5px;
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
   margin: 0px;
   text-decoration: none;
 }
