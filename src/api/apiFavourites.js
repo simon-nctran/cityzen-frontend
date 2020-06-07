@@ -4,7 +4,6 @@ import axios from "axios";
 // One important difference between fetch and axios is that axios's Promise automatically resolved to an Object.
 // This means that you don't need to call res.json()
 
-// const BASE_URL = "http://localhost:3001";
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
 axios.defaults.baseURL = BASE_URL;
