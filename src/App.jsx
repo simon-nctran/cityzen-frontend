@@ -9,10 +9,11 @@ import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Journey from "./pages/Journey";
-import "./App.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 /* https://react-bootstrap.netlify.app/getting-started/introduction */
+
+import "./App.css";
 
 import { useUser } from "./api/apiUser";
 import UserContext from "./UserContext";
