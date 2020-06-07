@@ -37,23 +37,12 @@ export default function Input({ getWayPoints, setInitial }) {
     if (origin === "" || destination === "" || poi === "Select..." || mode === "") {
       alert("Origin, Destination, Point of Interest and/or Mode cannot be empty!");
     } else {
-      const originCapital = origin.charAt(0).toUpperCase() + origin.split(1);
-      const destinationCapital = destination.charAt(0).toUpperCase() + origin.split(1);
-      const poiCapital = poi.charAt(0).toUpperCase() + origin.split(1);
-      const modeCapital = mode.charAt(0).toUpperCase() + origin.split(1);
-
-      console.log({
-        originCapital,
-        destinationCapital,
-        poiCapital,
-        modeCapital,
-      });
       event.preventDefault();
       setSave("Saving journey as favourite...");
       addFavourite(token, {
-        originCapital,
-        destinationCapital,
-        poiCapital,
+        origin,
+        destination,
+        poi,
         mode,
       })
         .then((res) => {
@@ -182,7 +171,6 @@ function PopulateOptions() {
     "Supermarket",
   ];
 
-  console.log(options);
   return options.map((option, index) => (
     <option key={index} value={option}>
       {option}

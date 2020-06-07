@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps,react/destructuring-assignment */
 import React, { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
-import { searchWaypoint, getPoiRoute, getRoute } from "../apiMap";
+import { searchWaypoint, getPoiRoute, getRoute } from "../api/apiMap";
 
 // mapbox
 mapboxgl.accessToken =
