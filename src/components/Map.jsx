@@ -136,11 +136,11 @@ export default function Map(props) {
       const { mode } = props.journey;
       map.on("click", "places", (e) => {
         const poiSelection = e.features[0].geometry.coordinates.slice();
-        console.log("e.features[0]", e.features[0]);
+        // console.log("e.features[0]", e.features[0]);
         setSelection(e.features[0]);
         getPoiRoute(routeCoords[0], poiSelection, routeCoords.slice(-1)[0], mode).then((route) => {
           const { coordinates: newCoordinates } = route.routes[0].geometry;
-          console.log("new route coordinates", newCoordinates);
+          // console.log("new route coordinates", newCoordinates);
           setRouteCoords(newCoordinates);
         });
       });
@@ -157,10 +157,10 @@ export default function Map(props) {
   async function searchRoute(start, end) {
     const { mode } = props.journey;
     const startPoint = await searchWaypoint(start, lng, lat);
-    console.log("start point", startPoint);
+    // console.log("start point", startPoint);
     setOrigin(startPoint);
     const endPoint = await searchWaypoint(end, lng, lat);
-    console.log("end point", endPoint);
+    // console.log("end point", endPoint);
     setDestination(endPoint);
     const startCoordinate = startPoint[0].geometry.coordinates;
     const endCoordinate = endPoint[0].geometry.coordinates;
@@ -170,7 +170,7 @@ export default function Map(props) {
 
   // Mount the map
   useEffect(() => {
-    console.log("Map Component has been mounted");
+    // console.log("Map Component has been mounted");
     const newMap = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
@@ -274,9 +274,9 @@ export default function Map(props) {
     setMap(newMap);
 
     // Search for a route
-    console.log("props.journey", props.journey);
+    // console.log("props.journey", props.journey);
     if (props.journey !== null) {
-      console.log("props.journey has been updated");
+      // console.log("props.journey has been updated");
 
       // extract the user input into their respective fields
       const { origin: start, destination: end } = props.journey;
@@ -284,12 +284,12 @@ export default function Map(props) {
       searchRoute(start, end)
         .then((route) => {
           const { coordinates } = route.routes[0].geometry;
-          console.log("route coordinates", coordinates);
+          // console.log("route coordinates", coordinates);
           setRouteCoords(coordinates);
         })
         .catch((err) => {
-          console.error("error has occurred when searching for routes");
-          console.error(err);
+          // console.error("error has occurred when searching for routes");
+          // console.error(err);
           alert("Places could not be found");
         });
     }
@@ -309,7 +309,7 @@ export default function Map(props) {
   // draw the Route and the POIs when route coordinates are updated
   useEffect(() => {
     if (map && routeCoords) {
-      console.log("routeCoords has been updated");
+      // console.log("routeCoords has been updated");
       const routeData = { ...routeDataTemplate };
       routeData.geometry.coordinates = routeCoords;
 
@@ -323,9 +323,9 @@ export default function Map(props) {
         // add markers for origin and destination
         const originData = { ...locationDataTemplate }; // shallow copy location data template (this means the properties share references)
         originData.features[0].geometry.coordinates = [routeCoords[0][0], routeCoords[0][1]];
-        console.log("origin", origin);
+        // console.log("origin", origin);
         originData.features[0].properties.place_name = origin[0].place_name;
-        console.log("originData", originData);
+        // console.log("originData", originData);
         if (map.getSource("origin")) {
           map.getSource("origin").setData(originData);
         } else {
@@ -367,9 +367,9 @@ export default function Map(props) {
           routeCoords.slice(-1)[0][0],
           routeCoords.slice(-1)[0][1],
         ];
-        console.log("destination", destination);
+        // console.log("destination", destination);
         destinationData.features[0].properties.place_name = destination[0].place_name;
-        console.log("destinationData", destinationData);
+        // console.log("destinationData", destinationData);
         if (map.getSource("destination")) {
           map.getSource("destination").setData(destinationData);
         } else {
@@ -441,7 +441,7 @@ export default function Map(props) {
   // draw the POIs (run when POIs are updated)
   useEffect(() => {
     if (map && poiFeatures !== null) {
-      console.log("poiFeatures has been updated", poiFeatures);
+      // console.log("poiFeatures has been updated", poiFeatures);
       const poiData = { ...poiDataTemplate };
       poiData.features = poiFeatures;
       const { poi } = props.journey;
@@ -451,14 +451,14 @@ export default function Map(props) {
 
   useEffect(() => {
     if (map && selection !== null) {
-      console.log("selection has been updated", selection);
+      // console.log("selection has been updated", selection);
       const selectionData = { ...locationDataTemplate };
       mapFlyTo(selection.geometry.coordinates);
       selectionData.features[0].geometry.coordinates = selection.geometry.coordinates;
       selectionData.features[0].properties.place_name = selection.properties.place_name;
-      console.log("selectionData", selectionData);
+      // console.log("selectionData", selectionData);
       if (map.getSource("selection")) {
-        console.log("already have selection data");
+        // console.log("already have selection data");
         map.getSource("selection").setData(selectionData);
       } else {
         map.addSource("selection", {
@@ -476,7 +476,7 @@ export default function Map(props) {
             "icon-allow-overlap": true,
           },
         });
-        console.log("added selection layer");
+        // console.log("added selection layer");
         const selectionPopup = new mapboxgl.Popup({
           closeButton: false,
           closeOnClick: false,

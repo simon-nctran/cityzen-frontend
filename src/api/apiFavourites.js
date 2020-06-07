@@ -34,11 +34,11 @@ export function addFavourite(token, favourite) {
 // res.data will be the response ?
 export function deleteFavourite(token, id) {
   // backend isn't done yet!
-  console.log(token);
-  console.log(id);
+  // console.log(token);
+  // console.log(id);
   const path = `/favourites/${id}`;
 
-  console.log("DELETING A FAVOURITE");
+  // console.log("DELETING A FAVOURITE");
   return axios.delete(path, {
     headers: { "x-auth-token": token },
   });
@@ -63,14 +63,14 @@ export function useFavourites(token) {
       setLoading(true);
       getFavourites(token)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setFavourites(
             res.data // might be wrong
           );
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           setError(err);
           setLoading(false);
         });

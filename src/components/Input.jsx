@@ -59,7 +59,7 @@ export default function Input({ getWayPoints, setInitial }) {
             alert(err.response.data);
             setSave("Save");
           } else {
-            alert(`Something went wrong: ${err.message}`);
+            alert(`Something went wrong, please try again later`);
           }
         });
     }
@@ -90,7 +90,6 @@ export default function Input({ getWayPoints, setInitial }) {
                 placeholder="Destination"
                 value={destination}
                 onChange={(event) => {
-                  // console.log(event.target.value);
                   setDestination(event.target.value);
                 }}
               />

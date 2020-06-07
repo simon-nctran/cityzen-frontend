@@ -21,7 +21,7 @@ export function searchWaypoint(place, longitude, latitude) {
           // alert("Places could not be found");
           reject(new Error("searchWaypoint reject"));
         } else {
-          //console.log("searchWaypoint data:", data);
+          // console.log("searchWaypoint data:", data);
           resolve(data.features); // extract the coordinates
         }
       });
