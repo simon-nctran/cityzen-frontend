@@ -47,7 +47,9 @@ export default function ProfileContents({ logout }) {
       )}
       <div className="logout">
         <h2>Thank you for trying out Cityzen!</h2>
-        <Button onClick={logout}>Logout</Button>
+        <Button variant="black" onClick={logout}>
+          Logout
+        </Button>
       </div>
     </div>
   );
@@ -75,7 +77,15 @@ function MapFavourites({ token }) {
 function Favourite(favourite) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = favourite;
-  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
+  const description =
+    "Find " +
+    poi +
+    " from '" +
+    origin +
+    "' to '" +
+    destination +
+    "' by " +
+    mode;
 
   const [hide, setHide] = useState(false);
 
@@ -99,11 +109,9 @@ function Favourite(favourite) {
     <div className={`profileFavourite profileFavourite-${_id}`} key={_id}>
       <div className={`profileFavouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
-          <Col xs={9}>
-            {description}
-          </Col>
+          <Col xs={9}>{description}</Col>
           <Col>
-            <Button size="sm" variant="danger" onClick={handleSubmit}>
+            <Button size="sm" variant="orange" onClick={handleSubmit}>
               Delete
             </Button>
           </Col>

@@ -89,10 +89,10 @@ function Favourite(props) {
         </Row>
         <Row>
           <Col>
-            <Button size="sm" variant="warning" onClick={onSubmit}>
+            <Button size="sm" variant="light-teal" onClick={onSubmit}>
               Apply
             </Button>
-            <Button size="sm" variant="danger" onClick={handleSubmit}>
+            <Button size="sm" variant="orange" onClick={handleSubmit}>
               Delete
             </Button>
           </Col>

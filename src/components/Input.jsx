@@ -169,7 +169,7 @@ export default function Input({ getWayPoints, setInitial }) {
         Submit
       </Button>
       {userData !== null && error == null ? (
-        <Button variant="info" onClick={handleSubmit}>
+        <Button variant="light-teal" onClick={handleSubmit}>
           {save}
         </Button>
       ) : (
