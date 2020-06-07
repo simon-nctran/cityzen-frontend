@@ -2,8 +2,6 @@
 import React, { useContext, useState } from "react";
 import { Button, Row, Col } from "react-bootstrap";
 
-// import Favourites from "../components/Favourites";
-
 import { useFavourites, deleteFavourite } from "../api/apiFavourites";
 
 import UserContext from "../UserContext";
@@ -66,10 +64,19 @@ function MapFavourites({ token }) {
 
   return (
     <div>
-      <h3>Here are your favourites:</h3>
-      {favourites.map((favourite) => (
-        <Favourite key={favourite._id} {...favourite} />
-      ))}
+      {favourites.length === 0 ? (
+        <>
+          <h5>You don't have any favourites saved</h5>
+          <h6>Go back to Home to save some!</h6>
+        </>
+      ) : (
+        <>
+          <h3>Here are your favourites:</h3>
+          {favourites.map((favourite) => (
+            <Favourite key={favourite._id} {...favourite} />
+          ))}
+        </>
+      )}
     </div>
   );
 }
@@ -77,15 +84,7 @@ function MapFavourites({ token }) {
 function Favourite(favourite) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = favourite;
-  const description =
-    "Find " +
-    poi +
-    " from '" +
-    origin +
-    "' to '" +
-    destination +
-    "' by " +
-    mode;
+  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
 
   const [hide, setHide] = useState(false);
 

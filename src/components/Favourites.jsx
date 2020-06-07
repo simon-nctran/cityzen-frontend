@@ -16,11 +16,7 @@ export default function Favourites(props) {
 
   return (
     <div className="favourites">
-      <Button
-        size="sm"
-        className="dark-teal"
-        onClick={() => setShowFavourites(!showFavourites)}
-      >
+      <Button size="sm" className="dark-teal" onClick={() => setShowFavourites(!showFavourites)}>
         {showFavourites ? "Hide Favourites" : "Show Favourites"}
       </Button>
       {showFavourites ? (
@@ -40,15 +36,7 @@ export default function Favourites(props) {
 function Favourite(props) {
   const { token } = useContext(UserContext);
   const { _id, origin, destination, poi, mode } = props;
-  const description =
-    "Find " +
-    poi +
-    " from '" +
-    origin +
-    "' to '" +
-    destination +
-    "' by " +
-    mode;
+  const description = "Find " + poi + " from '" + origin + "' to '" + destination + "' by " + mode;
 
   const [hide, setHide] = useState(false);
 
@@ -121,15 +109,21 @@ function FavouritesExtended(props) {
         <Col></Col>
         <Col xs="auto">
           <div className="favourites-list">
-            <h4>Your Favourite Journeys</h4>
-            {favourites.map((favourite) => (
-              <Favourite
-                key={favourite._id}
-                {...favourite}
-                get={props.get}
-                setInitial={props.setInitial}
-              />
-            ))}
+            {favourites.length === 0 ? (
+              <h4>You haven't saved any favourites yet!</h4>
+            ) : (
+              <>
+                <h4>Your Favourite Journeys</h4>
+                {favourites.map((favourite) => (
+                  <Favourite
+                    key={favourite._id}
+                    {...favourite}
+                    get={props.get}
+                    setInitial={props.setInitial}
+                  />
+                ))}
+              </>
+            )}
           </div>
         </Col>
         <Col></Col>
