@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 import {
   Button,
   Form,
-  Row,
   Col,
   ToggleButtonGroup,
   ToggleButton,
@@ -57,19 +56,19 @@ export default function Input({ getWayPoints }) {
         .catch((err) => {
           console.log(err);
           if (err.response) {
-            setSave(err.response.data);
+            alert(err.response.data);
           } else {
-            setSave(`Something went wrong: ${err.message}`);
+            alert(`Something went wrong: ${err.message}`);
           }
         });
     }
   }
 
   return (
-    <div className="input">
+    <div className="journey-input">
       <Form>
-        <Row>
-          <Col>
+        <Form.Row>
+          <Col sm={3}>
             <Form.Group controlId="formJourneyOrigin">
               <Form.Label>Where are you right now?</Form.Label>
               <Form.Control
@@ -82,7 +81,7 @@ export default function Input({ getWayPoints }) {
               />
             </Form.Group>
           </Col>
-          <Col>
+          <Col sm={3}>
             <Form.Group controlId="formJourneyDestination">
               <Form.Label>Where do you want to go?</Form.Label>
               <Form.Control
@@ -96,7 +95,7 @@ export default function Input({ getWayPoints }) {
               />
             </Form.Group>
           </Col>
-          <Col>
+          <Col sm={3}>
             <Form.Group controlId="formJourneyPOI">
               <Form.Label>What would you like?</Form.Label>
               <Form.Control
@@ -107,13 +106,14 @@ export default function Input({ getWayPoints }) {
                   console.log(event.target.value);
                   setPoi(event.target.value);
                 }}
+                custom
               >
                 <option disabled>Select...</option>
                 <PopulateOptions />
               </Form.Control>
             </Form.Group>
           </Col>
-          <Col>
+          <Col sm={3}>
             <Form.Group>
               <Form.Label>How will you be travelling? </Form.Label>
               <br />
@@ -132,7 +132,7 @@ export default function Input({ getWayPoints }) {
               </ToggleButtonGroup>
             </Form.Group>
           </Col>
-        </Row>
+        </Form.Row>
       </Form>
       <Button variant="success" onClick={onSubmit}>
         Submit
@@ -151,63 +151,14 @@ export default function Input({ getWayPoints }) {
 /* populate the drop down by mapping each option: https://stackoverflow.com/questions/43019816/populate-dropdown-select-with-props-react */
 function PopulateOptions() {
   const options = [
-    "bagel",
-    "donut",
-    "bar",
-    "alcohol",
-    "beauty",
-    "hair",
-    "salon",
-    "barber",
-    "bookstore",
-    "book shop",
-    "candy store",
-    "candy",
-    "candies",
-    "confectionary",
-    "chocolatier",
-    "chocolate",
-    "clothing",
-    "accessories",
-    "apparel",
-    "dog park",
-    "fast food",
-    "florist",
-    "flowers",
-    "flower shop",
-    "gas station",
-    "fuel",
-    "gas",
-    "petrol",
-    "hospital",
-    "clinic",
-    "medical center",
+    "Coffee",
+    "cafe",
     "hotel",
-    "motel",
-    "ice cream parlor",
-    "ice cream",
-    "juice bar",
-    "smoothie",
-    "juice",
-    "landmark",
-    "meat",
-    "seafood",
-    "butcher",
-    "deli",
     "parking",
-    "parking lot",
-    "pizza",
-    "restaurant",
     "police station",
-    "law enforcement",
     "post office",
-    "mail",
     "restaurant",
     "supermarket",
-    "groceries",
-    "grocery",
-    "market",
-    "super",
   ];
 
   console.log(options);

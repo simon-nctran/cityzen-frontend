@@ -75,20 +75,23 @@ export default function RegistrationForm() {
             </Col>
             <Col></Col>
           </Row>
+          <Form.Group as={Row} controlId="formRegistrationRememberMe">
+            <Col>
+              <Form.Check
+                label="Remember me"
+                type="checkbox"
+                id="login-checkbox"
+                checked={remember}
+                onChange={(event) => setRemember(event.target.checked)}
+              />
+            </Col>
+          </Form.Group>
           <Button variant="success" onClick={handleSubmit}>
             Register
           </Button>
         </Form>
         <br />
-        <label htmlFor="login-checkbox">
-          <input
-            type="checkbox"
-            id="registration-checkbox"
-            checked={remember}
-            onChange={(event) => setRemember(event.target.checked)}
-          />
-          Remember me
-        </label>
+
         <div className="registration-output">{output}</div>
         <br />
       </div>

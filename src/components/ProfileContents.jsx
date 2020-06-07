@@ -37,10 +37,7 @@ export default function ProfileContents({ logout }) {
                 <Row>
                   <Col>
                     <h3>Your Profile:</h3>
-
                     <p>Username: {userData.username}</p>
-                  </Col>
-                  <Col md="auto">
                     <div className="userFavourites">
                       <MapFavourites token={token} />
                     </div>
@@ -71,6 +68,7 @@ function MapFavourites({ token }) {
 
   return (
     <div>
+      <p> Your Favourites:</p>
       {favourites.map((favourite) => (
         <Favourite key={favourite._id} {...favourite} />
       ))}
@@ -104,12 +102,7 @@ function Favourite(favourite) {
     <div className={`profileFavourite profileFavourite-${_id}`} key={_id}>
       <div className={`profileFavouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
-          <Col>
-            <Button variant="danger" onClick={handleSubmit}>
-              Delete
-            </Button>
-          </Col>
-          <Col>
+          <Col xs={10}>
             Origin: {origin}
             <br />
             Destination: {destination}
@@ -117,6 +110,9 @@ function Favourite(favourite) {
             Point of Interest: {poi}
             <br />
             Mode: {mode}
+            <Button variant="danger" onClick={handleSubmit}>
+              Delete
+            </Button>
           </Col>
         </Row>
       </div>

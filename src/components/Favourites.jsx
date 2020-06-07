@@ -6,9 +6,12 @@ import UserContext from "../UserContext";
 
 import { useFavourites, deleteFavourite } from "../api/apiFavourites";
 
-export default function Favourites() {
+export default function Favourites(props) {
   const { token } = useContext(UserContext);
+
   const [showFavourites, setShowFavourites] = useState(false);
+
+  console.log(props);
 
   return (
     <div className="favourites">
@@ -19,7 +22,11 @@ export default function Favourites() {
         {showFavourites ? "Hide Favourites" : "Show Favourites"}
       </Button>
       {showFavourites ? (
-        <FavouritesExtended token={token} showFavourites={showFavourites} />
+        <FavouritesExtended
+          token={token}
+          showFavourites={showFavourites}
+          get={props.getWayPoints}
+        />
       ) : (
         <></>
       )}
@@ -27,11 +34,13 @@ export default function Favourites() {
   );
 }
 
-function Favourite(favourite) {
+function Favourite(props) {
   const { token } = useContext(UserContext);
-  const { _id, origin, destination, poi, mode } = favourite;
+  const { _id, origin, destination, poi, mode } = props;
 
   const [hide, setHide] = useState(false);
+
+  console.log(props.get);
 
   function handleSubmit(event) {
     console.log({ origin, destination, poi, mode });
@@ -49,18 +58,30 @@ function Favourite(favourite) {
       });
   }
 
+  function onSubmit() {
+    console.log({ origin, destination, poi, mode });
+    props.get({
+      origin,
+      destination,
+      poi,
+      mode,
+    });
+  }
+
   return (
     <div className={`favourite favourite-${_id}`} key={_id}>
       <div className={`favouriteDetails ${hide ? "hide" : ""}`}>
         <Row>
-          <Col>Origin: {origin}</Col>
-          <Col>Destination: {destination}</Col>
-          <Col>Point of Interest: {poi}</Col>
-          <Col>Mode: {mode}</Col>
+          <Col xs={3}>Origin: {origin}</Col>
+          <Col xs={3}>Destination: {destination}</Col>
+          <Col xs={3}>Point of Interest: {poi}</Col>
+          <Col xs={3}>Mode: {mode}</Col>
         </Row>
         <Row>
           <Col>
-            <Button variant="warning">Apply</Button>
+            <Button variant="warning" onClick={onSubmit}>
+              Apply
+            </Button>
             <Button variant="danger" onClick={handleSubmit}>
               X
             </Button>
@@ -73,6 +94,8 @@ function Favourite(favourite) {
 
 function FavouritesExtended(props) {
   const { token, showFavourites } = props;
+
+  console.log(props.get);
 
   const { loading, favourites, error } = useFavourites(token);
 
@@ -87,7 +110,7 @@ function FavouritesExtended(props) {
     <div className={`favourites-shown ${showFavourites ? "show" : ""}`}>
       <h3>Favourite Options</h3>
       {favourites.map((favourite) => (
-        <Favourite key={favourite._id} {...favourite} />
+        <Favourite key={favourite._id} {...favourite} get={props.get} />
       ))}
     </div>
   );
