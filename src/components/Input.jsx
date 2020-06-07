@@ -1,6 +1,12 @@
 import React, { useContext, useState } from "react";
 
-import { Button, Form, Col, ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Col,
+  ToggleButtonGroup,
+  ToggleButton,
+} from "react-bootstrap";
 
 import { addFavourite } from "../api/apiFavourites";
 
@@ -34,11 +40,19 @@ export default function Input({ getWayPoints, setInitial }) {
   }
 
   function handleSubmit(event) {
-    if (origin === "" || destination === "" || poi === "Select..." || mode === "") {
-      alert("Origin, Destination, Point of Interest and/or Mode cannot be empty!");
+    if (
+      origin === "" ||
+      destination === "" ||
+      poi === "Select..." ||
+      mode === ""
+    ) {
+      alert(
+        "Origin, Destination, Point of Interest and/or Mode cannot be empty!"
+      );
     } else {
       const originCapital = origin.charAt(0).toUpperCase() + origin.split(1);
-      const destinationCapital = destination.charAt(0).toUpperCase() + origin.split(1);
+      const destinationCapital =
+        destination.charAt(0).toUpperCase() + origin.split(1);
       const poiCapital = poi.charAt(0).toUpperCase() + origin.split(1);
       const modeCapital = mode.charAt(0).toUpperCase() + origin.split(1);
 
@@ -112,7 +126,6 @@ export default function Input({ getWayPoints, setInitial }) {
             <Form.Group controlId="formJourneyPOI">
               <Form.Label>What would you like?</Form.Label>
               <Form.Control
-                id="poi"
                 as="select"
                 value={poi}
                 onChange={(event) => {
