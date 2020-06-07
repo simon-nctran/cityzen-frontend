@@ -142,7 +142,7 @@ export default function Input({ getWayPoints, setInitial }) {
         </Form.Row>
       </Form>
       <Button variant="orange" onClick={onSubmit}>
-        Submit
+        Search
       </Button>
       {userData !== null && error == null ? (
         <Button variant="light-teal" onClick={handleSubmit}>
