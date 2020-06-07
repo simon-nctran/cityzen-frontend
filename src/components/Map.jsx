@@ -174,7 +174,7 @@ export default function Map(props) {
     console.log("Map Component has been mounted");
     const newMap = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/cityzen-app/ckb39zgvw0ord1gnyzgpb5kfg",
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
       zoom, // short hand for zoom: zoom
     });
