@@ -398,11 +398,7 @@ export default function Map(props) {
     if (map && poiFeatures !== null) {
       console.log("poiFeatures has been updated", poiFeatures);
       const poiData = { ...poiDataTemplate };
-      // if (poiFeatures === null) {
-      //   poiData.features = [];
-      // } else {
       poiData.features = poiFeatures;
-      // }
       const { poi } = props.journey;
       mapAddPOI(poiData, poi);
     }
