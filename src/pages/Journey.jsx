@@ -37,19 +37,23 @@ export default function Journey() {
         )}
       </div>
       {initial ? (
-        <div align="middle" className="map">
-          {console.log(initial)}
-          <h1>Welcome to Cityzen!</h1>
-          <p>
-            This app will help you find services and points of interest from where you are to where
-            you want to go!
-          </p>
-          <p>Fill out the above form to get started!</p>
-          <br />
-          <footer>
-            <p>This app was created by the members of Cityzen.</p>
-            <p>The University of Melbourne, 2020</p>
-          </footer>
+        <div className="home" align="middle">
+          <div className="welcome">
+            {console.log(initial)}
+            <h1>🏙 Welcome to Cityzen! 🏙</h1>
+            <h3>
+              This app will help you find services and points of interest from
+              where you are to where you want to go!
+            </h3>
+            <br />
+            <h4>⬆️ Fill out the above form to get started! ⬆️</h4>
+          </div>
+          <div>
+            <footer>
+              <p>This app was created by the members of Cityzen.</p>
+              <p>The University of Melbourne, 2020</p>
+            </footer>
+          </div>
         </div>
       ) : (
         <div className="map">
