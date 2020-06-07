@@ -43,7 +43,7 @@
   background-color: ghostwhite;
   border: 2px black solid;
   border-radius: 4px;
-  margin: 5px;
+  margin: 6px;
 }
 
 .favouriteDetails.hide {
@@ -308,6 +308,6 @@ h2 {
   text-align: center;
 }
 
-#poi {
+#formJourneyPOI {
   margin: 0px;
 }
