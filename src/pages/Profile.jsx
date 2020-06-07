@@ -68,13 +68,13 @@ export default function Profile() {
               {form}
 
               {!toggledLogin && (
-                <Button variant="dark" onClick={displayLogin}>
+                <Button variant="black" onClick={displayLogin}>
                   I want to Log In
                 </Button>
               )}
 
               {!toggledRegister && (
-                <Button variant="dark" onClick={displayRegister}>
+                <Button variant="black" onClick={displayRegister}>
                   I want to Register
                 </Button>
               )}
