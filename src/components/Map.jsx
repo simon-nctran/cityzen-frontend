@@ -48,6 +48,7 @@ export default function Map(props) {
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [selection, setSelection] = useState(null);
+  const [initial, setInitial] = useState(true);
   const mapContainer = useRef(null);
   // For useRef:
   // https://reactjs.org/docs/hooks-reference.html#useref
@@ -97,7 +98,7 @@ export default function Map(props) {
         type: "symbol",
         source: "places",
         layout: {
-          "icon-image": poiIcon,
+          "icon-image": "Marker",
           "icon-allow-overlap": true,
         },
       });
@@ -111,8 +112,6 @@ export default function Map(props) {
       map.on("mouseenter", "places", (e) => {
         // Change the cursor style as a UI indicator.
         map.getCanvas().style.cursor = "pointer";
-        console.log("e.features", e.features);
-        console.log("e.features[0]", e.features[0]);
 
         const coordinates = e.features[0].geometry.coordinates.slice();
         const description = e.features[0].properties.place_name;
@@ -249,6 +248,17 @@ export default function Map(props) {
           alert("Places could not be found");
         });
     }
+
+    return () => {
+      // setRouteCoords(null);
+      // setPoiFeatures(null);
+      // setOrigin(null);
+      // setDestination(null);
+      // setSelection(null);
+      newMap.remove();
+      setInitial(true);
+      setMap(null);
+    };
   }, [props.journey]);
 
   // draw the Route and the POIs when route coordinates are updated
@@ -262,7 +272,8 @@ export default function Map(props) {
       mapAddRoute(routeData);
 
       // only generate poi once
-      if (poiFeatures === null) {
+      if (initial) {
+        setInitial(false);
         mapFlyTo(routeCoords[0]);
         // add markers for origin and destination
         const originData = { ...locationDataTemplate }; // shallow copy location data template (this means the properties share references)
@@ -377,21 +388,21 @@ export default function Map(props) {
           setPoiFeatures(updatedPoiArray);
         });
       } else {
-        setPoiFeatures(null);
+        setPoiFeatures([]);
       }
     }
   }, [routeCoords]);
 
   // draw the POIs (run when POIs are updated)
   useEffect(() => {
-    if (map) {
+    if (map && poiFeatures !== null) {
       console.log("poiFeatures has been updated", poiFeatures);
       const poiData = { ...poiDataTemplate };
-      if (poiFeatures === null) {
-        poiData.features = [];
-      } else {
-        poiData.features = poiFeatures;
-      }
+      // if (poiFeatures === null) {
+      //   poiData.features = [];
+      // } else {
+      poiData.features = poiFeatures;
+      // }
       const { poi } = props.journey;
       mapAddPOI(poiData, poi);
     }
