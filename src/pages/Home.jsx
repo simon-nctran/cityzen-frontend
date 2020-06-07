@@ -5,6 +5,8 @@ import Input from "../components/Input";
 import Favourites from "../components/Favourites";
 import Map from "../components/Map";
 
+import { Row, Col } from "react-bootstrap";
+
 import UserContext from "../UserContext";
 
 export default function Home() {
@@ -48,8 +50,8 @@ export default function Home() {
               </span>
             </h1>
             <h3>
-              This app will help you find services and points of interest from where you are to
-              where you want to go!
+              This app will help you find services and points of interest from
+              where you are to where you want to go!
             </h3>
             <br />
             <h4>
@@ -61,16 +63,31 @@ export default function Home() {
                 ⬆️
               </span>
             </h4>
-            <p>
-              We'll generate a route from your selected origin to your selected destination as well
-              as POIs along that route
-            </p>
-            <p>
-              All you have to do is click on your preferred POI and we'll get you a route that makes
-              a detour to the POI!
-            </p>
-            <p>If you're not happy with your pick, just click 'Search' to try again :)</p>
-            <p>But if you like what you've seen, make an account with us which will let you save your searches!</p>
+            <br />
+            <Row>
+              <Col xs={{ span: 4, offset: 4 }}>
+                <div className="instructions">
+                  <ol>
+                    <li>
+                      We'll generate a route from your selected origin to your
+                      selected destination as well as POIs along that route
+                    </li>
+                    <li>
+                      All you have to do is click on your preferred POI and
+                      we'll get you a route that makes a detour to the POI!
+                    </li>
+                    <li>
+                      If you're not happy with your pick, just click 'Search' to
+                      try again :)
+                    </li>
+                    <li>
+                      But if you like what you've seen, make an account with us
+                      which will let you save your searches!
+                    </li>
+                  </ol>
+                </div>
+              </Col>
+            </Row>
           </div>
           <div>
             <footer>

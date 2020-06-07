@@ -9,7 +9,7 @@
 }
 
 .home {
-  padding-top: 100px;
+  padding-top: 10px;
   flex-grow: 1;
   display: flex;
   flex-flow: column;
@@ -27,12 +27,23 @@
   padding-top: 1px;
   padding-left: 10px;
 }
+
 .main {
   display: flex;
   flex-flow: column;
   flex-grow: 1;
   background-color: white;
   height: 100vh;
+}
+
+.instructions {
+  text-align: justify;
+  background-color: rgb(253, 125, 61, 0.5);
+  border: 1px black solid;
+  border-radius: 4px;
+  padding: 10px;
+  padding-bottom: 0;
+  padding-right: 25px;
 }
 
 .favourites {
