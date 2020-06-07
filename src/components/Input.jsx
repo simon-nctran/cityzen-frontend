@@ -19,10 +19,9 @@ export default function Input({ getWayPoints, setInitial }) {
   const [save, setSave] = useState("Save");
 
   function onSubmit() {
-    if (origin === "" || destination === "" || poi === "Select...") {
-      alert("Origin, Destination and/or Point of Interest cannot be empty!");
+    if (origin === "" || destination === "" || poi === "Select..." || mode === "") {
+      alert("Origin, Destination, Point of Interest and/or Mode cannot be empty!");
     } else {
-      console.log({ origin, destination, poi, mode });
       setInitial(false);
       getWayPoints({
         origin,
