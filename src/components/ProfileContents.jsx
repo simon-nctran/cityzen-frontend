@@ -20,7 +20,7 @@ export default function ProfileContents({ logout }) {
   }
 
   if (error) {
-    return <h1>Something went wrong: {error.message}</h1>;
+    return <h1>Something went wrong, please try again later</h1>;
   }
 
   return (
@@ -59,7 +59,7 @@ function MapFavourites({ token }) {
     return <p>Hold tight while we get your Favourites...</p>;
   }
   if (error) {
-    return <p>We weren't able to get your Favourites :'(: {error.message}</p>;
+    return <p>We weren't able to get your Favourites :'(, please try again later</p>;
   }
 
   return (

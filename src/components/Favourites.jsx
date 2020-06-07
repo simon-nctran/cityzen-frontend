@@ -12,7 +12,7 @@ export default function Favourites(props) {
 
   const [showFavourites, setShowFavourites] = useState(false);
 
-  console.log(props);
+  // console.log(props);
 
   return (
     <div className="favourites">
@@ -40,26 +40,26 @@ function Favourite(props) {
 
   const [hide, setHide] = useState(false);
 
-  console.log(props.get);
+  // console.log(props.get);
 
   function handleSubmit(event) {
-    console.log({ origin, destination, poi, mode });
+    // console.log({ origin, destination, poi, mode });
     event.preventDefault();
     deleteFavourite(token, _id)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data === "Delete favourite successfully") {
           alert(res.data);
           setHide(true);
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }
 
   function onSubmit() {
-    console.log({ origin, destination, poi, mode });
+    // console.log({ origin, destination, poi, mode });
     props.setInitial(false);
     props.get({
       origin,
@@ -92,7 +92,7 @@ function Favourite(props) {
 
 function FavouritesExtended(props) {
   const { token, showFavourites } = props;
-  console.log(props.get);
+  // console.log(props.get);
 
   const { loading, favourites, error } = useFavourites(token);
 
@@ -100,7 +100,7 @@ function FavouritesExtended(props) {
     return <p>Hold tight while we get your Favourites...</p>;
   }
   if (error) {
-    return <p>We weren't able to get your Favourites :'(: {error.message}</p>;
+    return <p>We weren't able to get your Favourites :'(, please try again later.</p>;
   }
 
   return (

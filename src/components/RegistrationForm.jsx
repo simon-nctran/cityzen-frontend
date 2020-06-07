@@ -37,14 +37,10 @@ export default function RegistrationForm() {
           console.log(err);
           if (err.response) {
             // error has .response property if the error was explicitly sent by the server
+            // they're written to be user friendly
             setOutput(err.response.data);
-            /*
-          if (res.data === "Username already exists") {
-            setOutput("Username already exists");
-          }
-           */
           } else {
-            setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
+            setOutput("Something went wrong, please try again later");
           }
         });
     }

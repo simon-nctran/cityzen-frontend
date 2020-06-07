@@ -37,18 +37,18 @@ export function useUser(token, setToken) {
       setLoading(true);
       getUser(token)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setUserData({
             ...res.data,
           });
           setLoading(false);
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           setError(err);
           setLoading(false);
           if (err.response && (err.response.status === 400 || err.response.status === 401)) {
-            console.error("token error");
+            // console.error("token error");
             setToken(null);
             localStorage.removeItem("auth-token");
           }

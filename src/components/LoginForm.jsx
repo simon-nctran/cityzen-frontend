@@ -37,16 +37,10 @@ export default function LoginForm() {
           console.log(err);
           if (err.response) {
             // error has .response property if the error was explicitly sent by the server
+            // they're written to be user friendly
             setOutput(err.response.data);
-            /*
-            if (err.response.data === "Username not found") {
-              setOutput("Username not found");
-            } else if (err.response.data === "Invalid password") {
-              setOutput("Invalid password");
-            }
-             */
           } else {
-            setOutput(`Something went wrong: ${err.message}`); // All error objects have .message property
+            setOutput("Something went wrong, please try again later");
           }
         });
     }
