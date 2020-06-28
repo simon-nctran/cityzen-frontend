@@ -5,7 +5,7 @@ import { searchWaypoint, getPoiRoute, getRoute } from "../api/apiMap";
 
 // mapbox
 mapboxgl.accessToken =
-  "pk.eyJ1IjoiY2l0eXplbi1hcHAiLCJhIjoiY2thdjIyZ2Z6MmU0NjJ4cDE2NHI1bzh2NSJ9.ZFCggjeuB6rV6qnUtjHvTQ";
+  "pk.eyJ1Ijoic2ltb24tbmN0cmFuIiwiYSI6ImNrYnlzZjlmZzBlajgyc2xtNzNmN3o4bHgifQ.qXtbDscWOIJfR2Sr6naFPg";
 
 // MapBox API: https://docs.mapbox.com/mapbox-gl-js/api/
 // Official examples for MapBox with React: https://github.com/mapbox/mapbox-react-examples
@@ -150,7 +150,7 @@ export default function Map(props) {
   function mapFlyTo(Coords) {
     map.flyTo({
       center: [Coords[0], Coords[1]],
-      essential: true, // this animation is considered essential with respect to prefers-reduced-motion
+      essential: true,
     });
   }
 
@@ -175,7 +175,7 @@ export default function Map(props) {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
       center: [lng, lat],
-      zoom, // short hand for zoom: zoom
+      zoom,
     });
 
     // add event listener that responds to moving the map
@@ -184,8 +184,6 @@ export default function Map(props) {
         lng: newMap.getCenter().lng,
         lat: newMap.getCenter().lat,
         zoom: newMap.getZoom(),
-        // removed .toFixed as that converts to String,
-        // but latLngZoom uses Number as defined in the argument of useState above
       });
     });
 
@@ -274,7 +272,6 @@ export default function Map(props) {
     setMap(newMap);
 
     // Search for a route
-    // console.log("props.journey", props.journey);
     if (props.journey !== null) {
       // console.log("props.journey has been updated");
 
@@ -295,11 +292,6 @@ export default function Map(props) {
     }
 
     return () => {
-      // setRouteCoords(null);
-      // setPoiFeatures(null);
-      // setOrigin(null);
-      // setDestination(null);
-      // setSelection(null);
       newMap.remove();
       setInitial(true);
       setMap(null);
@@ -321,11 +313,9 @@ export default function Map(props) {
         setInitial(false);
         mapFlyTo(routeCoords[0]);
         // add markers for origin and destination
-        const originData = { ...locationDataTemplate }; // shallow copy location data template (this means the properties share references)
+        const originData = { ...locationDataTemplate };
         originData.features[0].geometry.coordinates = [routeCoords[0][0], routeCoords[0][1]];
-        // console.log("origin", origin);
         originData.features[0].properties.place_name = origin[0].place_name;
-        // console.log("originData", originData);
         if (map.getSource("origin")) {
           map.getSource("origin").setData(originData);
         } else {
@@ -409,7 +399,6 @@ export default function Map(props) {
 
         const { poi } = props.journey;
 
-        // !!!! This uses searchWaypoint but assumes that there are no errors, cannot handle errors
         const promises = [];
         // https://stackoverflow.com/questions/50243782/create-array-of-promises
         for (let i = 0; i < routeCoords.length; i += 1) {
