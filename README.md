@@ -1,5 +1,4 @@
-# CITYZEN
-## A React web application that allows you to search for Points of Interest along a route from A to B.
+## Cityzen | A React web application that allows you to search for Points of Interest along a route from A to B.
 
 ### Usage:
 Access the web application [here](https://cityzen-client.herokuapp.com).
