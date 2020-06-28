@@ -5,7 +5,7 @@ import { Row, Col } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
-// App Navigation Component
+// App Navigation Component (child to App component)
 export default function Navigation() {
   const { userStatus } = useContext(UserContext);
   const { userData, error } = userStatus;

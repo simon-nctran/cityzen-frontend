@@ -6,6 +6,7 @@ import { useFavourites, deleteFavourite } from "../api/apiFavourites";
 
 import UserContext from "../UserContext";
 
+// Profile Contents Component (child to Profile Component)
 export default function ProfileContents({ logout }) {
   const { userStatus, token } = useContext(UserContext);
   const { loading, userData, error } = userStatus;

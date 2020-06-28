@@ -4,6 +4,7 @@ import UserContext from "../UserContext";
 
 import { Button, Form, Row, Col } from "react-bootstrap";
 
+// Login Form Component (child to Profile Component)
 export default function LoginForm() {
   const { setToken } = useContext(UserContext);
 
@@ -36,8 +37,8 @@ export default function LoginForm() {
         .catch((err) => {
           console.log(err);
           if (err.response) {
-            // error has .response property if the error was explicitly sent by the server
-            // they're written to be user friendly
+            // error has .response property if the error was explicitly sent by the backend
+            // they are user-friendly strings
             setOutput(err.response.data);
           } else {
             setOutput("Something went wrong, please try again later");

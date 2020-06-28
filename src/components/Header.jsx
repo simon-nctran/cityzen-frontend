@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 
 import UserContext from "../UserContext";
 
-// Header Component (child to App Component)
-export default function Header({ getWayPoints }) {
+// Header Component (child to Home Component)
+export default function Header() {
   const { userStatus } = useContext(UserContext);
   const { userData, error } = userStatus;
 

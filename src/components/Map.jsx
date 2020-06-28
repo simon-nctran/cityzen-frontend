@@ -38,8 +38,7 @@ const locationDataTemplate = {
   ],
 };
 
-// Main reference used to convert to functional component:
-// https://github.com/bryik/mapbox-react-examples/blob/basic-hooks/basic/src/index.js
+// Map Component (child to Home Component)
 export default function Map(props) {
   const [map, setMap] = useState(null);
   const [lngLatZoom, setLngLatZoom] = useState({ lng: 144.9631, lat: -37.8136, zoom: 14 });
