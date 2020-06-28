@@ -92,8 +92,8 @@ export default function Home() {
           </div>
           <div>
             <footer>
-              <p>This app was created by the members of Cityzen.</p>
-              <p>The University of Melbourne, 2020</p>
+              <br />
+              This app was created by Simon Tran, Tarra Co, Anthony Giang, and Yutao Wang.
             </footer>
           </div>
         </div>
