@@ -7,12 +7,11 @@ import UserContext from "../UserContext";
 
 import { useFavourites, deleteFavourite } from "../api/apiFavourites";
 
+// Favourites Component (child to Home Component)
 export default function Favourites(props) {
   const { token } = useContext(UserContext);
 
   const [showFavourites, setShowFavourites] = useState(false);
-
-  // console.log(props);
 
   return (
     <div className="favourites">
@@ -40,10 +39,7 @@ function Favourite(props) {
 
   const [hide, setHide] = useState(false);
 
-  // console.log(props.get);
-
   function handleSubmit(event) {
-    // console.log({ origin, destination, poi, mode });
     event.preventDefault();
     deleteFavourite(token, _id)
       .then((res) => {
@@ -59,7 +55,6 @@ function Favourite(props) {
   }
 
   function onSubmit() {
-    // console.log({ origin, destination, poi, mode });
     props.setInitial(false);
     props.get({
       origin,
@@ -92,7 +87,6 @@ function Favourite(props) {
 
 function FavouritesExtended(props) {
   const { token, showFavourites } = props;
-  // console.log(props.get);
 
   const { loading, favourites, error } = useFavourites(token);
 

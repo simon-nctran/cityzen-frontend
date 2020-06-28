@@ -9,6 +9,7 @@ import { Row, Col } from "react-bootstrap";
 
 import UserContext from "../UserContext";
 
+// Input Component (child to App Component)
 export default function Home() {
   const { userStatus } = useContext(UserContext);
   const { userData, error } = userStatus;

@@ -6,6 +6,7 @@ import ProfileContents from "../components/ProfileContents";
 
 import UserContext from "../UserContext";
 
+// Profile Component (child to App Component)
 export default function Profile() {
   const { userStatus, token, setToken } = useContext(UserContext);
 
@@ -83,12 +84,3 @@ export default function Profile() {
     </>
   );
 }
-// Note regarding onClick:
-// onClick takes in a reference to a function or value, that means if you give it func(),
-// then it will receive the output of func(). If func() has side effects, then these side effects
-// will be activated on each render as onClick tries to evaluate the value of func().
-// To prevent this, either:
-// 1. provide onClick with `func` on its own, which is a reference to the function func
-// 2. use arrow functions to pass func itself as the return value, i.e. onCLick={() => func()}
-// use 2. when you need to pass parameters in the function func
-// https://stackoverflow.com/questions/34226076/why-is-my-onclick-being-called-on-render-react-js/34226188#34226188

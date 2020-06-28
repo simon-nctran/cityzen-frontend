@@ -1,5 +1,5 @@
 const TOKEN =
-  "pk.eyJ1IjoiY2l0eXplbi1hcHAiLCJhIjoiY2thdjIyZ2Z6MmU0NjJ4cDE2NHI1bzh2NSJ9.ZFCggjeuB6rV6qnUtjHvTQ";
+  "pk.eyJ1Ijoic2ltb24tbmN0cmFuIiwiYSI6ImNrYnlzZjlmZzBlajgyc2xtNzNmN3o4bHgifQ.qXtbDscWOIJfR2Sr6naFPg";
 
 export function searchWaypoint(place, longitude, latitude) {
   return new Promise((resolve, reject) => {
@@ -18,10 +18,8 @@ export function searchWaypoint(place, longitude, latitude) {
       .then((data) => {
         if (data.features === undefined) {
           // features is undefined if the place doesnt exist
-          // alert("Places could not be found");
           reject(new Error("searchWaypoint reject"));
         } else {
-          // console.log("searchWaypoint data:", data);
           resolve(data.features); // extract the coordinates
         }
       });
@@ -56,18 +54,6 @@ export function getRoute(start, end, mode) {
   });
 }
 
-// export async function searchRoute(origin, destination, mode, lng, lat) {
-//   const start = await searchWaypoint(origin, lng, lat);
-//   const end = await searchWaypoint(destination, lng, lat);
-//   const startCoordinate = start[0].geometry.coordinates;
-//   const endCoordinate = end[0].geometry.coordinates;
-//
-//   return getRoute(startCoordinate, endCoordinate, mode);
-// }
-
-/////////////////////////////////////////////////////////////////////
-//  dodgy code
-/////////////////////////////////////////////////////////////////////
 export function getPoiRoute(start, middle, end, mode) {
   return new Promise((resolve, reject) => {
     const getRouteUrl =

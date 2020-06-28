@@ -6,7 +6,7 @@ import { addFavourite } from "../api/apiFavourites";
 
 import UserContext from "../UserContext";
 
-// Input Component (child to App Component)
+// Input Component (child to Home Component)
 export default function Input({ getWayPoints, setInitial }) {
   const { userStatus, token } = useContext(UserContext);
   const { userData, error } = userStatus;

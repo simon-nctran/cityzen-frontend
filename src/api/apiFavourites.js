@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 // Axios documentation: https://github.com/axios/axios
-// One important difference between fetch and axios is that axios's Promise automatically resolved to an Object.
-// This means that you don't need to call res.json()
 
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
@@ -29,22 +27,16 @@ export function addFavourite(token, favourite) {
 }
 
 // takes: auth token string, and id of the favourite to be deleted
-// // note: ID should be a string
+// // (note: ID should be a string)
 // returns: promise that resolves to json object
 // res.data will be the response ?
 export function deleteFavourite(token, id) {
-  // backend isn't done yet!
-  // console.log(token);
-  // console.log(id);
   const path = `/favourites/${id}`;
 
-  // console.log("DELETING A FAVOURITE");
   return axios.delete(path, {
     headers: { "x-auth-token": token },
   });
 }
-// suggestion: when trying to delete just remove the component/html from the frontend and hope the request is sent
-// rather than actually wait for request to send and then reload page to get changes. Just change the frontend
 
 /*
  * takes: auth token string

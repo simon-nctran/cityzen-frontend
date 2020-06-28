@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 // Axios documentation: https://github.com/axios/axios
-// One important difference between fetch and axios is that axios's Promise automatically resolved to an Object.
-// This means that you don't need to call res.json()
 
 const BASE_URL = "https://cityzen-app.herokuapp.com";
 
@@ -37,24 +35,21 @@ export function useUser(token, setToken) {
       setLoading(true);
       getUser(token)
         .then((res) => {
-          // console.log(res);
           setUserData({
             ...res.data,
           });
           setLoading(false);
         })
         .catch((err) => {
-          // console.log(err);
           setError(err);
           setLoading(false);
           if (err.response && (err.response.status === 400 || err.response.status === 401)) {
-            // console.error("token error");
             setToken(null);
             localStorage.removeItem("auth-token");
           }
         });
     }
-  }, [token, setToken]); // put setToken in useEffect dependencies to be consistent with Hook Rules
+  }, [token, setToken]);
 
   return {
     loading,
