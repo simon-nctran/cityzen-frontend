@@ -1,7 +1,7 @@
 ## Cityzen | A React web application that allows you to search for Points of Interest along a route from A to B.
 
 ### Usage:
-Access the web application [here](https://cityzen-client.herokuapp.com).
+Access the web application [here](https://cityzen-web.herokuapp.com).
 
 ##### Map functionality:
 1. Type in a start and end location, select an option, and a mode of transport.
